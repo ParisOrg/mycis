@@ -61,3 +61,23 @@ jobs:
         run: |
           npm ci
           npm run build
+
+  helm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.3
+
+      - name: helm lint
+        run: helm lint charts/mycis
+
+      - name: helm template
+        run: |
+          helm template test charts/mycis \
+            --set secret.create=true \
+            --set secret.databaseUrl='postgres://postgres:postgres@db:5432/mycis?sslmode=disable' \
+            --set secret.sessionKey=0123456789abcdef0123456789abcdef \
+            --debug

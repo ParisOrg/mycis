@@ -1,0 +1,73 @@
+# Default values for mycis.
+# Production: set secret.existingSecret to a Secret you create out-of-band (recommended).
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/example/mycis
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: mycis.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources: {}
+# limits:
+#   cpu: 500m
+#   memory: 512Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
+
+# Either reference an existing Secret (keys DATABASE_URL, APP_SESSION_KEY) or create one from values (dev only).
+secret:
+  existingSecret: ""
+  create: false
+  databaseUrl: ""
+  sessionKey: ""
+  databaseUrlKey: DATABASE_URL
+  sessionKeyKey: APP_SESSION_KEY
+
+# Set true when browsers use HTTPS (e.g. TLS-terminated ingress).
+appCookieSecure: false
+
+extraEnv: []
+# - name: APP_NAME
+#   value: "Controls Tracker"
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
