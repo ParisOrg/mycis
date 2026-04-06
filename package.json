@@ -2,6 +2,7 @@
   "name": "mycis-controls-tracker",
   "private": true,
   "version": "0.1.0",
+  "license": "MIT",
   "scripts": {
     "build:css": "npx @tailwindcss/cli -i ./assets/css/app.css -o ./public/assets/app.css --minify",
     "build:js": "npx esbuild ./assets/js/app.js --bundle --format=esm --minify --outfile=./public/assets/app.js",
