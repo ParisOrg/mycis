@@ -1,0 +1,152 @@
+{{ define "content" }}
+<section class="space-y-10 max-w-6xl">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-muted-foreground">Assessment operating picture.</p>
+    {{ if .Assessments }}
+      <form class="flex items-center gap-2" action="/dashboard" method="get">
+        <select class="select h-8 w-auto min-w-44 text-sm" id="assessment_id" name="assessment_id">
+          {{ range .Assessments }}
+            <option value="{{ .ID }}" {{ if and $.SelectedAssessment (eq $.SelectedAssessment.ID .ID) }}selected{{ end }}>{{ .Name }}</option>
+          {{ end }}
+        </select>
+        <button class="btn btn-secondary btn-sm" type="submit">View</button>
+      </form>
+    {{ end }}
+  </div>
+
+  {{ if not .Assessments }}
+    <div class="py-20 text-center">
+      <p class="text-sm text-muted-foreground">No assessments yet. Seed a framework, then create an assessment.</p>
+      {{ if and .CurrentUser .CurrentUser.IsAdmin }}
+        <a class="btn btn-primary mt-6" href="/assessments/new">Create assessment</a>
+      {{ end }}
+    </div>
+  {{ else if .Dashboard }}
+    <div class="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
+      <div>
+        <p class="kpi-label">Completion</p>
+        <p class="kpi-value mt-1">{{ percentage .Dashboard.Overview.CompletedItems .Dashboard.Overview.TotalItems }}%</p>
+        <p class="kpi-detail">{{ .Dashboard.Overview.CompletedItems }} / {{ .Dashboard.Overview.TotalItems }}</p>
+      </div>
+      <div>
+        <p class="kpi-label">Review queue</p>
+        <p class="kpi-value mt-1">{{ .Dashboard.Overview.ReadyForReviewItems }}</p>
+        <p class="kpi-detail">Awaiting review</p>
+      </div>
+      <div>
+        <p class="kpi-label">Overdue</p>
+        <p class="kpi-value mt-1 {{ if gt .Dashboard.Overview.OverdueItems 0 }}text-amber-600 dark:text-amber-400{{ end }}">{{ .Dashboard.Overview.OverdueItems }}</p>
+        <p class="kpi-detail">Past due date</p>
+      </div>
+      <div>
+        <p class="kpi-label">Blocked</p>
+        <p class="kpi-value mt-1 {{ if gt .Dashboard.Overview.BlockedItems 0 }}text-rose-600 dark:text-rose-400{{ end }}">{{ .Dashboard.Overview.BlockedItems }}</p>
+        <p class="kpi-detail">Need intervention</p>
+      </div>
+      <div>
+        <p class="kpi-label">Avg score</p>
+        <p class="kpi-value mt-1">{{ printf "%.1f" (numericFloat .Dashboard.Overview.AverageScore) }}</p>
+        <p class="kpi-detail">Across scored items</p>
+      </div>
+      <div>
+        <p class="kpi-label">Scope</p>
+        <p class="text-sm font-medium mt-1 leading-snug">{{ .SelectedAssessment.Scope }}</p>
+        <p class="kpi-detail">Due {{ formatDate .SelectedAssessment.DueDate }}</p>
+      </div>
+    </div>
+
+    <div class="border-t border-border"></div>
+
+    <div class="grid gap-10 lg:grid-cols-[1.3fr_0.7fr]">
+      <div class="space-y-8">
+        <div>
+          <h2 class="section-heading">Completion by group</h2>
+          <div class="mt-4 space-y-4">
+            {{ range .Dashboard.ByGroup }}
+              <div>
+                <div class="flex items-baseline justify-between gap-4">
+                  <p class="text-sm font-medium">{{ .GroupCode }} · {{ .GroupTitle }}</p>
+                  <p class="text-xs tabular-nums text-muted-foreground">{{ percentage .CompletedItems .TotalItems }}%</p>
+                </div>
+                <div class="mt-1.5 flex items-center gap-3">
+                  <div class="bg-primary/20 relative h-2 w-full flex-1 overflow-hidden rounded-full">
+                    <div class="bg-primary h-full transition-all" style="width: {{ percentage .CompletedItems .TotalItems }}%"></div>
+                  </div>
+                  <span class="text-xs tabular-nums text-muted-foreground w-16 text-right">{{ .CompletedItems }}/{{ .TotalItems }}</span>
+                </div>
+              </div>
+            {{ end }}
+          </div>
+        </div>
+
+        {{ if .Dashboard.ByOwner }}
+        <div>
+          <h2 class="section-heading">Assignment balance</h2>
+          <div class="mt-4">
+            {{ range .Dashboard.ByOwner }}
+              <div class="data-row">
+                <div>
+                  <p class="text-sm font-medium">{{ .Name }}</p>
+                  <p class="text-xs text-muted-foreground">{{ .CompletedItems }} complete · {{ .OverdueItems }} overdue</p>
+                </div>
+                <span class="text-sm tabular-nums text-muted-foreground">{{ .TotalItems }}</span>
+              </div>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+      </div>
+
+      <div class="space-y-8">
+        <div>
+          <h2 class="section-heading">Overdue</h2>
+          <div class="mt-3">
+            {{ if .Dashboard.Overdue }}
+              {{ range .Dashboard.Overdue }}
+                <a class="data-row-link text-sm" href="/items/{{ .ID }}">
+                  <span class="font-medium">{{ .ItemCode }} · {{ .ItemTitle }}</span>
+                  <span class="text-xs text-amber-600 dark:text-amber-400 shrink-0">{{ formatDate .DueDate }}</span>
+                </a>
+              {{ end }}
+            {{ else }}
+              <p class="text-sm text-muted-foreground py-2">None.</p>
+            {{ end }}
+          </div>
+        </div>
+
+        <div>
+          <h2 class="section-heading">Ready for review</h2>
+          <div class="mt-3">
+            {{ if .Dashboard.ReviewQueue }}
+              {{ range .Dashboard.ReviewQueue }}
+                <a class="data-row-link text-sm" href="/items/{{ .ID }}">
+                  <span class="font-medium">{{ .ItemCode }}</span>
+                  <span class="text-xs text-muted-foreground truncate ml-2">{{ .ItemTitle }}</span>
+                </a>
+              {{ end }}
+            {{ else }}
+              <p class="text-sm text-muted-foreground py-2">None.</p>
+            {{ end }}
+          </div>
+        </div>
+
+        <div>
+          <h2 class="section-heading">Low score</h2>
+          <div class="mt-3">
+            {{ if .Dashboard.LowScore }}
+              {{ range .Dashboard.LowScore }}
+                <a class="data-row-link text-sm" href="/items/{{ .ID }}">
+                  <span class="font-medium">{{ .ItemCode }} · {{ .ItemTitle }}</span>
+                  <span class="text-xs text-muted-foreground shrink-0">{{ .Score }}/5</span>
+                </a>
+              {{ end }}
+            {{ else }}
+              <p class="text-sm text-muted-foreground py-2">None.</p>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    </div>
+  {{ end }}
+</section>
+{{ end }}

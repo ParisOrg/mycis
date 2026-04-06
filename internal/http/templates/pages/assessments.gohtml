@@ -1,0 +1,58 @@
+{{ define "content" }}
+<section class="space-y-8 max-w-6xl">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-muted-foreground">Track ownership and progress against seeded frameworks.</p>
+    {{ if and .CurrentUser .CurrentUser.IsAdmin }}
+      <a class="btn btn-primary btn-sm" href="/assessments/new">New assessment</a>
+    {{ end }}
+  </div>
+
+  {{ if not .Assessments }}
+    <div class="py-20 text-center">
+      <p class="text-sm text-muted-foreground">No assessments yet. Create one to begin tracking controls.</p>
+      {{ if and .CurrentUser .CurrentUser.IsAdmin }}
+        <a class="btn btn-primary mt-6" href="/assessments/new">Create assessment</a>
+      {{ end }}
+    </div>
+  {{ else }}
+    <div class="overflow-x-auto rounded-lg border border-border">
+      <table class="table w-full text-sm">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Framework</th>
+            <th>Scope</th>
+            <th>Window</th>
+            <th>Progress</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .Assessments }}
+            <tr>
+              <td>
+                <a class="font-medium hover:underline" href="/assessments/{{ .ID }}">{{ .Name }}</a>
+              </td>
+              <td class="text-muted-foreground">{{ .FrameworkLabel }} {{ .FrameworkVersion }}</td>
+              <td>{{ .Scope }}</td>
+              <td class="text-muted-foreground tabular-nums">{{ formatDate .StartDate }} – {{ formatDate .DueDate }}</td>
+              <td>
+                <div class="min-w-32">
+                  <div class="flex items-center justify-between text-xs tabular-nums">
+                    <span>{{ percentage .CompletedCount .ItemCount }}%</span>
+                    <span class="text-muted-foreground">{{ .CompletedCount }}/{{ .ItemCount }}</span>
+                  </div>
+                  <div class="bg-primary/20 relative mt-1 h-2 w-full overflow-hidden rounded-full">
+                    <div class="bg-primary h-full transition-all" style="width: {{ percentage .CompletedCount .ItemCount }}%"></div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge-outline text-xs">{{ assessmentStatus .Status }}</span></td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  {{ end }}
+</section>
+{{ end }}

@@ -1,0 +1,42 @@
+{{ define "content" }}
+<section class="max-w-2xl">
+  <p class="text-sm text-muted-foreground">Name, scope, and timeline. Items are generated from the selected framework.</p>
+  <form class="mt-6" action="/assessments/new" method="post">
+    <div class="rounded-lg border border-border">
+      <div class="p-5">
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="field">
+            <label class="label" for="name">Assessment name</label>
+            <input class="input mt-1.5 w-full" id="name" name="name" type="text" required />
+          </div>
+          <div class="field">
+            <label class="label" for="framework_id">Framework</label>
+            <select class="select mt-1.5 w-full text-sm" id="framework_id" name="framework_id" required>
+              <option value="">Select a framework</option>
+              {{ range .Frameworks }}
+                <option value="{{ .ID }}">{{ .Label }} {{ .Version }}</option>
+              {{ end }}
+            </select>
+          </div>
+          <div class="field md:col-span-2">
+            <label class="label" for="scope">Scope</label>
+            <input class="input mt-1.5 w-full" id="scope" name="scope" type="text" placeholder="Organization, business unit, or environment" required />
+          </div>
+          <div class="field">
+            <label class="label" for="start_date">Start date</label>
+            <input class="input mt-1.5 w-full" id="start_date" name="start_date" type="text" required data-flatpickr data-flatpickr-sync="#due_date" />
+          </div>
+          <div class="field">
+            <label class="label" for="due_date">Due date</label>
+            <input class="input mt-1.5 w-full" id="due_date" name="due_date" type="text" required data-flatpickr />
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-3 border-t border-border px-5 py-3">
+        <a class="btn btn-ghost btn-sm" href="/assessments">Cancel</a>
+        <button class="btn btn-primary btn-sm" type="submit">Create assessment</button>
+      </div>
+    </div>
+  </form>
+</section>
+{{ end }}

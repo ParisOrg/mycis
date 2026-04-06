@@ -1,0 +1,37 @@
+{{ define "content" }}
+<section class="max-w-2xl">
+  <p class="text-sm text-muted-foreground">Create a new assessment cycle based on <strong>{{ .Assessment.Name }}</strong>. Owners and reviewers carry forward; scores and statuses reset.</p>
+  <form class="mt-6" action="/assessments/{{ .Assessment.ID }}/cycle" method="post">
+    <div class="rounded-lg border border-border">
+      <div class="p-5">
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="field">
+            <label class="label" for="name">Assessment name</label>
+            <input class="input mt-1.5 w-full" id="name" name="name" type="text" required />
+          </div>
+          <div class="field">
+            <label class="label" for="framework">Framework</label>
+            <input class="input mt-1.5 w-full bg-muted/50" id="framework" type="text" value="{{ .Assessment.FrameworkLabel }} {{ .Assessment.FrameworkVersion }}" disabled />
+          </div>
+          <div class="field md:col-span-2">
+            <label class="label" for="scope">Scope</label>
+            <input class="input mt-1.5 w-full" id="scope" name="scope" type="text" value="{{ .Assessment.Scope }}" required />
+          </div>
+          <div class="field">
+            <label class="label" for="start_date">Start date</label>
+            <input class="input mt-1.5 w-full" id="start_date" name="start_date" type="text" required data-flatpickr data-flatpickr-sync="#due_date" />
+          </div>
+          <div class="field">
+            <label class="label" for="due_date">Due date</label>
+            <input class="input mt-1.5 w-full" id="due_date" name="due_date" type="text" required data-flatpickr />
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-3 border-t border-border px-5 py-3">
+        <a class="btn btn-ghost btn-sm" href="/assessments/{{ .Assessment.ID }}">Cancel</a>
+        <button class="btn btn-primary btn-sm" type="submit">Create cycle</button>
+      </div>
+    </div>
+  </form>
+</section>
+{{ end }}

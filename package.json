@@ -1,0 +1,17 @@
+{
+  "name": "mycis-controls-tracker",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build:css": "npx @tailwindcss/cli -i ./assets/css/app.css -o ./public/assets/app.css --minify",
+    "build:js": "npx esbuild ./assets/js/app.js --bundle --format=esm --minify --outfile=./public/assets/app.js",
+    "build": "npm run build:css && npm run build:js"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.13",
+    "basecoat-css": "^0.3.3",
+    "esbuild": "^0.25.10",
+    "flatpickr": "^4.6.13",
+    "tailwindcss": "^4.1.13"
+  }
+}

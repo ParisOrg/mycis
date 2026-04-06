@@ -1,0 +1,17 @@
+{{ define "content" }}
+<section>
+  <h2 class="text-xl font-semibold tracking-tight">Sign in</h2>
+  <p class="mt-1.5 text-sm text-muted-foreground">Use your assigned credentials.</p>
+  <form class="mt-8 space-y-4" action="/login" method="post">
+    <div class="field">
+      <label class="label" for="email">Email</label>
+      <input class="input mt-1.5 w-full" id="email" name="email" type="email" value="{{ .Email }}" required />
+    </div>
+    <div class="field">
+      <label class="label" for="password">Password</label>
+      <input class="input mt-1.5 w-full" id="password" name="password" type="password" required />
+    </div>
+    <button class="btn btn-primary w-full" type="submit">Sign in</button>
+  </form>
+</section>
+{{ end }}

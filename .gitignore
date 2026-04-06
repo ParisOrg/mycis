@@ -1,0 +1,39 @@
+# Binaries / local build outputs
+app
+bin/
+
+# Node
+node_modules/
+
+# Built frontend (generated from assets/)
+public/assets/app.css
+public/assets/app.js
+
+# Secrets and local env (keep .env.example tracked)
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+
+# Air (live reload)
+tmp/
+build-errors.log
+
+# Go
+*.exe
+*.test
+*.out
+coverage.out
+coverage.html
+*.coverprofile
+vendor/
+
+# Editor / IDE
+.idea/
+*.swp
+*.swo
+
+# Optional: uncomment if docker-compose.override.yml is only for your machine
+# docker-compose.override.yml

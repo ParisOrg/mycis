@@ -1,0 +1,258 @@
+@import "tailwindcss";
+@import "basecoat-css";
+@import "flatpickr/dist/flatpickr.css";
+
+:root {
+  --background: oklch(0.985 0.002 260);
+  --foreground: oklch(0.13 0.015 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.13 0.015 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.13 0.015 260);
+  --primary: oklch(0.42 0.095 195);
+  --primary-foreground: oklch(0.98 0.005 195);
+  --secondary: oklch(0.955 0.004 260);
+  --secondary-foreground: oklch(0.22 0.015 260);
+  --muted: oklch(0.955 0.003 260);
+  --muted-foreground: oklch(0.50 0.01 260);
+  --accent: oklch(0.95 0.015 195);
+  --accent-foreground: oklch(0.22 0.015 260);
+  --destructive: oklch(0.55 0.2 27);
+  --border: oklch(0.92 0.003 260);
+  --input: oklch(0.90 0.003 260);
+  --ring: oklch(0.42 0.095 195);
+
+  --sidebar-background: oklch(0.975 0.003 260);
+  --sidebar-foreground: oklch(0.40 0.01 260);
+  --sidebar-primary: oklch(0.42 0.095 195);
+  --sidebar-primary-foreground: oklch(0.98 0.005 195);
+  --sidebar-accent: oklch(0.94 0.015 195);
+  --sidebar-accent-foreground: oklch(0.18 0.015 260);
+  --sidebar-border: oklch(0.92 0.003 260);
+  --sidebar-ring: oklch(0.42 0.095 195);
+}
+
+.dark {
+  --background: oklch(0.12 0.008 260);
+  --foreground: oklch(0.94 0.004 260);
+  --card: oklch(0.155 0.008 260);
+  --card-foreground: oklch(0.94 0.004 260);
+  --popover: oklch(0.155 0.008 260);
+  --popover-foreground: oklch(0.94 0.004 260);
+  --primary: oklch(0.55 0.11 195);
+  --primary-foreground: oklch(0.12 0.008 260);
+  --secondary: oklch(0.20 0.008 260);
+  --secondary-foreground: oklch(0.90 0.004 260);
+  --muted: oklch(0.20 0.008 260);
+  --muted-foreground: oklch(0.58 0.008 260);
+  --accent: oklch(0.22 0.015 195);
+  --accent-foreground: oklch(0.90 0.004 260);
+  --destructive: oklch(0.55 0.2 27);
+  --border: oklch(0.23 0.008 260);
+  --input: oklch(0.23 0.008 260);
+  --ring: oklch(0.55 0.11 195);
+
+  --sidebar-background: oklch(0.135 0.008 260);
+  --sidebar-foreground: oklch(0.65 0.006 260);
+  --sidebar-primary: oklch(0.55 0.11 195);
+  --sidebar-primary-foreground: oklch(0.12 0.008 260);
+  --sidebar-accent: oklch(0.22 0.015 195);
+  --sidebar-accent-foreground: oklch(0.90 0.004 260);
+  --sidebar-border: oklch(0.23 0.008 260);
+  --sidebar-ring: oklch(0.55 0.11 195);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scrollbar-gutter: stable;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+
+  button,
+  [role="button"],
+  select,
+  label[for],
+  input[type="checkbox"],
+  input[type="radio"],
+  a[href] {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+
+  /* Basecoat's native select padding stays too tall once compact heights override the default control size. */
+  select.select {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .status-pill {
+    @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium leading-none;
+  }
+
+  .status-not-started {
+    @apply bg-stone-100 text-stone-500 dark:bg-stone-800/50 dark:text-stone-400;
+  }
+
+  .status-in-progress {
+    @apply bg-sky-50 text-sky-600 dark:bg-sky-950/40 dark:text-sky-400;
+  }
+
+  .status-ready-for-review {
+    @apply bg-indigo-50 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400;
+  }
+
+  .status-validated {
+    @apply bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400;
+  }
+
+  .status-not-applicable {
+    @apply bg-stone-100 text-stone-400 dark:bg-stone-800/40 dark:text-stone-500;
+  }
+
+  .status-blocked {
+    @apply bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400;
+  }
+
+
+  .kpi-value {
+    @apply text-2xl font-semibold tracking-tight tabular-nums;
+  }
+
+  .kpi-label {
+    @apply text-xs font-medium text-muted-foreground uppercase tracking-wide;
+  }
+
+  .kpi-detail {
+    @apply text-xs text-muted-foreground mt-0.5;
+  }
+
+  .section-heading {
+    @apply text-xs font-medium uppercase tracking-wider text-muted-foreground;
+  }
+
+  .data-row {
+    @apply flex items-center justify-between gap-4 py-2.5 border-b border-border last:border-b-0;
+  }
+
+  .data-row-link {
+    @apply flex items-center justify-between gap-4 py-2.5 border-b border-border last:border-b-0 -mx-2 px-2 rounded-md transition-colors duration-150 hover:bg-accent/50;
+  }
+
+  /* Assessment items table – fixed layout to prevent overflow */
+  .items-table {
+    table-layout: fixed;
+  }
+
+  .items-table th,
+  .items-table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+  }
+
+  .items-table-title {
+    width: auto;
+    /* takes remaining space */
+  }
+
+  .items-table-title-cell {
+    overflow: hidden;
+  }
+
+  .items-table-title-cell a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .item-summary {
+    @apply mt-0.5 text-xs text-muted-foreground leading-snug;
+  }
+
+  /* Sticky bulk-action bar – slides up from the bottom when items are selected */
+  .bulk-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    border-top: 1px solid var(--border);
+    background-color: var(--background);
+    box-shadow: 0 -2px 16px oklch(0 0 0 / 0.07);
+    transform: translateY(calc(100% + 1px));
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bulk-bar--visible {
+    transform: translateY(0);
+  }
+}
+
+/* Flatpickr minimal overrides for theme integration */
+.flatpickr-calendar {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
+.flatpickr-months .flatpickr-month {
+  color: var(--foreground);
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  background: var(--card);
+  color: var(--foreground);
+}
+
+.flatpickr-weekdays {
+  background: var(--muted);
+}
+
+.flatpickr-weekday {
+  color: var(--muted-foreground);
+}
+
+.flatpickr-day {
+  color: var(--foreground);
+}
+
+.flatpickr-day:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover,
+.flatpickr-day.selected:focus {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.flatpickr-day.today {
+  border-color: var(--primary);
+}
+
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: var(--muted-foreground);
+}
+
+.flatpickr-day.disabled,
+.flatpickr-day.disabled:hover {
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}

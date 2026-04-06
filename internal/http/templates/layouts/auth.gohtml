@@ -1,0 +1,61 @@
+{{ define "layout" }}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ .Title }} · {{ .AppName }}</title>
+    <link rel="stylesheet" href="/assets/app.css" />
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem('themeMode');
+          if (stored ? stored === 'dark'
+                     : matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <script type="module" src="/assets/app.js"></script>
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <main class="grid min-h-screen lg:grid-cols-2">
+      <section class="hidden lg:flex relative overflow-hidden bg-primary text-primary-foreground">
+        <div class="relative z-10 flex w-full flex-col justify-between px-14 py-14 xl:px-20">
+          <div>
+            <p class="text-sm font-medium tracking-wide opacity-60">{{ .AppName }}</p>
+            <h1 class="mt-10 max-w-md text-3xl font-semibold tracking-tight leading-snug">Operational clarity for every safeguard owner.</h1>
+            <p class="mt-4 max-w-sm text-sm leading-relaxed opacity-60">Track execution, evidence, review, and accountability across your control framework.</p>
+          </div>
+          <div class="grid max-w-md gap-8 text-sm opacity-50 sm:grid-cols-3">
+            <div>
+              <p class="text-[10px] font-medium uppercase tracking-widest opacity-60">Workflow</p>
+              <p class="mt-1.5 text-xs leading-relaxed">Ownership to review with explicit gates.</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-medium uppercase tracking-widest opacity-60">Evidence</p>
+              <p class="mt-1.5 text-xs leading-relaxed">Links, comments, and history attached to work.</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-medium uppercase tracking-widest opacity-60">Reporting</p>
+              <p class="mt-1.5 text-xs leading-relaxed">Rollups operators can act on immediately.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="flex min-h-screen items-center justify-center px-6 py-12 sm:px-12">
+        <div class="w-full max-w-sm">
+          <div class="mb-10 lg:hidden">
+            <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider">{{ .AppName }}</p>
+            <h1 class="mt-2 text-xl font-semibold tracking-tight">Controls execution, kept simple.</h1>
+          </div>
+          {{ template "flash" . }}
+          {{ template "content" . }}
+        </div>
+      </section>
+    </main>
+    <section id="toaster"></section>
+  </body>
+</html>
+{{ end }}

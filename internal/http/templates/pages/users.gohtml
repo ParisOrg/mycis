@@ -1,0 +1,49 @@
+{{ define "content" }}
+<section class="grid gap-8 lg:grid-cols-[360px_1fr] max-w-5xl">
+  <div>
+    <h2 class="section-heading">Create user</h2>
+    <p class="mt-1 text-sm text-muted-foreground">Add an owner or reviewer account.</p>
+    <form class="mt-5 space-y-4" action="/admin/users" method="post">
+      <div class="field">
+        <label class="label" for="name">Name</label>
+        <input class="input mt-1.5 w-full" id="name" name="name" type="text" required />
+      </div>
+      <div class="field">
+        <label class="label" for="email">Email</label>
+        <input class="input mt-1.5 w-full" id="email" name="email" type="email" required />
+      </div>
+      <label class="flex items-center gap-2 text-sm">
+        <input class="input" type="checkbox" name="is_admin" />
+        <span>Admin access</span>
+      </label>
+      <button class="btn btn-primary btn-sm" type="submit">Create user</button>
+    </form>
+  </div>
+
+  <div>
+    <h2 class="section-heading">Active accounts</h2>
+    <div class="mt-3 overflow-x-auto rounded-lg border border-border">
+      <table class="table w-full text-sm">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Password</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .Users }}
+            <tr>
+              <td class="font-medium">{{ .Name }}</td>
+              <td class="text-muted-foreground">{{ .Email }}</td>
+              <td><span class="{{ if .IsAdmin }}badge-outline{{ else }}badge{{ end }} text-xs">{{ if .IsAdmin }}Admin{{ else }}Standard{{ end }}</span></td>
+              <td>{{ if .MustChangePassword }}<span class="text-amber-600 dark:text-amber-400 text-xs">Must change</span>{{ else }}<span class="text-muted-foreground text-xs">Set</span>{{ end }}</td>
+            </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{{ end }}

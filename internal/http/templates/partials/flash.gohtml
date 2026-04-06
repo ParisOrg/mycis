@@ -1,0 +1,21 @@
+{{ define "flash" }}
+  {{ if .Flashes }}
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        window.setTimeout(() => {
+          {{ range .Flashes }}
+            document.dispatchEvent(new CustomEvent("basecoat:toast", {
+              detail: {
+                config: {
+                  title: {{ if eq .Kind "error" }}"Error"{{ else }}"Success"{{ end }},
+                  description: "{{ .Message }}",
+                  category: {{ if eq .Kind "error" }}"error"{{ else }}"success"{{ end }}
+                }
+              }
+            }));
+          {{ end }}
+        }, 0);
+      });
+    </script>
+  {{ end }}
+{{ end }}

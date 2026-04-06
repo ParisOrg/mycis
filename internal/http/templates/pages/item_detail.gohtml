@@ -1,0 +1,172 @@
+{{ define "content" }}
+<section class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] max-w-6xl">
+  <div class="space-y-8">
+    <div>
+      <p class="text-xs text-muted-foreground">{{ .Detail.Item.FrameworkLabel }} {{ .Detail.Item.FrameworkVersion }} · Group {{ .Detail.Item.GroupCode }}</p>
+      <h2 class="mt-1 text-lg font-semibold tracking-tight">{{ .Detail.Item.ItemCode }} · {{ .Detail.Item.ItemTitle }}</h2>
+      <p class="mt-2 text-sm leading-relaxed text-muted-foreground max-w-2xl">{{ .Detail.Item.ItemDescription }}</p>
+      {{ if .Detail.Item.Tags }}
+        <div class="mt-3 flex flex-wrap gap-1.5">
+          {{ range .Detail.Item.Tags }}
+            <span class="badge-outline text-xs">{{ tagLabel . }}</span>
+          {{ end }}
+        </div>
+      {{ end }}
+    </div>
+
+    <form action="/items/{{ .Detail.Item.ID }}" method="post">
+      <div class="rounded-lg border border-border">
+        <div class="p-5">
+          <div class="grid gap-4 md:grid-cols-2">
+            <div class="field">
+              <label class="label" for="status">Status</label>
+              <select class="select mt-1.5 w-full text-sm" id="status" name="status">
+                <option value="not_started" {{ if eq .Detail.Item.Status "not_started" }}selected{{ end }}>Not started</option>
+                <option value="in_progress" {{ if eq .Detail.Item.Status "in_progress" }}selected{{ end }}>In progress</option>
+                <option value="ready_for_review" {{ if eq .Detail.Item.Status "ready_for_review" }}selected{{ end }}>Ready for review</option>
+                <option value="validated" {{ if eq .Detail.Item.Status "validated" }}selected{{ end }}>Validated</option>
+                <option value="not_applicable" {{ if eq .Detail.Item.Status "not_applicable" }}selected{{ end }}>Not applicable</option>
+                <option value="blocked" {{ if eq .Detail.Item.Status "blocked" }}selected{{ end }}>Blocked</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="score">Score</label>
+              <select class="select mt-1.5 w-full text-sm" id="score" name="score">
+                <option value="">Not scored</option>
+                <option value="1" {{ if intPtrEquals .Detail.Item.Score 1 }}selected{{ end }}>1</option>
+                <option value="2" {{ if intPtrEquals .Detail.Item.Score 2 }}selected{{ end }}>2</option>
+                <option value="3" {{ if intPtrEquals .Detail.Item.Score 3 }}selected{{ end }}>3</option>
+                <option value="4" {{ if intPtrEquals .Detail.Item.Score 4 }}selected{{ end }}>4</option>
+                <option value="5" {{ if intPtrEquals .Detail.Item.Score 5 }}selected{{ end }}>5</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="owner_user_id">Owner</label>
+              <select class="select mt-1.5 w-full text-sm" id="owner_user_id" name="owner_user_id">
+                <option value="">Unassigned</option>
+                {{ range .Users }}
+                  <option value="{{ .ID }}" {{ if eq $.Detail.Item.OwnerUserID.Bytes .ID }}selected{{ end }}>{{ .Name }}</option>
+                {{ end }}
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="reviewer_user_id">Reviewer</label>
+              <select class="select mt-1.5 w-full text-sm" id="reviewer_user_id" name="reviewer_user_id">
+                <option value="">Unassigned</option>
+                {{ range .Users }}
+                  <option value="{{ .ID }}" {{ if eq $.Detail.Item.ReviewerUserID.Bytes .ID }}selected{{ end }}>{{ .Name }}</option>
+                {{ end }}
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="priority">Priority</label>
+              <select class="select mt-1.5 w-full text-sm" id="priority" name="priority">
+                <option value="low" {{ if eq .Detail.Item.Priority "low" }}selected{{ end }}>Low</option>
+                <option value="medium" {{ if eq .Detail.Item.Priority "medium" }}selected{{ end }}>Medium</option>
+                <option value="high" {{ if eq .Detail.Item.Priority "high" }}selected{{ end }}>High</option>
+                <option value="critical" {{ if eq .Detail.Item.Priority "critical" }}selected{{ end }}>Critical</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="label" for="due_date">Due date</label>
+              <input class="input mt-1.5 w-full" id="due_date" name="due_date" type="text" value="{{ formatDate .Detail.Item.DueDate }}" data-flatpickr />
+            </div>
+            <div class="field md:col-span-2">
+              <label class="label" for="notes">Notes</label>
+              <textarea class="textarea mt-1.5 min-h-28 w-full" id="notes" name="notes">{{ .Detail.Item.Notes }}</textarea>
+            </div>
+            <div class="field md:col-span-2">
+              <label class="label" for="blocked_reason">Blocked reason</label>
+              <textarea class="textarea mt-1.5 min-h-16 w-full" id="blocked_reason" name="blocked_reason">{{ trimPointerText .Detail.Item.BlockedReason }}</textarea>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-end gap-3 border-t border-border px-5 py-3">
+          <a class="btn btn-ghost btn-sm" href="/assessments/{{ .Detail.Item.AssessmentID }}">Back</a>
+          <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <aside class="space-y-8">
+    <div>
+      <h3 class="section-heading">Reference</h3>
+      <dl class="mt-3 space-y-2.5 text-sm">
+        <div class="flex justify-between gap-4">
+          <dt class="text-muted-foreground">Group</dt>
+          <dd class="text-right">{{ .Detail.Item.GroupCode }} · {{ .Detail.Item.GroupTitle }}</dd>
+        </div>
+        <div class="flex justify-between gap-4">
+          <dt class="text-muted-foreground">Asset class</dt>
+          <dd>{{ .Detail.Item.AssetClass }}</dd>
+        </div>
+        <div class="flex justify-between gap-4">
+          <dt class="text-muted-foreground">Security function</dt>
+          <dd>{{ .Detail.Item.SecurityFunction }}</dd>
+        </div>
+        <div class="flex justify-between gap-4">
+          <dt class="text-muted-foreground">Validated by</dt>
+          <dd>{{ if .Detail.Item.ValidatedByName }}{{ .Detail.Item.ValidatedByName }}{{ else }}<span class="text-muted-foreground">–</span>{{ end }}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="border-t border-border pt-8">
+      <h3 class="section-heading">Evidence</h3>
+      <div class="mt-3 space-y-1">
+        {{ range .Detail.Evidence }}
+          <a class="data-row-link text-sm" href="{{ .Url }}" target="_blank" rel="noreferrer">
+            <div>
+              <p class="font-medium">{{ .Label }}</p>
+              <p class="text-xs text-muted-foreground">{{ .CreatedByName }} · {{ formatDateTime .CreatedAt }}</p>
+            </div>
+          </a>
+        {{ else }}
+          <p class="text-sm text-muted-foreground py-1">No evidence links yet.</p>
+        {{ end }}
+        <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/evidence" method="post">
+          <input class="input w-full" name="label" type="text" placeholder="Label" />
+          <input class="input w-full" name="url" type="url" placeholder="https://…" />
+          <button class="btn btn-secondary btn-sm" type="submit">Add evidence</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="border-t border-border pt-8">
+      <h3 class="section-heading">Comments</h3>
+      <div class="mt-3 space-y-2.5">
+        {{ range .Detail.Comments }}
+          <div class="rounded-md bg-muted/60 px-3 py-2.5 text-sm">
+            <div class="flex items-center justify-between gap-3">
+              <p class="font-medium text-xs">{{ .UserName }}</p>
+              <p class="text-xs text-muted-foreground">{{ formatDateTime .CreatedAt }}</p>
+            </div>
+            <p class="mt-1 whitespace-pre-wrap text-sm">{{ .Body }}</p>
+          </div>
+        {{ else }}
+          <p class="text-sm text-muted-foreground py-1">No comments yet.</p>
+        {{ end }}
+        <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/comments" method="post">
+          <textarea class="textarea min-h-16 w-full" name="body" placeholder="Add context or review notes"></textarea>
+          <button class="btn btn-secondary btn-sm" type="submit">Add comment</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="border-t border-border pt-8">
+      <h3 class="section-heading">Audit trail</h3>
+      <div class="mt-3 text-sm">
+        {{ range .Detail.Audit }}
+          <div class="data-row">
+            <p class="font-medium text-xs">{{ .ActorName }}</p>
+            <p class="text-xs text-muted-foreground">{{ .Action }} · {{ formatDateTime .CreatedAt }}</p>
+          </div>
+        {{ else }}
+          <p class="text-sm text-muted-foreground py-1">No history yet.</p>
+        {{ end }}
+      </div>
+    </div>
+  </aside>
+</section>
+{{ end }}
