@@ -3,6 +3,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
 COPY assets ./assets
+COPY internal/http/templates ./internal/http/templates
 RUN npm run build
 
 FROM golang:1.26-alpine AS build
