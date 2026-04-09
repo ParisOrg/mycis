@@ -1,5 +1,5 @@
 # Binaries / local build outputs
-app
+/app
 bin/
 
 # Node
