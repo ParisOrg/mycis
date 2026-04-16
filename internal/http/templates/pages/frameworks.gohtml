@@ -1,64 +1,64 @@
 {{ define "content" }}
-<div class="max-w-3xl">
 
-  {{ if not .Frameworks }}
-    <div class="py-20 text-center">
-      <p class="text-sm text-muted-foreground">No frameworks loaded. Run the seed command to load initial data.</p>
-    </div>
-  {{ else }}
+{{ if not .Frameworks }}
+  <div class="py-20 text-center">
+    <p class="text-sm text-muted-foreground">No frameworks loaded. Run the seed command to load initial data.</p>
+  </div>
+{{ else }}
 
-    {{/* Tab bar — only rendered when there is more than one framework */}}
-    {{ if gt (len .Frameworks) 1 }}
-      <div class="flex border-b border-border mb-8">
-        {{ range .Frameworks }}
-          <a href="/frameworks?framework_id={{ .ID }}"
-             class="px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors duration-150 whitespace-nowrap
-                    {{ if and $.SelectedFramework (eq $.SelectedFramework.ID .ID) }}
-                      border-foreground text-foreground
-                    {{ else }}
-                      border-transparent text-muted-foreground hover:text-foreground hover:border-border
-                    {{ end }}">
-            {{ .Label }} {{ .Version }}
-          </a>
-        {{ end }}
-      </div>
-    {{ end }}
+  {{/* ── Framework picker ──────────────────────────────────────────── */}}
+  <div class="mb-8 max-w-sm">
+    <select class="select w-full text-sm"
+            onchange="window.location.href='/frameworks?framework_id='+this.value">
+      <option value="">Select a framework…</option>
+      {{ range .Frameworks }}
+        <option value="{{ .ID }}"
+          {{ if and $.SelectedFramework (eq $.SelectedFramework.ID .ID) }}selected{{ end }}>
+          {{ .Label }} {{ .Version }} ({{ .ItemCount }} items)
+        </option>
+      {{ end }}
+    </select>
+  </div>
 
-    {{ if .SelectedFramework }}
-      {{/* Framework identity + stats */}}
-      <div class="flex items-start justify-between gap-4 mb-8">
-        <div>
-          <div class="flex items-baseline gap-2">
-            <h2 class="text-xl font-semibold tracking-tight">{{ .SelectedFramework.Label }}</h2>
-            <span class="text-base text-muted-foreground font-normal">{{ .SelectedFramework.Version }}</span>
-          </div>
-          <p class="mt-1 text-sm text-muted-foreground">
-            {{ .SelectedFramework.GroupCount }} control groups · {{ .SelectedFramework.ItemCount }} items
-          </p>
-        </div>
-        <span class="badge-outline text-xs mt-1 shrink-0">{{ .SelectedFramework.Status }}</span>
-      </div>
+  {{/* ── Framework detail ──────────────────────────────────────────── */}}
+  {{ if .SelectedFramework }}
+  <div class="max-w-3xl">
 
-      {{/* Control groups list */}}
+    {{/* Header */}}
+    <div class="flex items-start justify-between gap-4 mb-8">
       <div>
-        {{ range .Groups }}
-          <div class="flex gap-5 border-t border-border py-5 -mx-2 px-2 rounded-sm transition-colors duration-150 hover:bg-muted/40 group">
-            <div class="shrink-0 w-8 pt-0.5 text-right">
-              <span class="font-mono text-xs font-medium text-muted-foreground/60 tabular-nums">{{ .Code }}</span>
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-semibold text-foreground leading-snug">{{ .Title }}</p>
-              <p class="mt-1.5 text-sm text-muted-foreground leading-relaxed">{{ .Summary }}</p>
-            </div>
-            <div class="shrink-0 pt-0.5">
-              <span class="text-xs text-muted-foreground/60 tabular-nums">{{ .ItemCount }}</span>
-            </div>
-          </div>
-        {{ end }}
-        <div class="border-t border-border"></div>
+        <div class="flex items-baseline gap-2">
+          <h2 class="text-xl font-semibold tracking-tight">{{ .SelectedFramework.Label }}</h2>
+          <span class="text-base text-muted-foreground font-normal">{{ .SelectedFramework.Version }}</span>
+        </div>
+        <p class="mt-1 text-sm text-muted-foreground">
+          {{ .SelectedFramework.GroupCount }} control groups · {{ .SelectedFramework.ItemCount }} items
+        </p>
       </div>
-    {{ end }}
+      <span class="badge-outline text-xs mt-1 shrink-0">{{ .SelectedFramework.Status }}</span>
+    </div>
 
+    {{/* Control groups list */}}
+    <div>
+      {{ range .Groups }}
+        <div class="flex gap-5 border-t border-border py-5 -mx-2 px-2 rounded-sm transition-colors duration-150 hover:bg-muted/40">
+          <div class="shrink-0 w-24 pt-0.5 text-right">
+            <span class="font-mono text-xs font-medium text-muted-foreground/60 tabular-nums">{{ .Code }}</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-foreground leading-snug">{{ .Title }}</p>
+            <p class="mt-1.5 text-sm text-muted-foreground leading-relaxed">{{ .Summary }}</p>
+          </div>
+          <div class="shrink-0 pt-0.5">
+            <span class="text-xs text-muted-foreground/60 tabular-nums">{{ .ItemCount }}</span>
+          </div>
+        </div>
+      {{ end }}
+      <div class="border-t border-border"></div>
+    </div>
+
+  </div>
   {{ end }}
-</div>
+
+{{ end }}
 {{ end }}

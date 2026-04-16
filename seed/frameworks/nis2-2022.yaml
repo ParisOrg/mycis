@@ -1,0 +1,467 @@
+framework:
+  slug: "nis2-2022"
+  label: "NIS2 Directive"
+  version: "2022"
+
+groups:
+  - code: "GOV"
+    title: "Governance and Management Accountability"
+    summary: "Management body obligations: approval of cybersecurity measures, accountability for infringements, mandatory training, and overseeing cybersecurity risk management (Article 20)."
+    description: "NIS2 Article 20 introduces direct accountability for management bodies. They must approve the cybersecurity risk-management measures, oversee their implementation, and can be held personally liable for infringements. This shifts cybersecurity from a purely technical to a governance concern."
+
+  - code: "RISK"
+    title: "Risk Analysis and Information System Security"
+    summary: "Policies for risk analysis and overall information system security, forming the foundation for all other cybersecurity measures (Article 21(2)(a))."
+    description: "A systematic risk management approach is the basis of NIS2 compliance. Organizations must establish and maintain policies covering risk identification, analysis, treatment, and monitoring for their networks and information systems."
+
+  - code: "INCIDENT"
+    title: "Incident Handling"
+    summary: "Policies and procedures for detecting, managing, and recovering from cybersecurity incidents (Article 21(2)(b))."
+    description: "NIS2 requires documented and tested incident handling capabilities, from detection through containment, eradication, recovery, and post-incident review."
+
+  - code: "BCM"
+    title: "Business Continuity and Crisis Management"
+    summary: "Backup management, disaster recovery, and crisis management to ensure operational continuity during and after cybersecurity incidents (Article 21(2)(c))."
+    description: "Entities must ensure they can maintain or rapidly restore critical services. This covers backup strategy, disaster recovery plans, and crisis management procedures including communication plans."
+
+  - code: "SUPPLY"
+    title: "Supply Chain Security"
+    summary: "Security in supply chains including security aspects of relationships with direct suppliers or service providers (Article 21(2)(d))."
+    description: "NIS2 explicitly requires supply chain security controls, recognizing that vulnerabilities in the supply chain (SolarWinds, Log4j, etc.) are a major attack vector. Organizations must address security risks from their direct suppliers and service providers."
+
+  - code: "DEVOPS"
+    title: "Secure Acquisition, Development and Maintenance"
+    summary: "Security in network and information systems acquisition, development, and maintenance including vulnerability handling and disclosure (Article 21(2)(e))."
+    description: "Organizations must apply security requirements throughout the lifecycle of systems and software — from procurement through development, deployment, maintenance, and decommissioning."
+
+  - code: "ASSESS"
+    title: "Effectiveness Assessment"
+    summary: "Policies and procedures to assess the effectiveness of cybersecurity risk-management measures (Article 21(2)(f))."
+    description: "NIS2 requires organizations to measure and demonstrate the effectiveness of their cybersecurity controls, not just implement them. This includes regular assessments, testing, and metrics."
+
+  - code: "HYGIENE"
+    title: "Cyber Hygiene and Training"
+    summary: "Basic cyber hygiene practices and cybersecurity training for all relevant personnel (Article 21(2)(g))."
+    description: "All personnel with relevant roles must receive appropriate cybersecurity training. Basic cyber hygiene covers password management, patching, secure configuration, and awareness of social engineering."
+
+  - code: "CRYPTO"
+    title: "Cryptography and Encryption"
+    summary: "Policies and procedures regarding the use of cryptography and, where appropriate, encryption (Article 21(2)(h))."
+    description: "Organizations must have defined policies governing when and how cryptography is used, covering key management, approved algorithms, and the encryption of sensitive data in transit and at rest."
+
+  - code: "HR_ACCESS"
+    title: "Human Resources Security and Access Control"
+    summary: "Human resources security, access control policies, and asset management (Article 21(2)(i))."
+    description: "Personnel security must cover the full employment lifecycle including screening, security responsibilities, access rights management aligned with roles, and procedures for departure. Asset management must support accurate understanding of what needs protecting."
+
+  - code: "AUTH"
+    title: "Multi-Factor Authentication and Secure Communications"
+    summary: "Use of MFA or continuous authentication, and secured communications (Article 21(2)(j))."
+    description: "NIS2 explicitly mandates MFA or continuous authentication where appropriate, recognizing that password-only authentication is insufficient for essential and important entities. Secure communications channels must also be in place."
+
+  - code: "REPORTING"
+    title: "Incident Reporting Obligations"
+    summary: "Obligations to report significant incidents to competent authorities: early warning (24h), notification (72h), and final report (1 month) (Article 23)."
+    description: "NIS2 establishes a tiered reporting regime. Organizations must report significant incidents to their national CSIRT or competent authority, with strict timelines. Multi-country incidents may require reporting to ENISA."
+
+
+items:
+
+  # ── GOV: Governance ───────────────────────────────────────────────────────
+  - group_code: "GOV"
+    code: "GOV.1"
+    title: "Management body approves cybersecurity risk-management measures"
+    summary: "The management body shall approve the cybersecurity risk-management measures taken by the entity"
+    description: "Art. 20(1): Management bodies must formally approve the organization's cybersecurity risk-management measures, not merely delegate them to IT or security teams. Document approval through board minutes or equivalent governance records."
+    security_function: "Governance"
+    asset_class: "Organization"
+    tags: ["governance", "management", "art-20"]
+
+  - group_code: "GOV"
+    code: "GOV.2"
+    title: "Management body oversees implementation of cybersecurity measures"
+    summary: "The management body shall oversee implementation of cybersecurity risk-management measures"
+    description: "Art. 20(1): Oversight is an active, ongoing responsibility. Management must receive regular reports on the status of cybersecurity controls, incident trends, and risk posture — not just approve policies once."
+    security_function: "Governance"
+    asset_class: "Organization"
+    tags: ["governance", "management", "art-20"]
+
+  - group_code: "GOV"
+    code: "GOV.3"
+    title: "Management body members receive adequate cybersecurity training"
+    summary: "Members of management bodies shall follow training to gain sufficient knowledge to identify risks and assess cybersecurity risk-management practices"
+    description: "Art. 20(2): NIS2 mandates cybersecurity training for management body members — not just awareness, but sufficient knowledge to assess and govern cybersecurity risk. Similar training requirements apply to all personnel."
+    security_function: "Governance"
+    asset_class: "Users"
+    tags: ["governance", "training", "art-20"]
+
+  - group_code: "GOV"
+    code: "GOV.4"
+    title: "Management body members can be held liable for infringements"
+    summary: "Member States shall ensure that natural persons responsible for an entity can be held liable for infringements of cybersecurity obligations"
+    description: "Art. 20(1) / Art. 32(6): NIS2 introduces personal liability for management — a significant shift from previous frameworks. Organizations should ensure that D&O policies cover NIS2 infringements and that liability is appropriately managed."
+    security_function: "Governance"
+    asset_class: "Organization"
+    tags: ["governance", "liability", "compliance", "art-20"]
+
+  # ── RISK: Risk Analysis and Information System Security ──────────────────
+  - group_code: "RISK"
+    code: "RISK.1"
+    title: "Information security risk management policy"
+    summary: "Establish, implement, and maintain a policy for information security risk analysis and management"
+    description: "Art. 21(2)(a): A formal risk management policy must define the risk assessment methodology, risk tolerance, risk treatment options, and review frequency. It should be approved by management and integrated into overall enterprise risk management."
+    security_function: "Risk Management"
+    asset_class: "Organization"
+    tags: ["risk-management", "policy", "art-21"]
+
+  - group_code: "RISK"
+    code: "RISK.2"
+    title: "Regular information security risk assessments"
+    summary: "Conduct regular risk assessments to identify and evaluate cybersecurity risks to network and information systems"
+    description: "Art. 21(2)(a): Risk assessments must be conducted at planned intervals and triggered by significant changes. They should cover asset inventories, threat identification, vulnerability analysis, and impact assessment."
+    security_function: "Risk Management"
+    asset_class: "Organization"
+    tags: ["risk-management", "art-21"]
+
+  - group_code: "RISK"
+    code: "RISK.3"
+    title: "Risk treatment and residual risk acceptance"
+    summary: "Implement risk treatment measures and formally accept residual risks"
+    description: "Art. 21(2)(a): Identified risks must be treated through mitigating controls, risk transfer, avoidance, or formal acceptance. Residual risk acceptance must be documented and authorized at an appropriate level."
+    security_function: "Risk Management"
+    asset_class: "Organization"
+    tags: ["risk-management", "art-21"]
+
+  - group_code: "RISK"
+    code: "RISK.4"
+    title: "Asset management supporting risk analysis"
+    summary: "Maintain inventories of network and information systems assets to underpin risk management"
+    description: "Art. 21(2)(a) / (i): Accurate asset inventories are a prerequisite for meaningful risk analysis. Assets should be classified by criticality and sensitivity, with ownership assigned."
+    security_function: "Risk Management"
+    asset_class: "All"
+    tags: ["asset-management", "risk-management", "art-21"]
+
+  # ── INCIDENT: Incident Handling ───────────────────────────────────────────
+  - group_code: "INCIDENT"
+    code: "INC.1"
+    title: "Incident detection capabilities"
+    summary: "Implement technical and organisational measures to detect cybersecurity incidents"
+    description: "Art. 21(2)(b): Entities must be able to detect incidents through monitoring, alerting, and anomaly detection. SIEM, IDS/IPS, and endpoint detection tools are common implementations."
+    security_function: "Incident Handling"
+    asset_class: "Systems"
+    tags: ["incident-management", "detection", "art-21"]
+
+  - group_code: "INCIDENT"
+    code: "INC.2"
+    title: "Documented incident response plan"
+    summary: "Establish and maintain a documented incident response plan with defined roles and procedures"
+    description: "Art. 21(2)(b): The incident response plan must define roles, responsibilities, escalation paths, communication procedures, and steps for containment, eradication, and recovery. It must be tested regularly."
+    security_function: "Incident Handling"
+    asset_class: "Organization"
+    tags: ["incident-management", "response", "art-21"]
+
+  - group_code: "INCIDENT"
+    code: "INC.3"
+    title: "Incident classification and severity assessment"
+    summary: "Classify and assess the severity of incidents to prioritise response"
+    description: "Art. 21(2)(b) / Art. 23: NIS2 defines 'significant incidents' based on impact thresholds (service disruption, financial loss, affected persons). Classification procedures must align with these thresholds to trigger appropriate reporting."
+    security_function: "Incident Handling"
+    asset_class: "Organization"
+    tags: ["incident-management", "art-21", "art-23"]
+
+  - group_code: "INCIDENT"
+    code: "INC.4"
+    title: "Post-incident analysis and lessons learned"
+    summary: "Conduct post-incident analysis and apply lessons learned to improve security controls"
+    description: "Art. 21(2)(b): After-action reviews must document root causes, the effectiveness of the response, and improvements to controls and procedures. Findings feed back into the risk management process."
+    security_function: "Incident Handling"
+    asset_class: "Organization"
+    tags: ["incident-management", "continual-improvement", "art-21"]
+
+  # ── BCM: Business Continuity ──────────────────────────────────────────────
+  - group_code: "BCM"
+    code: "BCM.1"
+    title: "Backup management"
+    summary: "Implement backup management with regular, tested backups of critical data and systems"
+    description: "Art. 21(2)(c): Backups must be aligned with defined RTO and RPO objectives. Backups should be encrypted, stored offline or offsite, and regularly tested for restorability. Ransomware-resilient backup strategies are essential."
+    security_function: "Business Continuity"
+    asset_class: "Data"
+    tags: ["backup", "business-continuity", "art-21"]
+
+  - group_code: "BCM"
+    code: "BCM.2"
+    title: "Disaster recovery planning and testing"
+    summary: "Establish and regularly test disaster recovery plans to restore systems and services after a cybersecurity incident"
+    description: "Art. 21(2)(c): DR plans must be documented, regularly tested (at least annually), and updated based on test results. Tests should validate both technical recovery and coordination between teams."
+    security_function: "Business Continuity"
+    asset_class: "Systems"
+    tags: ["disaster-recovery", "business-continuity", "art-21"]
+
+  - group_code: "BCM"
+    code: "BCM.3"
+    title: "Crisis management procedures"
+    summary: "Establish crisis management procedures for major cybersecurity incidents affecting critical operations"
+    description: "Art. 21(2)(c): Crisis management covers major incidents that cannot be handled through normal incident response — requiring executive involvement, external communications, regulatory liaison, and potentially emergency operations centres."
+    security_function: "Business Continuity"
+    asset_class: "Organization"
+    tags: ["crisis-management", "business-continuity", "art-21"]
+
+  # ── SUPPLY: Supply Chain Security ─────────────────────────────────────────
+  - group_code: "SUPPLY"
+    code: "SUP.1"
+    title: "Supplier security risk assessment"
+    summary: "Assess cybersecurity risks posed by direct suppliers and service providers"
+    description: "Art. 21(2)(d): Organizations must assess the security practices of their direct suppliers and service providers, with focus on those with access to the entity's network and information systems."
+    security_function: "Supply Chain"
+    asset_class: "Organization"
+    tags: ["supply-chain", "risk-management", "art-21"]
+
+  - group_code: "SUPPLY"
+    code: "SUP.2"
+    title: "Security requirements in supplier contracts"
+    summary: "Include security requirements in contracts with direct suppliers and service providers"
+    description: "Art. 21(2)(d): Contractual provisions should address minimum security standards, incident notification obligations, audit rights, sub-contractor requirements, and security during and after contract termination."
+    security_function: "Supply Chain"
+    asset_class: "Organization"
+    tags: ["supply-chain", "art-21"]
+
+  - group_code: "SUPPLY"
+    code: "SUP.3"
+    title: "Ongoing monitoring of supplier security"
+    summary: "Continuously monitor the security performance of critical suppliers throughout the relationship"
+    description: "Art. 21(2)(d): Supplier security is not a one-time assessment. Organizations must monitor ongoing security performance through periodic reviews, security questionnaires, and review of suppliers' own audit reports."
+    security_function: "Supply Chain"
+    asset_class: "Organization"
+    tags: ["supply-chain", "monitoring", "art-21"]
+
+  - group_code: "SUPPLY"
+    code: "SUP.4"
+    title: "ICT supply chain integrity"
+    summary: "Address security of hardware, software, and services throughout the ICT supply chain"
+    description: "Art. 21(2)(d): Organizations should verify the integrity and authenticity of hardware and software components, require SBOMs from critical software suppliers, and manage risks from open-source dependencies."
+    security_function: "Supply Chain"
+    asset_class: "Systems"
+    tags: ["supply-chain", "asset-management", "art-21"]
+
+  # ── DEVOPS: Secure Acquisition, Development and Maintenance ───────────────
+  - group_code: "DEVOPS"
+    code: "DEV.1"
+    title: "Security requirements in system acquisition"
+    summary: "Define and enforce security requirements when acquiring network and information systems"
+    description: "Art. 21(2)(e): Security requirements must be defined before procurement, included in RFPs and contracts, and verified upon delivery. Vendor security assessments should precede significant acquisitions."
+    security_function: "Secure Development"
+    asset_class: "Systems"
+    tags: ["secure-development", "asset-management", "art-21"]
+
+  - group_code: "DEVOPS"
+    code: "DEV.2"
+    title: "Secure software development practices"
+    summary: "Apply security throughout the software development lifecycle"
+    description: "Art. 21(2)(e): Secure SDLC practices include threat modelling, security requirements, secure coding standards, SAST/DAST testing, and security sign-off before deployment."
+    security_function: "Secure Development"
+    asset_class: "Software"
+    tags: ["secure-development", "art-21"]
+
+  - group_code: "DEVOPS"
+    code: "DEV.3"
+    title: "Vulnerability management and disclosure"
+    summary: "Manage technical vulnerabilities and implement responsible vulnerability disclosure"
+    description: "Art. 21(2)(e): Organizations must have processes for identifying, prioritizing, and remediating vulnerabilities — including a vulnerability disclosure policy (VDP) to receive and act on reports from external researchers."
+    security_function: "Secure Development"
+    asset_class: "Systems"
+    tags: ["vulnerability-management", "art-21"]
+
+  - group_code: "DEVOPS"
+    code: "DEV.4"
+    title: "Patch management"
+    summary: "Apply security patches to systems in a timely manner based on risk"
+    description: "Art. 21(2)(e): A risk-based patch management process must ensure that critical security patches are applied within defined timeframes. Emergency patching procedures should exist for actively exploited vulnerabilities."
+    security_function: "Secure Development"
+    asset_class: "Systems"
+    tags: ["vulnerability-management", "patch-management", "art-21"]
+
+  # ── ASSESS: Effectiveness Assessment ─────────────────────────────────────
+  - group_code: "ASSESS"
+    code: "ASS.1"
+    title: "Regular assessment of cybersecurity control effectiveness"
+    summary: "Regularly assess whether cybersecurity risk-management measures are effective and proportionate"
+    description: "Art. 21(2)(f): Effectiveness assessments may include internal audits, penetration testing, vulnerability assessments, and review of security metrics and KPIs. Results must be reported to management."
+    security_function: "Assessment"
+    asset_class: "Organization"
+    tags: ["audit", "testing", "art-21"]
+
+  - group_code: "ASSESS"
+    code: "ASS.2"
+    title: "Penetration testing and security exercises"
+    summary: "Conduct penetration testing and security exercises to validate control effectiveness"
+    description: "Art. 21(2)(f): Regular penetration testing (at least annually for essential entities) and tabletop exercises validate that controls work as intended and that teams can respond effectively to incidents."
+    security_function: "Assessment"
+    asset_class: "Systems"
+    tags: ["testing", "penetration-testing", "art-21"]
+
+  - group_code: "ASSESS"
+    code: "ASS.3"
+    title: "Security metrics and KPIs"
+    summary: "Define, collect, and review security metrics to monitor the effectiveness of the cybersecurity programme"
+    description: "Art. 21(2)(f): Metrics should cover key risk indicators (KRIs), control effectiveness indicators (CEIs), and operational metrics. Results must be reported to management for oversight purposes."
+    security_function: "Assessment"
+    asset_class: "Organization"
+    tags: ["monitoring", "governance", "art-21"]
+
+  # ── HYGIENE: Cyber Hygiene and Training ───────────────────────────────────
+  - group_code: "HYGIENE"
+    code: "HYG.1"
+    title: "Basic cyber hygiene practices"
+    summary: "Implement and maintain basic cyber hygiene across the organization"
+    description: "Art. 21(2)(g): Minimum cyber hygiene includes: strong passwords/MFA, timely patching, secure configuration baselines, anti-malware, data backup, and phishing awareness. These apply to all personnel and systems."
+    security_function: "Cyber Hygiene"
+    asset_class: "Organization"
+    tags: ["cyber-hygiene", "art-21"]
+
+  - group_code: "HYGIENE"
+    code: "HYG.2"
+    title: "Cybersecurity awareness and training programme"
+    summary: "Provide cybersecurity awareness and training to all personnel with relevant roles"
+    description: "Art. 21(2)(g): Training must be role-appropriate, regularly updated, and include phishing simulation. Management training is addressed separately in Article 20. Track completion and test effectiveness."
+    security_function: "Cyber Hygiene"
+    asset_class: "Users"
+    tags: ["training", "awareness", "art-21"]
+
+  - group_code: "HYGIENE"
+    code: "HYG.3"
+    title: "Endpoint security and malware protection"
+    summary: "Protect endpoints from malware and unauthorized access"
+    description: "Art. 21(2)(g): Endpoint protection platforms (AV/EDR), application control, and mobile device management (MDM) are core cyber hygiene controls. Policies for BYOD and remote access must align."
+    security_function: "Cyber Hygiene"
+    asset_class: "Devices"
+    tags: ["endpoint-security", "malware-protection", "art-21"]
+
+  # ── CRYPTO: Cryptography and Encryption ──────────────────────────────────
+  - group_code: "CRYPTO"
+    code: "CRY.1"
+    title: "Cryptography policy"
+    summary: "Establish and maintain a policy governing the use of cryptography and key management"
+    description: "Art. 21(2)(h): The cryptography policy must specify approved algorithms, key lengths, permitted use cases, and key management lifecycle requirements (generation, distribution, storage, rotation, revocation, destruction)."
+    security_function: "Cryptography"
+    asset_class: "Data"
+    tags: ["cryptography", "policy", "art-21"]
+
+  - group_code: "CRYPTO"
+    code: "CRY.2"
+    title: "Encryption of sensitive data in transit and at rest"
+    summary: "Encrypt sensitive data in transit and at rest using approved cryptographic mechanisms"
+    description: "Art. 21(2)(h): Data in transit should be protected using current TLS standards. Sensitive data at rest should be encrypted, particularly on portable devices and backup media. Key management must be robust."
+    security_function: "Cryptography"
+    asset_class: "Data"
+    tags: ["cryptography", "data-security", "art-21"]
+
+  - group_code: "CRYPTO"
+    code: "CRY.3"
+    title: "Cryptographic key management"
+    summary: "Implement secure key management processes covering the full key lifecycle"
+    description: "Art. 21(2)(h): Key management includes secure generation (using approved entropy sources), storage (HSM or equivalent), access control, rotation schedules, and revocation/destruction procedures."
+    security_function: "Cryptography"
+    asset_class: "Systems"
+    tags: ["cryptography", "key-management", "art-21"]
+
+  # ── HR_ACCESS: HR Security and Access Control ─────────────────────────────
+  - group_code: "HR_ACCESS"
+    code: "HRA.1"
+    title: "Personnel security screening and onboarding"
+    summary: "Screen personnel before granting access to systems and establish security responsibilities at onboarding"
+    description: "Art. 21(2)(i): Pre-employment screening proportionate to the role's access level. Security responsibilities must be communicated and acknowledged during onboarding, including policies, NDAs, and acceptable use."
+    security_function: "HR and Access"
+    asset_class: "Users"
+    tags: ["hr-security", "art-21"]
+
+  - group_code: "HR_ACCESS"
+    code: "HRA.2"
+    title: "Access control policy based on least privilege"
+    summary: "Implement access control based on need-to-know and least privilege principles"
+    description: "Art. 21(2)(i): Access rights must be defined, provisioned, reviewed, and revoked based on job requirements. Privileged access requires enhanced controls including PAM, session recording, and regular reviews."
+    security_function: "HR and Access"
+    asset_class: "Users"
+    tags: ["access-control", "least-privilege", "art-21"]
+
+  - group_code: "HR_ACCESS"
+    code: "HRA.3"
+    title: "User account lifecycle management"
+    summary: "Manage user accounts throughout their lifecycle, including timely revocation on departure or role change"
+    description: "Art. 21(2)(i): Joiner-mover-leaver (JML) processes must ensure access is granted, modified, or revoked in a timely manner. Automated provisioning tied to HR systems reduces the risk of orphaned accounts."
+    security_function: "HR and Access"
+    asset_class: "Users"
+    tags: ["access-control", "identity-management", "hr-security", "art-21"]
+
+  # ── AUTH: Multi-Factor Authentication ────────────────────────────────────
+  - group_code: "AUTH"
+    code: "AUTH.1"
+    title: "Multi-factor authentication (MFA)"
+    summary: "Implement multi-factor authentication for access to network and information systems"
+    description: "Art. 21(2)(j): MFA must be implemented where appropriate — at minimum for remote access, privileged accounts, and internet-facing services. Phishing-resistant MFA (FIDO2) is preferred for high-risk use cases."
+    security_function: "Authentication"
+    asset_class: "Users"
+    tags: ["authentication", "mfa", "art-21"]
+
+  - group_code: "AUTH"
+    code: "AUTH.2"
+    title: "Continuous authentication solutions where appropriate"
+    summary: "Implement continuous or risk-based authentication solutions for sensitive access"
+    description: "Art. 21(2)(j): For high-risk systems, continuous authentication (evaluating signals throughout a session) or step-up authentication (requiring re-authentication for sensitive operations) may be required."
+    security_function: "Authentication"
+    asset_class: "Users"
+    tags: ["authentication", "zero-trust", "art-21"]
+
+  - group_code: "AUTH"
+    code: "AUTH.3"
+    title: "Secured voice, video, and text communications"
+    summary: "Implement secured communications for internal and emergency communications"
+    description: "Art. 21(2)(j): Communications systems used for sensitive discussions, incident coordination, and crisis management must use end-to-end encryption and be resistant to eavesdropping or tampering."
+    security_function: "Authentication"
+    asset_class: "Systems"
+    tags: ["communications", "cryptography", "art-21"]
+
+  # ── REPORTING: Incident Reporting ─────────────────────────────────────────
+  - group_code: "REPORTING"
+    code: "REP.1"
+    title: "Significant incident definition and thresholds"
+    summary: "Define criteria for 'significant incidents' that trigger NIS2 reporting obligations"
+    description: "Art. 23(3): A significant incident must be reported if it causes or may cause severe operational disruption, financial loss, or affect other entities. Organizations must translate these criteria into internal thresholds."
+    security_function: "Reporting"
+    asset_class: "Organization"
+    tags: ["incident-reporting", "compliance", "art-23"]
+
+  - group_code: "REPORTING"
+    code: "REP.2"
+    title: "Early warning within 24 hours"
+    summary: "Submit an early warning to the competent authority or CSIRT within 24 hours of becoming aware of a significant incident"
+    description: "Art. 23(4)(a): The early warning should indicate whether the incident is suspected to be caused by unlawful or malicious acts and whether it has cross-border impact. This triggers the clock for the full notification."
+    security_function: "Reporting"
+    asset_class: "Organization"
+    tags: ["incident-reporting", "compliance", "art-23"]
+
+  - group_code: "REPORTING"
+    code: "REP.3"
+    title: "Incident notification within 72 hours"
+    summary: "Submit a full incident notification to the competent authority or CSIRT within 72 hours of becoming aware of a significant incident"
+    description: "Art. 23(4)(b): The notification should include an initial assessment of the incident, including its severity, impact, and indicators of compromise (IOCs) if available. Update the early warning with new information."
+    security_function: "Reporting"
+    asset_class: "Organization"
+    tags: ["incident-reporting", "compliance", "art-23"]
+
+  - group_code: "REPORTING"
+    code: "REP.4"
+    title: "Final incident report within one month"
+    summary: "Submit a final report to the competent authority within one month of the incident notification"
+    description: "Art. 23(4)(d): The final report must include a detailed description of the incident, the type of threat or root cause, applied and ongoing mitigation measures, and cross-border impact if applicable."
+    security_function: "Reporting"
+    asset_class: "Organization"
+    tags: ["incident-reporting", "compliance", "art-23"]
+
+  - group_code: "REPORTING"
+    code: "REP.5"
+    title: "Notification to affected recipients and public"
+    summary: "Notify affected service recipients about significant incidents and, where appropriate, inform the public"
+    description: "Art. 23(1) / Art. 14: Entities may need to notify downstream users affected by the incident and, in cases of public interest, inform the general public. Notification procedures must be pre-defined and tested."
+    security_function: "Reporting"
+    asset_class: "Organization"
+    tags: ["incident-reporting", "communications", "compliance", "art-23"]

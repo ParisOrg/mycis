@@ -1,0 +1,1282 @@
+framework:
+  slug: "nist-csf-2-0"
+  label: "NIST Cybersecurity Framework"
+  version: "2.0"
+
+groups:
+  # ── GOVERN ──────────────────────────────────────────────────────────────────
+  - code: "GV.OC"
+    title: "Organizational Context"
+    summary: "The circumstances — mission, stakeholder expectations, and dependencies — surrounding the organization's cybersecurity risk management decisions are understood."
+    description: "Understanding organizational context is the foundation for meaningful cybersecurity risk management. It ensures that risk decisions align with business objectives, legal obligations, and stakeholder expectations."
+
+  - code: "GV.RM"
+    title: "Risk Management Strategy"
+    summary: "The organization's priorities, constraints, risk tolerance and appetite statements, and assumptions are established, communicated, and used to support operational risk decisions."
+    description: "An explicit risk management strategy gives decision-makers a consistent basis for accepting, mitigating, transferring, or avoiding cybersecurity risks across the enterprise."
+
+  - code: "GV.RR"
+    title: "Roles, Responsibilities, and Authorities"
+    summary: "Cybersecurity roles, responsibilities, and authorities to foster accountability, performance assessment, and continuous improvement are established and communicated."
+    description: "Clear accountability structures ensure that cybersecurity responsibilities are understood across the organization and that adequate authority exists to act on risk decisions."
+
+  - code: "GV.PO"
+    title: "Policy"
+    summary: "Organizational cybersecurity policy is established, communicated, and enforced."
+    description: "Policy translates governance intent into mandatory requirements that guide behaviour and technical controls throughout the organization."
+
+  - code: "GV.OV"
+    title: "Oversight"
+    summary: "Results of organization-wide cybersecurity risk management activities and performance are used to inform, improve, and adjust the risk management strategy."
+    description: "Oversight closes the governance loop by ensuring that strategy, resources, and outcomes are reviewed and adjusted as the threat landscape and business environment evolve."
+
+  - code: "GV.SC"
+    title: "Cybersecurity Supply Chain Risk Management"
+    summary: "Cyber supply chain risk management processes are identified, established, managed, monitored, and improved by organizational stakeholders."
+    description: "Supply chain risks — from hardware components to managed services — require dedicated governance because the organization's risk posture depends on the security practices of its suppliers and partners."
+
+  # ── IDENTIFY ─────────────────────────────────────────────────────────────────
+  - code: "ID.AM"
+    title: "Asset Management"
+    summary: "Assets (data, hardware, software, systems, facilities, services, people) that enable the organization to achieve business purposes are identified and managed consistent with their relative importance to organizational objectives."
+    description: "You cannot protect what you do not know you have. Comprehensive, up-to-date asset inventories are the prerequisite for almost every other cybersecurity practice."
+
+  - code: "ID.RA"
+    title: "Risk Assessment"
+    summary: "The cybersecurity risk to the organization, assets, and individuals is identified, analyzed, prioritized, and communicated."
+    description: "Risk assessments translate threat and vulnerability information into actionable risk data that informs investment and treatment decisions."
+
+  - code: "ID.IM"
+    title: "Improvement"
+    summary: "Improvements to organizational cybersecurity risk management processes, procedures, and activities are identified across all CSF Functions."
+    description: "Continuous improvement ensures that the cybersecurity program adapts to lessons learned from assessments, incidents, and changing business and threat conditions."
+
+  # ── PROTECT ──────────────────────────────────────────────────────────────────
+  - code: "PR.AA"
+    title: "Identity Management, Authentication, and Access Control"
+    summary: "Access to physical and logical assets is limited to authorized users, services, and hardware and managed commensurate with the assessed risk of unauthorized access."
+    description: "Controlling who and what can access resources is the primary means of preventing unauthorized use, data breaches, and lateral movement by attackers."
+
+  - code: "PR.AT"
+    title: "Awareness and Training"
+    summary: "The organization's personnel are provided with cybersecurity awareness and training so that they can perform their cybersecurity-related tasks."
+    description: "People are both the most exploited attack vector and one of the most effective controls. Awareness and training reduce the likelihood of human-enabled incidents."
+
+  - code: "PR.DS"
+    title: "Data Security"
+    summary: "Data are managed consistent with the organization's risk strategy to protect the confidentiality, integrity, and availability of information."
+    description: "Data security controls protect information throughout its lifecycle — at rest, in transit, and in use — ensuring that sensitive data cannot be accessed, altered, or destroyed by unauthorized parties."
+
+  - code: "PR.PS"
+    title: "Platform Security"
+    summary: "The hardware, software (e.g., firmware, operating systems, applications), and services of physical and virtual platforms are managed consistent with the organization's risk strategy."
+    description: "Secure platform management reduces the attack surface by ensuring that systems are properly configured, patched, and hardened throughout their lifecycle."
+
+  - code: "PR.IR"
+    title: "Technology Infrastructure Resilience"
+    summary: "Security architectures are managed with the organization's risk strategy to protect asset confidentiality, integrity, and availability, and organizational resilience."
+    description: "Resilience controls ensure that the organization can withstand and recover from disruptions — whether from attacks, failures, or disasters — with minimal impact on mission-critical operations."
+
+  # ── DETECT ───────────────────────────────────────────────────────────────────
+  - code: "DE.CM"
+    title: "Continuous Monitoring"
+    summary: "Assets are monitored to find anomalies, indicators of compromise, and other potentially adverse events."
+    description: "Continuous monitoring provides real-time or near-real-time visibility into the security state of the environment, enabling timely detection of threats before they escalate."
+
+  - code: "DE.AE"
+    title: "Adverse Event Analysis"
+    summary: "Anomalies, indicators of compromise, and other potentially adverse events are analyzed to characterize the events and detect cybersecurity incidents."
+    description: "Event analysis converts raw monitoring data into actionable intelligence, distinguishing benign anomalies from genuine threats and providing the context needed to declare and scope incidents."
+
+  # ── RESPOND ──────────────────────────────────────────────────────────────────
+  - code: "RS.MA"
+    title: "Incident Management"
+    summary: "Responses to detected cybersecurity incidents are managed."
+    description: "Incident management provides the structure and coordination needed to contain threats quickly, minimize damage, and maintain stakeholder confidence during a security event."
+
+  - code: "RS.AN"
+    title: "Incident Analysis"
+    summary: "Investigations are conducted to ensure effective response and support forensics and recovery activities."
+    description: "In-depth analysis during an incident establishes what happened, how it happened, and what data or systems were affected — informing both immediate response and longer-term improvements."
+
+  - code: "RS.CO"
+    title: "Incident Response Reporting and Communication"
+    summary: "Response activities are coordinated with internal and external stakeholders as required by laws, regulations, or policies."
+    description: "Timely and accurate communication during incidents ensures that decision-makers, regulators, customers, and partners receive the information they need to act appropriately."
+
+  - code: "RS.MI"
+    title: "Incident Mitigation"
+    summary: "Activities are performed to prevent expansion of an event and mitigate its effects."
+    description: "Mitigation actions stop an incident from spreading and eliminate the attacker's foothold, creating the conditions necessary to begin safe recovery."
+
+  # ── RECOVER ──────────────────────────────────────────────────────────────────
+  - code: "RC.RP"
+    title: "Incident Recovery Plan Execution"
+    summary: "Restoration activities are performed to ensure operational availability of systems and services affected by cybersecurity incidents."
+    description: "Structured recovery execution restores systems and services in priority order, verifying integrity at each step to ensure that restored assets are clean and fully functional."
+
+  - code: "RC.CO"
+    title: "Incident Recovery Communication"
+    summary: "Restoration activities are coordinated with internal and external parties."
+    description: "Recovery communications maintain stakeholder trust and satisfy legal obligations by keeping relevant parties informed of progress and expected timelines during restoration."
+
+
+items:
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # GOVERN
+  # ════════════════════════════════════════════════════════════════════════════
+
+  # GV.OC — Organizational Context (5)
+  - group_code: "GV.OC"
+    code: "GV.OC-01"
+    title: "The organizational mission is understood and informs cybersecurity risk management"
+    summary: "The organizational mission informs cybersecurity risk management"
+    description: "Examples: cybersecurity risk management strategy explicitly references the organizational mission; cybersecurity objectives are aligned with mission objectives; mission statements used in risk tolerance setting."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.OC"
+    code: "GV.OC-02"
+    title: "Internal and external stakeholders are understood, and their needs and expectations regarding cybersecurity risk management are understood and considered"
+    summary: "Stakeholder needs and expectations regarding cybersecurity are understood and considered"
+    description: "Examples: stakeholder identification processes; recurring stakeholder review meetings; documented stakeholder expectations; customer contractual security requirements; regulatory body expectations."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.OC"
+    code: "GV.OC-03"
+    title: "Legal, regulatory, and contractual requirements regarding cybersecurity — including privacy and civil liberties obligations — are understood and managed"
+    summary: "Legal, regulatory, and contractual cybersecurity requirements are understood and managed"
+    description: "Examples: legal and regulatory requirement tracking; compliance calendars; contractual obligation registers; privacy impact assessments; data protection obligation inventories."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.OC"
+    code: "GV.OC-04"
+    title: "Critical objectives, capabilities, and services that external stakeholders depend on or expect from the organization are understood and communicated"
+    summary: "Critical services that external stakeholders depend on are understood and communicated"
+    description: "Examples: business impact analyses; service dependency mapping; SLA commitments; critical service availability requirements; external-facing service catalogues."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.OC"
+    code: "GV.OC-05"
+    title: "Outcomes, capabilities, and services that the organization depends on are understood and communicated"
+    summary: "Outcomes, capabilities, and services that the organization depends on are understood"
+    description: "Examples: vendor and partner dependency inventories; third-party service criticality assessments; resilience requirements for critical dependencies; single-point-of-failure analysis."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  # GV.RM — Risk Management Strategy (7)
+  - group_code: "GV.RM"
+    code: "GV.RM-01"
+    title: "Risk management objectives are established and agreed to by organizational stakeholders"
+    summary: "Risk management objectives are established and agreed to by stakeholders"
+    description: "Examples: risk management steering committees; documented and board-approved risk management objectives; stakeholder sign-off on risk strategy; alignment between business and cybersecurity risk objectives."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RM"
+    code: "GV.RM-02"
+    title: "Risk appetite and risk tolerance statements are established, communicated, and maintained"
+    summary: "Risk appetite and risk tolerance statements are established, communicated, and maintained"
+    description: "Examples: board-approved risk appetite statements; quantitative risk tolerance thresholds; risk tolerance broken down by risk category; periodic reviews and updates of risk appetite."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RM"
+    code: "GV.RM-03"
+    title: "Organizational cybersecurity risk management is informed by and integrated into the enterprise risk management (ERM) framework"
+    summary: "Cybersecurity risk management is integrated into the enterprise risk management framework"
+    description: "Examples: cybersecurity risk included in ERM register; common risk taxonomy across ERM and cybersecurity; joint risk committee; shared risk reporting to the board."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RM"
+    code: "GV.RM-04"
+    title: "Strategic direction that describes appropriate risk response options is established and communicated"
+    summary: "Strategic direction for risk response options is established and communicated"
+    description: "Examples: risk response policies (accept, mitigate, transfer, avoid); risk treatment decision frameworks; guidance on when to accept vs. remediate risk; pre-approved risk response templates."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RM"
+    code: "GV.RM-05"
+    title: "Lines of communication across the organization are established for cybersecurity risks, including risks from suppliers and other third parties"
+    summary: "Lines of communication are established for cybersecurity risks, including third-party risks"
+    description: "Examples: defined escalation paths for cybersecurity risks; supplier risk communication channels; third-party risk reporting processes; cross-functional risk discussion forums."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RM"
+    code: "GV.RM-06"
+    title: "A standardized method for calculating, documenting, categorizing, and prioritizing cybersecurity risks is established and communicated"
+    summary: "A standardized method for calculating, documenting, and prioritizing cybersecurity risks is established"
+    description: "Examples: risk scoring methodologies (qualitative and quantitative); risk register templates; risk prioritization criteria; FAIR or similar quantitative risk analysis methods."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RM"
+    code: "GV.RM-07"
+    title: "Strategic opportunities (i.e., positive risks) are characterized and are included in organizational cybersecurity risk discussions"
+    summary: "Strategic opportunities (positive risks) are characterized and included in risk discussions"
+    description: "Examples: opportunity identification in risk assessments; innovation initiatives leveraging cybersecurity capabilities; risk-informed strategic planning that balances threats with opportunities."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  # GV.RR — Roles, Responsibilities, and Authorities (4)
+  - group_code: "GV.RR"
+    code: "GV.RR-01"
+    title: "Organizational leadership is responsible and accountable for cybersecurity risk and fosters a culture that is risk-aware, ethical, and continually improving"
+    summary: "Organizational leadership is accountable for cybersecurity risk and fosters a risk-aware culture"
+    description: "Examples: board cybersecurity oversight; CISO reporting to CEO/board; executive accountability metrics for cybersecurity outcomes; leadership participation in tabletop exercises."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RR"
+    code: "GV.RR-02"
+    title: "Roles, responsibilities, and authorities related to cybersecurity risk management are established, communicated, understood, and enforced"
+    summary: "Cybersecurity roles, responsibilities, and authorities are established, communicated, and enforced"
+    description: "Examples: RACI matrices for cybersecurity; job descriptions with cybersecurity responsibilities; enforcement mechanisms for accountability; documented delegation of authority."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RR"
+    code: "GV.RR-03"
+    title: "Adequate resources are allocated commensurate with the cybersecurity risk strategy, roles, responsibilities, and policies"
+    summary: "Adequate resources are allocated commensurate with the cybersecurity risk strategy"
+    description: "Examples: cybersecurity budget allocation process; headcount planning for security roles; tool and technology investment aligned with risk strategy; resource gap analysis."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.RR"
+    code: "GV.RR-04"
+    title: "Cybersecurity is included in human resources practices"
+    summary: "Cybersecurity is included in human resources practices"
+    description: "Examples: background checks for positions with elevated access; cybersecurity in performance reviews; offboarding procedures for access revocation; security requirements in job descriptions."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  # GV.PO — Policy (2)
+  - group_code: "GV.PO"
+    code: "GV.PO-01"
+    title: "Policy for managing cybersecurity risks is established based on organizational context, cybersecurity strategy, and priorities and is communicated and enforced"
+    summary: "Cybersecurity risk management policy is established, communicated, and enforced"
+    description: "Examples: information security policy; acceptable use policies; cybersecurity standards and procedures; policy enforcement mechanisms; policy exception processes."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.PO"
+    code: "GV.PO-02"
+    title: "Policy for managing cybersecurity risks is reviewed, updated, communicated, and enforced to reflect changes in requirements, threats, technology, and organizational mission"
+    summary: "Cybersecurity risk management policy is regularly reviewed, updated, and communicated"
+    description: "Examples: annual policy review cycles; policy update triggers (new regulations, threats, technologies); policy version control and communication plans; policy attestation processes."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  # GV.OV — Oversight (3)
+  - group_code: "GV.OV"
+    code: "GV.OV-01"
+    title: "Cybersecurity risk management strategy outcomes are reviewed to inform and adjust strategy and direction"
+    summary: "Cybersecurity risk management strategy outcomes are reviewed to inform and adjust strategy"
+    description: "Examples: periodic strategy reviews; performance metrics tied to risk objectives; board and executive risk reporting; strategy adjustment based on outcomes and lessons learned."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.OV"
+    code: "GV.OV-02"
+    title: "The cybersecurity risk management strategy is reviewed and adjusted to ensure coverage of organizational requirements and risks"
+    summary: "The cybersecurity risk management strategy is reviewed and adjusted to ensure adequate coverage"
+    description: "Examples: gap analysis of risk coverage; strategy reviews triggered by organizational changes; independent assessments of strategy effectiveness; emerging threat coverage reviews."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  - group_code: "GV.OV"
+    code: "GV.OV-03"
+    title: "Organizational cybersecurity risk management performance is evaluated and reviewed for adjustments needed"
+    summary: "Cybersecurity risk management performance is evaluated and reviewed for needed adjustments"
+    description: "Examples: cybersecurity KPIs and KRIs; balanced scorecards for security performance; management reviews of security metrics; benchmarking against industry peers."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern"]
+
+  # GV.SC — Cybersecurity Supply Chain Risk Management (10)
+  - group_code: "GV.SC"
+    code: "GV.SC-01"
+    title: "A cybersecurity supply chain risk management program, strategy, objectives, policies, and processes are established and agreed to by organizational stakeholders"
+    summary: "A cybersecurity supply chain risk management program is established and agreed to by stakeholders"
+    description: "Examples: C-SCRM program charter; documented C-SCRM objectives and policies; stakeholder agreement on supply chain risk approach; dedicated supply chain risk management team."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-02"
+    title: "Cybersecurity roles and responsibilities for suppliers, customers, and partners are established, communicated, and coordinated internally and externally"
+    summary: "Cybersecurity roles and responsibilities for suppliers and partners are established and communicated"
+    description: "Examples: supplier security liaisons; defined security responsibilities in contracts; joint security committees with key suppliers; security points of contact in supplier agreements."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-03"
+    title: "Cybersecurity supply chain risk management is integrated into cybersecurity and enterprise risk management, risk assessment, and improvement processes"
+    summary: "Supply chain risk management is integrated into enterprise risk management processes"
+    description: "Examples: supply chain risk in the enterprise risk register; C-SCRM integrated into ERM governance; supply chain risks addressed in organizational risk assessments."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-04"
+    title: "Suppliers are known and prioritized by criticality"
+    summary: "Suppliers are known and prioritized by criticality"
+    description: "Examples: supplier inventories; supplier criticality tiers; criteria for determining supplier criticality (access level, data sensitivity, business impact, substitutability)."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-05"
+    title: "Requirements to address cybersecurity risks in supply chains are established, prioritized, and integrated into contracts and other types of agreements with suppliers and other relevant third parties"
+    summary: "Cybersecurity requirements are established and integrated into supplier contracts and agreements"
+    description: "Examples: cybersecurity contract clauses; minimum security baselines for suppliers; right-to-audit provisions; data protection agreements; incident notification obligations in contracts."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-06"
+    title: "Planning and due diligence are performed to reduce risks before entering into formal supplier or other third-party relationships"
+    summary: "Due diligence is performed to reduce risks before entering supplier relationships"
+    description: "Examples: pre-contract security assessments; supplier security questionnaires; security certification requirements (ISO 27001, SOC 2); proof-of-concept security testing; financial health checks."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-07"
+    title: "The risks posed by a supplier, their products and services, and other third parties are understood, recorded, prioritized, assessed, responded to, and monitored over the course of the relationship"
+    summary: "Supplier risks are understood, recorded, assessed, and monitored throughout the relationship"
+    description: "Examples: ongoing supplier risk monitoring; periodic supplier security reviews; supplier risk scoring; tracking supplier security incidents and vulnerability disclosures."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-08"
+    title: "Relevant suppliers and other third parties are included in incident planning, response, and recovery activities"
+    summary: "Suppliers and third parties are included in incident planning, response, and recovery"
+    description: "Examples: supplier incident notification procedures; joint incident response exercises; supplier contacts in the incident response plan; mutual aid agreements with critical suppliers."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-09"
+    title: "Supply chain security practices are integrated into cybersecurity and enterprise risk management programs, and their performance is monitored throughout the technology product and service life cycle"
+    summary: "Supply chain security practices are integrated and monitored throughout the product and service life cycle"
+    description: "Examples: secure development requirements for suppliers; software bill of materials (SBOM) requirements; end-of-life management for supplier products; continuous monitoring of supplier security posture."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+  - group_code: "GV.SC"
+    code: "GV.SC-10"
+    title: "Cybersecurity supply chain risk management plans include provisions for activities that occur after the conclusion of a partnership or service agreement"
+    summary: "Supply chain risk management plans include provisions for activities after the conclusion of a partnership"
+    description: "Examples: supplier offboarding procedures; data return and destruction requirements; access revocation on contract termination; transition plans; post-relationship security assessments."
+    security_function: "GOVERN"
+    asset_class: "Organization"
+    tags: ["govern", "supply-chain"]
+
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # IDENTIFY
+  # ════════════════════════════════════════════════════════════════════════════
+
+  # ID.AM — Asset Management (7)
+  - group_code: "ID.AM"
+    code: "ID.AM-01"
+    title: "Inventories of hardware managed by the organization are maintained"
+    summary: "Inventories of hardware managed by the organization are maintained"
+    description: "Examples: hardware asset inventories; automated network discovery; CMDB; mobile device management (MDM) enrollment; IoT device registries; physical asset audits."
+    security_function: "IDENTIFY"
+    asset_class: "Devices"
+    tags: ["identify"]
+
+  - group_code: "ID.AM"
+    code: "ID.AM-02"
+    title: "Inventories of software, services, and systems managed by the organization are maintained"
+    summary: "Inventories of software, services, and systems are maintained"
+    description: "Examples: software asset management (SAM) tools; application portfolio registries; cloud service inventories; CMDB software records; container image registries."
+    security_function: "IDENTIFY"
+    asset_class: "Software"
+    tags: ["identify"]
+
+  - group_code: "ID.AM"
+    code: "ID.AM-03"
+    title: "Representations of the organization's authorized network communication and internal and external network data flows are maintained"
+    summary: "Authorized network communications and data flows are documented and maintained"
+    description: "Examples: network diagrams; data flow diagrams; network segmentation documentation; authorized connection lists; firewall rule reviews."
+    security_function: "IDENTIFY"
+    asset_class: "Networks"
+    tags: ["identify"]
+
+  - group_code: "ID.AM"
+    code: "ID.AM-04"
+    title: "Inventories of services provided by suppliers are maintained"
+    summary: "Inventories of services provided by suppliers are maintained"
+    description: "Examples: third-party service inventories; cloud service provider registries; managed service provider catalogues; SaaS application inventories; API dependency maps."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify", "supply-chain"]
+
+  - group_code: "ID.AM"
+    code: "ID.AM-05"
+    title: "Assets are prioritized based on classification, criticality, resources, and impact on the mission"
+    summary: "Assets are prioritized based on classification, criticality, and mission impact"
+    description: "Examples: asset classification schemes; criticality ratings; business impact analyses; tiered protection levels based on asset importance; data classification policies."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.AM"
+    code: "ID.AM-07"
+    title: "Inventories of data and corresponding metadata for designated data types are maintained"
+    summary: "Inventories of data and corresponding metadata for designated data types are maintained"
+    description: "Examples: data inventories; data classification catalogues; data flow inventories; personally identifiable information (PII) records; sensitive data registries; data maps."
+    security_function: "IDENTIFY"
+    asset_class: "Data"
+    tags: ["identify"]
+
+  - group_code: "ID.AM"
+    code: "ID.AM-08"
+    title: "Systems, hardware, software, services, and data are managed throughout their life cycles"
+    summary: "Assets are managed throughout their life cycles"
+    description: "Examples: asset lifecycle management procedures; decommissioning checklists; hardware disposal procedures; software end-of-life tracking; data retention and deletion policies."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  # ID.RA — Risk Assessment (10)
+  - group_code: "ID.RA"
+    code: "ID.RA-01"
+    title: "Vulnerabilities in assets are identified, validated, and recorded"
+    summary: "Vulnerabilities in assets are identified, validated, and recorded"
+    description: "Examples: vulnerability scanning; penetration testing; security assessments; CVE tracking; vulnerability management platforms; authenticated vs. unauthenticated scanning."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-02"
+    title: "Cyber threat intelligence is received from information sharing forums and sources"
+    summary: "Cyber threat intelligence is received from information sharing forums and sources"
+    description: "Examples: threat intelligence feeds (commercial and open source); ISAC/ISAO membership; government advisories (CISA, FBI); threat intelligence platforms; vendor threat reports."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-03"
+    title: "Internal and external threats to the organization are identified and recorded"
+    summary: "Internal and external threats to the organization are identified and recorded"
+    description: "Examples: threat modelling; threat registers; insider threat programs; external threat landscape assessments; threat actor profiling; attack simulation exercises."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-04"
+    title: "Potential impacts and likelihoods of threats exploiting vulnerabilities are identified and recorded"
+    summary: "Potential impacts and likelihoods of threats exploiting vulnerabilities are identified and recorded"
+    description: "Examples: risk analysis methodologies; likelihood and impact ratings; risk scoring; attack path analysis; threat-vulnerability pairing; exposure assessments."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-05"
+    title: "Threats, vulnerabilities, likelihoods, and impacts are used to understand inherent risk and inform risk response prioritization"
+    summary: "Risk data is used to understand inherent risk and inform prioritization of responses"
+    description: "Examples: risk matrices; risk registers; risk-based prioritization of remediation; inherent vs. residual risk tracking; risk scoring to drive investment decisions."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-06"
+    title: "Risk responses are chosen, prioritized, planned, tracked, and communicated"
+    summary: "Risk responses are chosen, prioritized, planned, tracked, and communicated"
+    description: "Examples: risk treatment plans; risk acceptance processes; risk tracking systems; risk owner assignments; plan of action and milestones (POA&M); risk response reporting to leadership."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-07"
+    title: "Changes and exceptions are managed, assessed for risk impact, recorded, and tracked"
+    summary: "Changes and exceptions are managed, assessed for risk impact, recorded, and tracked"
+    description: "Examples: change management processes; risk assessments for significant changes; exception tracking and approval workflows; change advisory boards (CAB); emergency change procedures."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-08"
+    title: "Processes for receiving, analyzing, and responding to vulnerability disclosures are established"
+    summary: "Processes for receiving, analyzing, and responding to vulnerability disclosures are established"
+    description: "Examples: coordinated vulnerability disclosure (CVD) policies; security research programs; bug bounty programs; responsible disclosure handling; PSIRT processes."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-09"
+    title: "The authenticity and integrity of hardware and software are assessed prior to acquisition and use"
+    summary: "The authenticity and integrity of hardware and software are assessed prior to acquisition and use"
+    description: "Examples: hardware/software provenance verification; SBOM review; code signing verification; supply chain integrity checks; firmware authenticity verification."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify", "supply-chain"]
+
+  - group_code: "ID.RA"
+    code: "ID.RA-10"
+    title: "Critical suppliers are assessed prior to acquisition"
+    summary: "Critical suppliers are assessed prior to acquisition"
+    description: "Examples: pre-acquisition security due diligence; supplier security questionnaires; third-party audits; security certifications review; financial and operational stability assessments."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify", "supply-chain"]
+
+  # ID.IM — Improvement (4)
+  - group_code: "ID.IM"
+    code: "ID.IM-01"
+    title: "Improvements are identified from evaluations"
+    summary: "Improvements are identified from evaluations"
+    description: "Examples: findings from audits and assessments; lessons learned from incidents; red team exercise findings; compliance gap assessments; internal audit recommendations."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.IM"
+    code: "ID.IM-02"
+    title: "Plans and changes to improve the organization's cybersecurity are established, communicated, and implemented"
+    summary: "Plans and changes to improve cybersecurity are established, communicated, and implemented"
+    description: "Examples: cybersecurity improvement roadmaps; remediation plans; security program maturity improvement initiatives; security investment plans with measurable milestones."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.IM"
+    code: "ID.IM-03"
+    title: "Organizational cybersecurity risk management processes and activities are reviewed to ensure their effectiveness"
+    summary: "Cybersecurity risk management processes and activities are reviewed for effectiveness"
+    description: "Examples: program effectiveness metrics; post-implementation reviews; independent security program assessments; continuous improvement processes; PDCA cycles."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+  - group_code: "ID.IM"
+    code: "ID.IM-04"
+    title: "Plan and track actions for closing identified improvement opportunities consistently across the organization"
+    summary: "Actions for closing improvement opportunities are planned and tracked consistently"
+    description: "Examples: remediation tracking systems; POA&M management; improvement dashboards; accountability assignments for remediation actions; follow-up on audit findings."
+    security_function: "IDENTIFY"
+    asset_class: "All"
+    tags: ["identify"]
+
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # PROTECT
+  # ════════════════════════════════════════════════════════════════════════════
+
+  # PR.AA — Identity Management, Authentication, and Access Control (6)
+  - group_code: "PR.AA"
+    code: "PR.AA-01"
+    title: "Identities and credentials for authorized users, services, and hardware are managed by the organization"
+    summary: "Identities and credentials for authorized users, services, and hardware are managed"
+    description: "Examples: identity and access management (IAM) systems; credential lifecycle management; service account management; certificate management; privileged account inventories."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.AA"
+    code: "PR.AA-02"
+    title: "Identities are proofed and bound to credentials based on the context of interactions"
+    summary: "Identities are proofed and bound to credentials based on context"
+    description: "Examples: identity proofing processes; identity binding procedures; context-aware access decisions; step-up authentication for sensitive operations; risk-based authentication."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.AA"
+    code: "PR.AA-03"
+    title: "Users, services, and hardware are authenticated"
+    summary: "Users, services, and hardware are authenticated"
+    description: "Examples: multi-factor authentication (MFA); certificate-based authentication; service account authentication; device authentication; passwordless authentication."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.AA"
+    code: "PR.AA-04"
+    title: "Identity assertions are protected, conveyed, and verified"
+    summary: "Identity assertions are protected, conveyed, and verified"
+    description: "Examples: federation protocols (SAML, OIDC); token validation and integrity; secure session management; identity provider security; token binding."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.AA"
+    code: "PR.AA-05"
+    title: "Access permissions, entitlements, and authorizations are defined in a policy, managed, enforced, and reviewed"
+    summary: "Access permissions and authorizations are defined, managed, enforced, and reviewed"
+    description: "Examples: access control policies; role-based access control (RBAC); attribute-based access control (ABAC); privileged access management (PAM); periodic access reviews; separation of duties."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.AA"
+    code: "PR.AA-06"
+    title: "Physical access to assets is managed, monitored, and enforced commensurate with risk"
+    summary: "Physical access to assets is managed, monitored, and enforced commensurate with risk"
+    description: "Examples: physical access control systems; badge and key management; visitor management; secure facility and data centre access procedures; physical access audits."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  # PR.AT — Awareness and Training (2)
+  - group_code: "PR.AT"
+    code: "PR.AT-01"
+    title: "Personnel are provided with awareness and training so that they possess the knowledge and skills to perform general tasks with cybersecurity risks in mind"
+    summary: "Personnel are provided with cybersecurity awareness and training"
+    description: "Examples: security awareness programs; phishing simulation campaigns; annual mandatory security training; onboarding security training; security culture initiatives and metrics."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.AT"
+    code: "PR.AT-02"
+    title: "Individuals in specialized roles are provided with awareness and training so that they possess the knowledge and skills to perform relevant tasks with cybersecurity risks in mind"
+    summary: "Individuals in specialized roles receive role-specific cybersecurity training"
+    description: "Examples: developer secure coding training; IT administrator security training; incident responder training; executive cybersecurity briefings; security certification support."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  # PR.DS — Data Security (8)
+  - group_code: "PR.DS"
+    code: "PR.DS-01"
+    title: "The confidentiality, integrity, and availability of data-at-rest are protected"
+    summary: "Data-at-rest is protected for confidentiality, integrity, and availability"
+    description: "Examples: encryption at rest (full-disk, database, file-level); database encryption; backup encryption; key management; data classification-based protection controls."
+    security_function: "PROTECT"
+    asset_class: "Data"
+    tags: ["protect"]
+
+  - group_code: "PR.DS"
+    code: "PR.DS-02"
+    title: "The confidentiality, integrity, and availability of data-in-transit are protected"
+    summary: "Data-in-transit is protected for confidentiality, integrity, and availability"
+    description: "Examples: TLS/HTTPS enforcement; VPN for remote access; secure file transfer protocols (SFTP, FTPS); email encryption; mutual TLS for service-to-service communication."
+    security_function: "PROTECT"
+    asset_class: "Data"
+    tags: ["protect"]
+
+  - group_code: "PR.DS"
+    code: "PR.DS-03"
+    title: "Assets are formally managed throughout removal, transfers, and disposition"
+    summary: "Assets are formally managed throughout removal, transfers, and disposition"
+    description: "Examples: media sanitization procedures; secure asset disposal; data wiping before hardware re-use or disposal; chain of custody for asset transfers; NIST SP 800-88 media sanitization."
+    security_function: "PROTECT"
+    asset_class: "Data"
+    tags: ["protect"]
+
+  - group_code: "PR.DS"
+    code: "PR.DS-04"
+    title: "Adequate capacity to ensure availability is maintained"
+    summary: "Adequate capacity to ensure availability is maintained"
+    description: "Examples: capacity planning; auto-scaling and load balancing; performance monitoring; storage quota management; bandwidth management; DDoS mitigation."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.DS"
+    code: "PR.DS-05"
+    title: "Protections against data leaks are implemented"
+    summary: "Protections against data leaks are implemented"
+    description: "Examples: data loss prevention (DLP) tools; egress filtering; USB and removable media controls; email DLP policies; cloud access security broker (CASB); data exfiltration monitoring."
+    security_function: "PROTECT"
+    asset_class: "Data"
+    tags: ["protect"]
+
+  - group_code: "PR.DS"
+    code: "PR.DS-10"
+    title: "The confidentiality, integrity, and availability of data-in-use are protected"
+    summary: "Data-in-use is protected for confidentiality, integrity, and availability"
+    description: "Examples: memory protection; secure enclaves and trusted execution environments; confidential computing; screen lock and privacy screens; DLP for active data."
+    security_function: "PROTECT"
+    asset_class: "Data"
+    tags: ["protect"]
+
+  - group_code: "PR.DS"
+    code: "PR.DS-11"
+    title: "Backups of data are created, protected, maintained, and tested"
+    summary: "Backups of data are created, protected, maintained, and tested"
+    description: "Examples: backup policies and schedules; offsite and offline backups; encrypted backups; immutable backup storage; backup integrity testing; recovery time objective (RTO) and recovery point objective (RPO) validation."
+    security_function: "PROTECT"
+    asset_class: "Data"
+    tags: ["protect"]
+
+  - group_code: "PR.DS"
+    code: "PR.DS-12"
+    title: "Integrity of assets is monitored to detect unauthorized modifications"
+    summary: "Integrity of assets is monitored to detect unauthorized modifications"
+    description: "Examples: file integrity monitoring (FIM); configuration drift detection; software integrity checks; code signing; hash verification of critical files."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  # PR.PS — Platform Security (6)
+  - group_code: "PR.PS"
+    code: "PR.PS-01"
+    title: "Configuration management practices are established and applied"
+    summary: "Configuration management practices are established and applied"
+    description: "Examples: secure configuration baselines; CIS Benchmarks; configuration management databases (CMDB); infrastructure-as-code; hardening standards; configuration drift detection."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.PS"
+    code: "PR.PS-02"
+    title: "Software is maintained, replaced, and removed commensurate with risk"
+    summary: "Software is maintained, replaced, and removed commensurate with risk"
+    description: "Examples: patch management programs; software lifecycle management; end-of-life software tracking; automated patch deployment; vulnerability remediation SLAs."
+    security_function: "PROTECT"
+    asset_class: "Software"
+    tags: ["protect"]
+
+  - group_code: "PR.PS"
+    code: "PR.PS-03"
+    title: "Hardware is maintained, replaced, and removed commensurate with risk"
+    summary: "Hardware is maintained, replaced, and removed commensurate with risk"
+    description: "Examples: hardware lifecycle management; firmware update programs; hardware end-of-life tracking; secure hardware disposal; hardware refresh cycles."
+    security_function: "PROTECT"
+    asset_class: "Devices"
+    tags: ["protect"]
+
+  - group_code: "PR.PS"
+    code: "PR.PS-04"
+    title: "Log records are generated and made available for continuous monitoring, incident response, and data recovery activities"
+    summary: "Log records are generated and made available for monitoring, incident response, and recovery"
+    description: "Examples: logging standards and requirements; SIEM integration; centralized log management; log retention policies; log integrity protection; audit trail requirements."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.PS"
+    code: "PR.PS-05"
+    title: "Installation and execution of unauthorized software are prevented"
+    summary: "Installation and execution of unauthorized software are prevented"
+    description: "Examples: application allowlisting; software restriction policies; endpoint protection platforms; MDM application controls; code signing enforcement; container image policies."
+    security_function: "PROTECT"
+    asset_class: "Software"
+    tags: ["protect"]
+
+  - group_code: "PR.PS"
+    code: "PR.PS-06"
+    title: "Secure software development practices are integrated, and their security is evaluated"
+    summary: "Secure software development practices are integrated and evaluated"
+    description: "Examples: secure SDLC; SAST/DAST tooling; code reviews with security focus; security testing in CI/CD pipelines; software composition analysis (SCA); developer security training."
+    security_function: "PROTECT"
+    asset_class: "Software"
+    tags: ["protect"]
+
+  # PR.IR — Technology Infrastructure Resilience (4)
+  - group_code: "PR.IR"
+    code: "PR.IR-01"
+    title: "Networks and environments are protected from unauthorized logical access and usage"
+    summary: "Networks and environments are protected from unauthorized logical access"
+    description: "Examples: network segmentation and micro-segmentation; firewalls and next-generation firewalls; zero-trust network access (ZTNA); network access control (NAC); DMZ architectures."
+    security_function: "PROTECT"
+    asset_class: "Networks"
+    tags: ["protect"]
+
+  - group_code: "PR.IR"
+    code: "PR.IR-02"
+    title: "The organization's technology assets are protected from environmental threats"
+    summary: "Technology assets are protected from environmental threats"
+    description: "Examples: physical environmental controls; UPS and power redundancy; cooling and HVAC redundancy; fire suppression systems; flood and environmental monitoring; site resiliency."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.IR"
+    code: "PR.IR-03"
+    title: "Mechanisms are implemented to achieve resilience requirements in normal and adverse situations"
+    summary: "Mechanisms are implemented to achieve resilience in normal and adverse situations"
+    description: "Examples: redundancy and failover architectures; high availability (HA) designs; disaster recovery planning; business continuity measures; graceful degradation and circuit breakers."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+  - group_code: "PR.IR"
+    code: "PR.IR-04"
+    title: "Adequate resource capacity to ensure availability is maintained"
+    summary: "Adequate resource capacity to ensure availability is maintained"
+    description: "Examples: capacity planning and forecasting; auto-scaling policies; load balancing; resource utilization thresholds and alerts; performance testing under peak load."
+    security_function: "PROTECT"
+    asset_class: "Systems"
+    tags: ["protect"]
+
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # DETECT
+  # ════════════════════════════════════════════════════════════════════════════
+
+  # DE.CM — Continuous Monitoring (9)
+  - group_code: "DE.CM"
+    code: "DE.CM-01"
+    title: "Networks and network services are monitored to find potentially adverse events"
+    summary: "Networks and network services are monitored to find potentially adverse events"
+    description: "Examples: network monitoring tools; IDS/IPS; network traffic analysis (NTA); anomaly detection; NetFlow/packet analysis; DNS monitoring; east-west traffic inspection."
+    security_function: "DETECT"
+    asset_class: "Networks"
+    tags: ["detect"]
+
+  - group_code: "DE.CM"
+    code: "DE.CM-02"
+    title: "The physical environment is monitored to find potentially adverse events"
+    summary: "The physical environment is monitored to find potentially adverse events"
+    description: "Examples: physical security monitoring; CCTV and video analytics; access control alarm monitoring; environmental sensors (temperature, humidity, water); physical intrusion detection."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.CM"
+    code: "DE.CM-03"
+    title: "Personnel activity and technology usage are monitored to find potentially adverse events"
+    summary: "Personnel activity and technology usage are monitored to find potentially adverse events"
+    description: "Examples: user and entity behaviour analytics (UEBA); data loss prevention (DLP) monitoring; privileged user monitoring; endpoint detection and response (EDR); web proxy logs."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.CM"
+    code: "DE.CM-04"
+    title: "Malicious code is detected"
+    summary: "Malicious code is detected"
+    description: "Examples: anti-malware and endpoint protection platforms; sandboxing for suspicious files; email security gateways; web content filtering; malicious script detection."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.CM"
+    code: "DE.CM-05"
+    title: "Unauthorized mobile code is detected"
+    summary: "Unauthorized mobile code is detected"
+    description: "Examples: mobile device management (MDM) monitoring; application control on endpoints; script execution monitoring; browser security controls; software restriction policies."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.CM"
+    code: "DE.CM-06"
+    title: "External service provider activities and services are monitored to find potentially adverse events"
+    summary: "External service provider activities and services are monitored for potentially adverse events"
+    description: "Examples: third-party access monitoring; cloud service activity logs; managed service provider monitoring; API activity monitoring; CASB for cloud service visibility."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect", "supply-chain"]
+
+  - group_code: "DE.CM"
+    code: "DE.CM-07"
+    title: "Monitoring for unauthorized personnel, connections, devices, and software is performed"
+    summary: "Monitoring for unauthorized personnel, connections, devices, and software is performed"
+    description: "Examples: rogue device detection; unauthorized network connection monitoring; shadow IT discovery; NAC enforcement; wireless rogue access point detection."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.CM"
+    code: "DE.CM-08"
+    title: "Vulnerability scans are performed"
+    summary: "Vulnerability scans are performed"
+    description: "Examples: authenticated vulnerability scanning; unauthenticated network scanning; web application scanning; cloud configuration assessments; container image scanning; continuous vulnerability assessment."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.CM"
+    code: "DE.CM-09"
+    title: "Computing hardware and software, runtime environments, and their data are monitored to find potentially adverse events"
+    summary: "Computing hardware, software, and runtime environments are monitored for potentially adverse events"
+    description: "Examples: endpoint detection and response (EDR); file integrity monitoring; application performance monitoring; container runtime security; cloud workload protection platforms (CWPP)."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  # DE.AE — Adverse Event Analysis (8)
+  - group_code: "DE.AE"
+    code: "DE.AE-01"
+    title: "A baseline of network operations and expected data flows for users and systems is established and managed"
+    summary: "A baseline of network operations and expected data flows is established and managed"
+    description: "Examples: network baseline documentation; normal traffic pattern profiles; user and system behaviour baselines; allowlisted communication patterns; baseline deviations threshold definitions."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.AE"
+    code: "DE.AE-02"
+    title: "Potentially adverse events are analyzed to better understand associated activities"
+    summary: "Potentially adverse events are analyzed to understand associated activities"
+    description: "Examples: security event correlation; SIEM rule development; threat hunting; log analysis; behavioural analysis; hypothesis-driven investigation."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.AE"
+    code: "DE.AE-03"
+    title: "Information is correlated from multiple sources"
+    summary: "Information is correlated from multiple sources"
+    description: "Examples: SIEM platforms; log aggregation and normalization; security data lakes; cross-source correlation rules; event correlation across network, endpoint, and identity sources."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.AE"
+    code: "DE.AE-04"
+    title: "The estimated impact and scope of adverse events are understood"
+    summary: "The estimated impact and scope of adverse events are understood"
+    description: "Examples: incident scoping processes; blast radius assessment; impact analysis; affected asset identification; data exfiltration assessment."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.AE"
+    code: "DE.AE-05"
+    title: "Incident alert thresholds are established"
+    summary: "Incident alert thresholds are established"
+    description: "Examples: SIEM alert tuning; alert threshold policies; signal-to-noise ratio management; risk-based alerting thresholds; false positive reduction processes."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.AE"
+    code: "DE.AE-06"
+    title: "Information on adverse events is provided to authorized staff and tools"
+    summary: "Information on adverse events is provided to authorized staff and tools"
+    description: "Examples: SOC alerting and escalation; incident notification workflows; automated ticket creation; alert routing to appropriate teams; integration with SOAR platforms."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.AE"
+    code: "DE.AE-07"
+    title: "Cyber threat intelligence and other contextual information are integrated into the analysis"
+    summary: "Cyber threat intelligence and contextual information are integrated into event analysis"
+    description: "Examples: threat intelligence platforms; IOC/IOA enrichment; MITRE ATT&CK mapping; contextual alert enrichment; threat actor profiling in investigations."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+  - group_code: "DE.AE"
+    code: "DE.AE-08"
+    title: "Incidents are declared when adverse events meet the defined incident criteria"
+    summary: "Incidents are declared when adverse events meet defined incident criteria"
+    description: "Examples: incident declaration criteria; escalation thresholds; incident classification schemes; automated incident creation rules; clear definition of what constitutes a security incident."
+    security_function: "DETECT"
+    asset_class: "Systems"
+    tags: ["detect"]
+
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # RESPOND
+  # ════════════════════════════════════════════════════════════════════════════
+
+  # RS.MA — Incident Management (5)
+  - group_code: "RS.MA"
+    code: "RS.MA-01"
+    title: "The incident response plan is executed in coordination with relevant third parties once an incident is declared"
+    summary: "The incident response plan is executed in coordination with relevant third parties"
+    description: "Examples: incident response plan activation procedures; IRP coordination with legal, HR, PR, and suppliers; incident commander role activation; crisis management team mobilization."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.MA"
+    code: "RS.MA-02"
+    title: "Incident reports are triaged to support analysis, prioritization, and handling of incidents"
+    summary: "Incident reports are triaged to support analysis, prioritization, and handling"
+    description: "Examples: incident triage procedures; severity classification rubrics; incident queuing and assignment; initial assessment checklists; triage SLA targets."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.MA"
+    code: "RS.MA-03"
+    title: "Incidents are categorized and prioritized"
+    summary: "Incidents are categorized and prioritized"
+    description: "Examples: incident categorization taxonomies (e.g., ransomware, data breach, insider threat); priority matrices; SLA-based prioritization; business impact-based prioritization."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.MA"
+    code: "RS.MA-04"
+    title: "Incidents are escalated or elevated as needed"
+    summary: "Incidents are escalated or elevated as needed"
+    description: "Examples: escalation criteria and procedures; escalation paths to executive leadership; regulatory reporting triggers; law enforcement referral criteria."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.MA"
+    code: "RS.MA-05"
+    title: "The criteria for initiating incident recovery are applied"
+    summary: "The criteria for initiating incident recovery are applied"
+    description: "Examples: recovery decision criteria; threshold definitions for moving from response to recovery; containment verification requirements; transition to recovery team procedures."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  # RS.AN — Incident Analysis (8)
+  - group_code: "RS.AN"
+    code: "RS.AN-01"
+    title: "Investigations are performed to understand the contributing factors and root causes of the incident"
+    summary: "Investigations are performed to understand contributing factors and root causes"
+    description: "Examples: root cause analysis (RCA); kill chain analysis; MITRE ATT&CK TTPs mapping; forensic investigation; contributing factor identification."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.AN"
+    code: "RS.AN-02"
+    title: "The impact of the incident is understood"
+    summary: "The impact of the incident is understood"
+    description: "Examples: affected asset identification; data classification of impacted data; business impact assessment; financial and reputational impact estimation; regulatory breach determination."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.AN"
+    code: "RS.AN-03"
+    title: "Forensics are performed"
+    summary: "Forensics are performed"
+    description: "Examples: digital forensics procedures; memory acquisition; disk imaging; network packet capture analysis; forensic toolkits; chain of custody maintenance."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.AN"
+    code: "RS.AN-04"
+    title: "The root cause of the incident is established"
+    summary: "The root cause of the incident is established"
+    description: "Examples: root cause analysis frameworks (5 Whys, fishbone); technical root cause determination; process/procedure gaps identified; people, process, and technology root causes."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.AN"
+    code: "RS.AN-05"
+    title: "New root causes or indicators of compromise discovered during incident analysis are disseminated to relevant parties"
+    summary: "New root causes and indicators of compromise are disseminated to relevant parties"
+    description: "Examples: IOC sharing via threat intelligence platforms; internal IOC distribution to detection tools; ISAC threat sharing; updated detection signatures from incident findings."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.AN"
+    code: "RS.AN-06"
+    title: "Actions performed during an investigation are recorded, and the records' integrity and provenance are preserved"
+    summary: "Investigation actions are recorded with preserved integrity and provenance"
+    description: "Examples: forensic chain of custody documentation; investigation logs and timelines; evidence management; tamper-evident recording of investigation activities."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.AN"
+    code: "RS.AN-07"
+    title: "Incident data and metadata are collected, and their integrity is preserved"
+    summary: "Incident data and metadata are collected with preserved integrity"
+    description: "Examples: forensic data collection procedures; evidence preservation; volatile data acquisition; centralized evidence storage; integrity hashing of collected evidence."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.AN"
+    code: "RS.AN-08"
+    title: "An incident's magnitude is estimated and validated"
+    summary: "An incident's magnitude is estimated and validated"
+    description: "Examples: impact quantification; affected system enumeration; data exfiltration scope assessment; business impact quantification; regulatory breach magnitude determination."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  # RS.CO — Incident Response Reporting and Communication (3)
+  - group_code: "RS.CO"
+    code: "RS.CO-01"
+    title: "Personnel know their roles and order of operations when a response is needed"
+    summary: "Personnel know their roles and order of operations when a response is needed"
+    description: "Examples: incident response role assignments; contact trees; regular IRP training; tabletop exercises; on-call schedules; runbooks for common incident types."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.CO"
+    code: "RS.CO-02"
+    title: "Internal and external stakeholders are notified of incidents in a timely manner"
+    summary: "Internal and external stakeholders are notified of incidents in a timely manner"
+    description: "Examples: incident notification procedures; stakeholder communication templates; regulatory notification timelines (e.g., GDPR 72-hour breach notification); customer breach notifications."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.CO"
+    code: "RS.CO-03"
+    title: "Information is shared with designated internal and external stakeholders as defined in the incident response plan"
+    summary: "Information is shared with designated stakeholders as defined in the incident response plan"
+    description: "Examples: information sharing protocols; need-to-know determinations; public communications plans; law enforcement coordination; threat intelligence sharing with sector partners."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  # RS.MI — Incident Mitigation (2)
+  - group_code: "RS.MI"
+    code: "RS.MI-01"
+    title: "Incidents are contained"
+    summary: "Incidents are contained"
+    description: "Examples: network isolation; account suspension; system quarantine; firewall rule implementation; containment playbooks; short-term workarounds to stop spread."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+  - group_code: "RS.MI"
+    code: "RS.MI-02"
+    title: "Incidents are eradicated"
+    summary: "Incidents are eradicated"
+    description: "Examples: malware removal; backdoor and persistence mechanism elimination; compromised account remediation; patch deployment for exploited vulnerabilities; re-imaging affected systems."
+    security_function: "RESPOND"
+    asset_class: "Incidents"
+    tags: ["respond"]
+
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # RECOVER
+  # ════════════════════════════════════════════════════════════════════════════
+
+  # RC.RP — Incident Recovery Plan Execution (6)
+  - group_code: "RC.RP"
+    code: "RC.RP-01"
+    title: "The recovery portion of the incident response plan is executed once initiated from the incident response process"
+    summary: "The recovery plan is executed once initiated from the incident response process"
+    description: "Examples: recovery plan activation procedures; recovery team mobilization; recovery prioritization based on asset criticality and business impact; warm/cold standby activation."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  - group_code: "RC.RP"
+    code: "RC.RP-02"
+    title: "Recovery actions are selected, scoped, prioritized, and performed"
+    summary: "Recovery actions are selected, scoped, prioritized, and performed"
+    description: "Examples: recovery option evaluation; restoration sequencing; priority-based recovery aligned with business criticality; recovery decision frameworks; clean rebuild vs. restoration decisions."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  - group_code: "RC.RP"
+    code: "RC.RP-03"
+    title: "The integrity of backups and other restoration assets is verified before using them for restoration"
+    summary: "Integrity of backups and restoration assets is verified before use"
+    description: "Examples: backup integrity verification; restoration testing procedures; checksum and hash validation; verification that backups are free of malware before restoration."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  - group_code: "RC.RP"
+    code: "RC.RP-04"
+    title: "Critical mission functions and cybersecurity risk management are considered to establish post-incident operational norms"
+    summary: "Critical mission functions are considered to establish post-incident operational norms"
+    description: "Examples: post-incident operational assessments; temporary operating procedures; risk acceptance for post-incident state; mission continuity reviews; enhanced monitoring during recovery."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  - group_code: "RC.RP"
+    code: "RC.RP-05"
+    title: "The integrity of restored assets is verified, systems and services are restored, and normal operating status is confirmed"
+    summary: "Restored assets are verified, systems are restored, and normal operating status is confirmed"
+    description: "Examples: post-restoration functional testing; system health checks; security validation of restored systems; service availability verification; stakeholder sign-off on restored services."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  - group_code: "RC.RP"
+    code: "RC.RP-06"
+    title: "The end of incident recovery is declared based on criteria, and incident-related documentation is completed"
+    summary: "End of incident recovery is declared based on criteria and documentation is completed"
+    description: "Examples: recovery closure criteria definition; incident closure procedures; post-incident documentation requirements; lessons learned capture; after-action reports."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  # RC.CO — Incident Recovery Communication (4)
+  - group_code: "RC.CO"
+    code: "RC.CO-01"
+    title: "Public relations are managed"
+    summary: "Public relations are managed during incident recovery"
+    description: "Examples: media relations procedures; approved spokesperson designation; holding statement templates; social media monitoring during incidents; PR agency coordination."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  - group_code: "RC.CO"
+    code: "RC.CO-02"
+    title: "Reputation is repaired after an incident"
+    summary: "Reputation is repaired after an incident"
+    description: "Examples: customer trust restoration programs; security posture improvement communications; third-party security attestations post-incident; transparent disclosure of improvements made."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  - group_code: "RC.CO"
+    code: "RC.CO-03"
+    title: "Recovery activities and progress in restoring operational capabilities are communicated to designated internal and external stakeholders"
+    summary: "Recovery activities and progress are communicated to internal and external stakeholders"
+    description: "Examples: recovery status communications cadence; stakeholder update schedules; internal recovery dashboards; customer recovery status notifications; executive briefings on recovery progress."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]
+
+  - group_code: "RC.CO"
+    code: "RC.CO-04"
+    title: "Public updates on incident recovery are shared using approved methods and messaging"
+    summary: "Public updates on incident recovery are shared using approved methods and messaging"
+    description: "Examples: public communications approval process; press releases and public statements; regulatory disclosure filings; website status pages; coordinated disclosure with affected parties."
+    security_function: "RECOVER"
+    asset_class: "Systems"
+    tags: ["recover"]

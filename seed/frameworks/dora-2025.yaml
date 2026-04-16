@@ -1,0 +1,391 @@
+framework:
+  slug: "dora-2025"
+  label: "Digital Operational Resilience Act (DORA)"
+  version: "2025"
+
+groups:
+  - code: "GOVERN"
+    title: "ICT Governance and Strategy"
+    summary: "Management body responsibilities, ICT risk strategy, governance arrangements, and ICT security policy requirements under DORA Articles 5–9."
+
+  - code: "IDENTIFY"
+    title: "ICT Asset and Risk Identification"
+    summary: "Identification and classification of ICT assets, continuous ICT risk identification, business impact analysis, and dependency mapping under DORA Article 8."
+
+  - code: "PROTECT"
+    title: "ICT Protection and Prevention"
+    summary: "Technical and organisational security measures, access control, encryption, network security, change management, and secure development under DORA Article 9."
+
+  - code: "DETECT"
+    title: "ICT Detection and Monitoring"
+    summary: "Continuous monitoring for anomalous activities, threat intelligence, vulnerability management, and log management capabilities under DORA Article 10."
+
+  - code: "RESPOND"
+    title: "ICT Incident Response"
+    summary: "ICT incident management process, classification of incidents, regulatory reporting obligations, and post-incident review under DORA Articles 17–19."
+
+  - code: "BACKUP"
+    title: "Backup and Recovery"
+    summary: "Backup policies, restoration testing, business continuity planning, disaster recovery, and crisis communication requirements under DORA Articles 11–12."
+
+  - code: "TESTING"
+    title: "Digital Operational Resilience Testing"
+    summary: "Risk-based testing programme, basic resilience tests, threat-led penetration testing (TLPT) following TIBER-EU, and remediation of findings under DORA Articles 24–26."
+
+  - code: "TPRM"
+    title: "ICT Third-Party Risk Management"
+    summary: "Third-party ICT risk policy, due diligence, contractual requirements, register of arrangements, concentration risk, and exit strategies under DORA Article 28–30."
+
+items:
+
+  # ── GOVERN ────────────────────────────────────────────────────────────────
+  - group_code: "GOVERN"
+    code: "GOVERN-01"
+    title: "ICT Risk Appetite and Strategy"
+    summary: "Define and document the organisation's ICT risk appetite and integrate it into the overall digital operational resilience strategy. Ensure the strategy is reviewed and approved by the management body at least annually."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-5", "governance", "strategy"]
+
+  - group_code: "GOVERN"
+    code: "GOVERN-02"
+    title: "Management Body Responsibility"
+    summary: "Ensure the management body bears full responsibility for defining, approving, overseeing, and being accountable for the implementation of all arrangements related to the ICT risk management framework."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-5", "governance", "accountability"]
+
+  - group_code: "GOVERN"
+    code: "GOVERN-03"
+    title: "ICT Risk Management Framework"
+    summary: "Establish, implement, and maintain a sound, comprehensive, and well-documented ICT risk management framework as part of the overall risk management system, enabling the entity to address ICT risk swiftly, efficiently, and comprehensively."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-6", "risk-management", "framework"]
+
+  - group_code: "GOVERN"
+    code: "GOVERN-04"
+    title: "ICT Security Policy"
+    summary: "Define, approve, and implement an ICT security policy expressing the principles for protecting the confidentiality, integrity, availability, and authenticity of data and information assets, including ICT systems."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-9", "security-policy"]
+
+  - group_code: "GOVERN"
+    code: "GOVERN-05"
+    title: "Roles and Responsibilities"
+    summary: "Assign clear roles and responsibilities for all ICT-related functions, establish appropriate governance arrangements to ensure effective and timely communication, cooperation, and coordination among all internal functions involved in ICT risk management."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-5", "roles", "responsibilities"]
+
+  # ── IDENTIFY ──────────────────────────────────────────────────────────────
+  - group_code: "IDENTIFY"
+    code: "IDENTIFY-01"
+    title: "ICT Asset Management"
+    summary: "Identify, classify, and document all ICT assets including hardware, software, and data assets. Maintain an up-to-date inventory and ensure that the asset register is regularly reviewed and updated."
+    asset_class: "All"
+    security_function: "Identify"
+    tags: ["art-8", "asset-management", "inventory"]
+
+  - group_code: "IDENTIFY"
+    code: "IDENTIFY-02"
+    title: "ICT Risk Identification"
+    summary: "Continuously identify all sources of ICT risk including internal and external threats. Assess exposure to cyber threats and ICT risk, considering critical ICT systems, key assets, and the impact of potential ICT disruptions."
+    asset_class: "All"
+    security_function: "Identify"
+    tags: ["art-8", "risk-identification", "threat-assessment"]
+
+  - group_code: "IDENTIFY"
+    code: "IDENTIFY-03"
+    title: "Business Impact Analysis"
+    summary: "Conduct business impact analysis to assess the potential impact of severe ICT-related disruptions. Identify and document critical business functions, supporting ICT systems, and internal and external interdependencies."
+    asset_class: "Organization"
+    security_function: "Identify"
+    tags: ["art-11", "bia", "business-continuity"]
+
+  - group_code: "IDENTIFY"
+    code: "IDENTIFY-04"
+    title: "ICT Risk Assessment"
+    summary: "Perform comprehensive ICT risk assessments on a regular basis, following any major changes to the ICT infrastructure or processes, and after major ICT-related incidents. Document and report findings to senior management."
+    asset_class: "All"
+    security_function: "Identify"
+    tags: ["art-8", "risk-assessment"]
+
+  - group_code: "IDENTIFY"
+    code: "IDENTIFY-05"
+    title: "Dependency Mapping"
+    summary: "Map and monitor dependencies between ICT systems, processes, and third-party ICT service providers. Identify single points of failure and concentration risks within the ICT infrastructure."
+    asset_class: "Systems"
+    security_function: "Identify"
+    tags: ["art-8", "dependencies", "concentration-risk"]
+
+  # ── PROTECT ───────────────────────────────────────────────────────────────
+  - group_code: "PROTECT"
+    code: "PROTECT-01"
+    title: "ICT Security Controls"
+    summary: "Implement state-of-the-art technical and organisational measures to protect ICT systems and data against cyber attacks. Controls must be proportionate to the risk profile and include network segmentation, encryption, and access controls."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-9", "technical-controls", "security"]
+
+  - group_code: "PROTECT"
+    code: "PROTECT-02"
+    title: "Access Control and Identity Management"
+    summary: "Establish and enforce strong access control policies including need-to-know and least-privilege principles. Implement multi-factor authentication for all privileged and remote access, and manage the lifecycle of user identities."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-9", "access-control", "identity-management", "mfa"]
+
+  - group_code: "PROTECT"
+    code: "PROTECT-03"
+    title: "Data Security and Encryption"
+    summary: "Apply appropriate encryption to data at rest and in transit. Establish data classification policies, implement data loss prevention mechanisms, and ensure cryptographic key management procedures are in place."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-9", "encryption", "data-security"]
+
+  - group_code: "PROTECT"
+    code: "PROTECT-04"
+    title: "Network and Infrastructure Security"
+    summary: "Implement network segmentation, perimeter security, and infrastructure hardening measures. Regularly patch and update ICT systems, disable unnecessary services, and monitor for configuration drifts."
+    asset_class: "Infrastructure"
+    security_function: "Protect"
+    tags: ["art-9", "network-security", "patch-management"]
+
+  - group_code: "PROTECT"
+    code: "PROTECT-05"
+    title: "Physical Security"
+    summary: "Establish physical security measures to protect ICT infrastructure from physical threats. Control physical access to data centres, server rooms, and other critical ICT infrastructure."
+    asset_class: "Infrastructure"
+    security_function: "Protect"
+    tags: ["art-9", "physical-security"]
+
+  - group_code: "PROTECT"
+    code: "PROTECT-06"
+    title: "ICT Change and Project Management"
+    summary: "Define and implement ICT project management, change management, and release management processes. Ensure that changes are assessed for ICT risk impact before implementation and that rollback procedures exist."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-8", "change-management"]
+
+  - group_code: "PROTECT"
+    code: "PROTECT-07"
+    title: "Secure Acquisition, Development, and Maintenance"
+    summary: "Apply security throughout the ICT system lifecycle including acquisition, development, and maintenance. Implement secure coding practices, conduct security testing, and manage software vulnerabilities."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-9", "secure-development", "sdlc"]
+
+  # ── DETECT ────────────────────────────────────────────────────────────────
+  - group_code: "DETECT"
+    code: "DETECT-01"
+    title: "Continuous Monitoring"
+    summary: "Implement mechanisms to promptly detect anomalous activities including ICT network performance, ICT-related incidents, and suspected ICT vulnerabilities. Monitor third-party ICT services for anomalies as well."
+    asset_class: "Systems"
+    security_function: "Detect"
+    tags: ["art-10", "monitoring", "anomaly-detection"]
+
+  - group_code: "DETECT"
+    code: "DETECT-02"
+    title: "Threat Intelligence"
+    summary: "Gather, analyse, and act on cyber threat intelligence to maintain awareness of evolving threats. Participate in information sharing arrangements relevant to the sector and assess threat intelligence for applicability."
+    asset_class: "Organization"
+    security_function: "Detect"
+    tags: ["art-13", "threat-intelligence", "information-sharing"]
+
+  - group_code: "DETECT"
+    code: "DETECT-03"
+    title: "Vulnerability Management"
+    summary: "Establish a vulnerability management process to identify, assess, and remediate ICT vulnerabilities in a timely manner. Conduct regular vulnerability scans and penetration tests on critical systems."
+    asset_class: "Systems"
+    security_function: "Detect"
+    tags: ["art-10", "vulnerability-management", "pen-testing"]
+
+  - group_code: "DETECT"
+    code: "DETECT-04"
+    title: "Log Management and SIEM"
+    summary: "Collect, store, and analyse logs from all critical ICT systems. Implement SIEM or equivalent log correlation capabilities to detect security events and support incident investigation and forensic analysis."
+    asset_class: "Systems"
+    security_function: "Detect"
+    tags: ["art-10", "logging", "siem"]
+
+  # ── RESPOND ───────────────────────────────────────────────────────────────
+  - group_code: "RESPOND"
+    code: "RESPOND-01"
+    title: "ICT Incident Management Process"
+    summary: "Define, implement, and test a comprehensive ICT incident management process covering detection, classification, notification, escalation, containment, resolution, and root cause analysis of ICT-related incidents."
+    asset_class: "Organization"
+    security_function: "Respond"
+    tags: ["art-17", "incident-management"]
+
+  - group_code: "RESPOND"
+    code: "RESPOND-02"
+    title: "ICT Incident Classification"
+    summary: "Classify ICT-related incidents using defined criteria based on the number of clients affected, duration, geographic spread, data loss, criticality of services, and economic impact. Distinguish major incidents from minor ones."
+    asset_class: "Organization"
+    security_function: "Respond"
+    tags: ["art-18", "classification", "severity"]
+
+  - group_code: "RESPOND"
+    code: "RESPOND-03"
+    title: "Regulatory Reporting of Major Incidents"
+    summary: "Report major ICT-related incidents to the relevant competent authority within the timelines prescribed by DORA: initial notification, intermediate report, and final report. Notify clients affected by major incidents."
+    asset_class: "Organization"
+    security_function: "Respond"
+    tags: ["art-19", "regulatory-reporting", "notification"]
+
+  - group_code: "RESPOND"
+    code: "RESPOND-04"
+    title: "Voluntary Cyber Threat Reporting"
+    summary: "Voluntarily report significant cyber threats to competent authorities when the entity considers the threat to be of relevance to the financial system. Participate in threat information-sharing schemes."
+    asset_class: "Organization"
+    security_function: "Respond"
+    tags: ["art-19", "voluntary-reporting", "information-sharing"]
+
+  - group_code: "RESPOND"
+    code: "RESPOND-05"
+    title: "Post-Incident Review"
+    summary: "Conduct post-incident reviews after major ICT incidents to analyse root causes, identify improvements, and update the ICT incident management process. Document lessons learned and track corrective actions."
+    asset_class: "Organization"
+    security_function: "Respond"
+    tags: ["art-17", "post-incident-review", "lessons-learned"]
+
+  # ── BACKUP ────────────────────────────────────────────────────────────────
+  - group_code: "BACKUP"
+    code: "BACKUP-01"
+    title: "Backup Policy"
+    summary: "Establish, implement, and test a comprehensive backup policy defining backup frequency, retention periods, storage locations, and restoration procedures for all critical data and ICT systems."
+    asset_class: "Data"
+    security_function: "Recover"
+    tags: ["art-12", "backup", "data-protection"]
+
+  - group_code: "BACKUP"
+    code: "BACKUP-02"
+    title: "Backup Integrity and Restoration Testing"
+    summary: "Regularly test backup restoration procedures to ensure data integrity and restoration capability within required timeframes. Maintain at least one complete offline backup of critical data."
+    asset_class: "Data"
+    security_function: "Recover"
+    tags: ["art-12", "backup-testing", "restoration"]
+
+  - group_code: "BACKUP"
+    code: "BACKUP-03"
+    title: "Business Continuity Planning"
+    summary: "Develop and maintain ICT business continuity plans that define recovery time objectives (RTO) and recovery point objectives (RPO). Ensure continuity plans are aligned with the business impact analysis."
+    asset_class: "Organization"
+    security_function: "Recover"
+    tags: ["art-11", "bcp", "rto", "rpo"]
+
+  - group_code: "BACKUP"
+    code: "BACKUP-04"
+    title: "Disaster Recovery"
+    summary: "Establish disaster recovery capabilities for critical ICT systems including redundant infrastructure, failover procedures, and alternative processing sites. Test disaster recovery regularly and after significant changes."
+    asset_class: "Infrastructure"
+    security_function: "Recover"
+    tags: ["art-11", "disaster-recovery", "redundancy"]
+
+  - group_code: "BACKUP"
+    code: "BACKUP-05"
+    title: "Crisis Communication"
+    summary: "Define crisis communication plans for ICT incidents including internal escalation paths, external stakeholder communication, and regulatory notification procedures. Ensure crisis communication plans are regularly tested."
+    asset_class: "Organization"
+    security_function: "Recover"
+    tags: ["art-11", "crisis-communication"]
+
+  # ── TESTING ───────────────────────────────────────────────────────────────
+  - group_code: "TESTING"
+    code: "TESTING-01"
+    title: "DORA Testing Programme"
+    summary: "Establish a comprehensive digital operational resilience testing programme covering a range of assessments, tests, methodologies, and tools to be applied according to a risk-based approach at least annually."
+    asset_class: "Organization"
+    security_function: "Protect"
+    tags: ["art-24", "testing-programme"]
+
+  - group_code: "TESTING"
+    code: "TESTING-02"
+    title: "Basic Resilience Testing"
+    summary: "Conduct basic digital operational resilience tests including vulnerability assessments, open source analyses, network security assessments, gap analyses, physical security reviews, and questionnaire-based assessments."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-25", "basic-testing", "vulnerability-assessment"]
+
+  - group_code: "TESTING"
+    code: "TESTING-03"
+    title: "Threat-Led Penetration Testing (TLPT)"
+    summary: "Conduct Threat-Led Penetration Testing (TLPT) at least every three years for significant financial entities. TLPT must cover critical live production systems and follow the TIBER-EU framework or equivalent national framework."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-26", "tlpt", "tiber-eu", "penetration-testing"]
+
+  - group_code: "TESTING"
+    code: "TESTING-04"
+    title: "Testing of ICT Third-Party Providers"
+    summary: "Where appropriate, extend testing scope to critical ICT third-party service providers. Ensure contractual arrangements allow for testing of third-party systems and that results are shared with competent authorities."
+    asset_class: "Organization"
+    security_function: "Protect"
+    tags: ["art-26", "third-party-testing"]
+
+  - group_code: "TESTING"
+    code: "TESTING-05"
+    title: "Remediation of Testing Findings"
+    summary: "Establish a process to remediate findings from digital operational resilience tests in a timely manner. Track remediation progress, report to senior management, and validate that vulnerabilities are addressed."
+    asset_class: "Organization"
+    security_function: "Protect"
+    tags: ["art-24", "remediation"]
+
+  # ── TPRM ──────────────────────────────────────────────────────────────────
+  - group_code: "TPRM"
+    code: "TPRM-01"
+    title: "Third-Party ICT Risk Policy"
+    summary: "Adopt and regularly review a policy on arrangements with ICT third-party service providers. Define a strategy for ICT third-party risk, including risk tolerance, due diligence procedures, and concentration risk assessment."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-28", "tprm-policy", "concentration-risk"]
+
+  - group_code: "TPRM"
+    code: "TPRM-02"
+    title: "Third-Party Due Diligence"
+    summary: "Conduct appropriate due diligence before entering into contractual arrangements with ICT third-party service providers. Assess their ICT security posture, resilience capabilities, and compliance with applicable regulations."
+    asset_class: "Organization"
+    security_function: "Identify"
+    tags: ["art-28", "due-diligence"]
+
+  - group_code: "TPRM"
+    code: "TPRM-03"
+    title: "Contractual Requirements for ICT Providers"
+    summary: "Ensure contracts with ICT third-party service providers include minimum mandatory provisions: service descriptions, data locations, security requirements, audit rights, incident notification obligations, exit arrangements, and SLAs."
+    asset_class: "Organization"
+    security_function: "Protect"
+    tags: ["art-30", "contractual-requirements", "sla"]
+
+  - group_code: "TPRM"
+    code: "TPRM-04"
+    title: "Register of ICT Third-Party Arrangements"
+    summary: "Maintain an up-to-date register of all contractual arrangements with ICT third-party service providers. Distinguish critical from non-critical arrangements and report the register to competent authorities upon request."
+    asset_class: "Organization"
+    security_function: "Identify"
+    tags: ["art-28", "register", "inventory"]
+
+  - group_code: "TPRM"
+    code: "TPRM-05"
+    title: "Critical ICT Third-Party Providers"
+    summary: "Identify and manage concentration risk arising from reliance on critical ICT third-party providers. Assess exit strategies, substitutability, and business continuity arrangements in the event of a provider failure or discontinuation."
+    asset_class: "Organization"
+    security_function: "Identify"
+    tags: ["art-28", "critical-providers", "concentration-risk"]
+
+  - group_code: "TPRM"
+    code: "TPRM-06"
+    title: "Ongoing Third-Party Monitoring"
+    summary: "Continuously monitor the performance, security posture, and compliance of critical ICT third-party service providers. Conduct periodic reviews, request audit reports, and ensure service levels are maintained."
+    asset_class: "Organization"
+    security_function: "Detect"
+    tags: ["art-28", "monitoring", "audit"]
+
+  - group_code: "TPRM"
+    code: "TPRM-07"
+    title: "Exit Strategies"
+    summary: "Develop documented exit strategies for critical ICT third-party service providers. Ensure that substitution plans are feasible and that knowledge, data, and continuity of service can be transferred without disruption."
+    asset_class: "Organization"
+    security_function: "Recover"
+    tags: ["art-28", "exit-strategy", "portability"]
