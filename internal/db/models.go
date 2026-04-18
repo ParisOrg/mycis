@@ -234,6 +234,7 @@ type FrameworkGroup struct {
 	Summary     string    `json:"summary"`
 	Description string    `json:"description"`
 	IsActive    bool      `json:"is_active"`
+	SortOrder   int32     `json:"sort_order"`
 }
 
 type FrameworkItem struct {
@@ -248,6 +249,7 @@ type FrameworkItem struct {
 	Tags             []string  `json:"tags"`
 	Description      string    `json:"description"`
 	IsActive         bool      `json:"is_active"`
+	SortOrder        int32     `json:"sort_order"`
 }
 
 type User struct {

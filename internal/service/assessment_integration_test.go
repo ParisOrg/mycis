@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"reflect"
 	"runtime"
 	"strings"
 	"testing"
@@ -330,6 +331,315 @@ func TestForceReseedUsesOnlyActiveFrameworkRowsForNewAssessmentsAndCycles(t *tes
 	}
 }
 
+func TestSeedFrameworkPreservesYamlOrderForNonNumericCodes(t *testing.T) {
+	databaseURL := os.Getenv("TEST_DATABASE_URL")
+	if databaseURL == "" {
+		t.Skip("TEST_DATABASE_URL is not set")
+	}
+
+	ctx := context.Background()
+	rootDir := repoRoot(t)
+	withWorkingDirectory(t, rootDir)
+
+	testDatabaseURL := createIntegrationDatabase(t, ctx, databaseURL)
+	runMigrationsForTest(t, testDatabaseURL, rootDir)
+
+	pool, err := pgxpool.New(ctx, testDatabaseURL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer pool.Close()
+
+	services := New(pool)
+
+	slug := fmt.Sprintf("ordered-%d", time.Now().UnixNano())
+	seedPath := filepath.Join(rootDir, "seed", "frameworks", slug+".yaml")
+	t.Cleanup(func() {
+		_ = os.Remove(seedPath)
+	})
+
+	if err := os.WriteFile(seedPath, []byte(testOrderedFrameworkSeedYAML(slug)), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := services.Frameworks.SeedFramework(ctx, slug, false); err != nil {
+		t.Fatal(err)
+	}
+
+	admin, err := services.Auth.CreateUserWithPassword(ctx, "Admin", "admin@example.com", "password-12345", true, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	frameworks, err := services.Frameworks.ListFrameworks(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(frameworks) != 1 {
+		t.Fatalf("expected one framework, got %d", len(frameworks))
+	}
+
+	groups, err := services.Frameworks.ListGroupsByFramework(ctx, frameworks[0].ID.String())
+	if err != nil {
+		t.Fatal(err)
+	}
+	groupCodes := make([]string, 0, len(groups))
+	for _, group := range groups {
+		groupCodes = append(groupCodes, group.Code)
+	}
+	if want := []string{"ZZ", "AA", "MM"}; !reflect.DeepEqual(groupCodes, want) {
+		t.Fatalf("unexpected group order: got %v want %v", groupCodes, want)
+	}
+
+	assessment, err := services.Assessments.CreateAssessment(ctx, admin, CreateAssessmentInput{
+		FrameworkID: frameworks[0].ID,
+		Name:        "Ordered Assessment",
+		Scope:       "Production",
+		StartDate:   time.Date(2026, time.April, 1, 0, 0, 0, 0, time.UTC),
+		DueDate:     time.Date(2026, time.April, 30, 0, 0, 0, 0, time.UTC),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	items, err := services.Assessments.ListAssessmentItems(ctx, assessment.ID.String(), AssessmentItemFilters{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := []string{"ZZ-two", "AA-one", "MM-three", "AA-nine"}; !reflect.DeepEqual(assessmentItemCodes(items), want) {
+		t.Fatalf("unexpected assessment item order: got %v want %v", assessmentItemCodes(items), want)
+	}
+}
+
+func TestNISTCSF20SeedUsesOnlyActiveCoreItems(t *testing.T) {
+	databaseURL := os.Getenv("TEST_DATABASE_URL")
+	if databaseURL == "" {
+		t.Skip("TEST_DATABASE_URL is not set")
+	}
+
+	ctx := context.Background()
+	rootDir := repoRoot(t)
+	withWorkingDirectory(t, rootDir)
+
+	testDatabaseURL := createIntegrationDatabase(t, ctx, databaseURL)
+	runMigrationsForTest(t, testDatabaseURL, rootDir)
+
+	pool, err := pgxpool.New(ctx, testDatabaseURL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer pool.Close()
+
+	services := New(pool)
+
+	if err := services.Frameworks.SeedFramework(ctx, "nist-csf-2-0", false); err != nil {
+		t.Fatal(err)
+	}
+
+	admin, err := services.Auth.CreateUserWithPassword(ctx, "Admin", "admin@example.com", "password-12345", true, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	frameworks, err := services.Frameworks.ListFrameworks(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(frameworks) != 1 {
+		t.Fatalf("expected one framework, got %d", len(frameworks))
+	}
+
+	assessment, err := services.Assessments.CreateAssessment(ctx, admin, CreateAssessmentInput{
+		FrameworkID: frameworks[0].ID,
+		Name:        "NIST Assessment",
+		Scope:       "Production",
+		StartDate:   time.Date(2026, time.April, 1, 0, 0, 0, 0, time.UTC),
+		DueDate:     time.Date(2026, time.April, 30, 0, 0, 0, 0, time.UTC),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	items, err := services.Assessments.ListAssessmentItems(ctx, assessment.ID.String(), AssessmentItemFilters{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := len(items); got != 106 {
+		t.Fatalf("expected 106 active NIST CSF 2.0 items, got %d", got)
+	}
+
+	codes := assessmentItemCodes(items)
+	for _, withdrawn := range []string{
+		"PR.DS-03",
+		"PR.DS-04",
+		"PR.DS-05",
+		"PR.DS-12",
+		"DE.CM-04",
+		"DE.CM-05",
+		"DE.CM-07",
+		"DE.CM-08",
+		"DE.AE-01",
+		"DE.AE-05",
+		"RS.AN-01",
+		"RS.AN-02",
+		"RS.AN-04",
+		"RS.AN-05",
+		"RS.CO-01",
+		"RC.CO-01",
+		"RC.CO-02",
+	} {
+		if containsString(codes, withdrawn) {
+			t.Fatalf("expected withdrawn item %s to be absent from new assessments", withdrawn)
+		}
+	}
+
+	for _, active := range []string{"GV.OC-01", "PR.IR-04", "RS.CO-02", "RC.CO-04"} {
+		if !containsString(codes, active) {
+			t.Fatalf("expected active item %s to be present", active)
+		}
+	}
+}
+
+func TestRepairFrameworkItemReferencesRebindsOnlySafeAssessments(t *testing.T) {
+	databaseURL := os.Getenv("TEST_DATABASE_URL")
+	if databaseURL == "" {
+		t.Skip("TEST_DATABASE_URL is not set")
+	}
+
+	ctx := context.Background()
+	rootDir := repoRoot(t)
+	withWorkingDirectory(t, rootDir)
+
+	testDatabaseURL := createIntegrationDatabase(t, ctx, databaseURL)
+	runMigrationsForTest(t, testDatabaseURL, rootDir)
+
+	pool, err := pgxpool.New(ctx, testDatabaseURL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer pool.Close()
+
+	services := New(pool)
+	queries := db.New(pool)
+
+	admin, err := services.Auth.CreateUserWithPassword(ctx, "Admin", "admin@example.com", "password-12345", true, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	framework, err := queries.CreateFramework(ctx, db.CreateFrameworkParams{
+		Slug:    "repair-framework",
+		Label:   "Repair Framework",
+		Version: "1.0.0",
+		Status:  "active",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	group, err := queries.CreateFrameworkGroup(ctx, db.CreateFrameworkGroupParams{
+		FrameworkID: framework.ID,
+		Code:        "GRP",
+		Title:       "Group",
+		Summary:     "Group summary",
+		Description: "Group description",
+		SortOrder:   1,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	legacyItem, err := queries.CreateFrameworkItem(ctx, db.CreateFrameworkItemParams{
+		FrameworkID:      framework.ID,
+		FrameworkGroupID: group.ID,
+		Code:             "LEGACY-01",
+		Title:            "Legacy item",
+		Summary:          "Legacy item",
+		Description:      "Legacy item",
+		SortOrder:        1,
+		AssetClass:       "Systems",
+		SecurityFunction: "RESPOND",
+		Tags:             []string{"legacy"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	safeAssessment, err := services.Assessments.CreateAssessment(ctx, admin, CreateAssessmentInput{
+		FrameworkID: framework.ID,
+		Name:        "Safe Assessment",
+		Scope:       "Production",
+		StartDate:   time.Date(2026, time.April, 1, 0, 0, 0, 0, time.UTC),
+		DueDate:     time.Date(2026, time.April, 30, 0, 0, 0, 0, time.UTC),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	canonicalItem, err := queries.CreateFrameworkItem(ctx, db.CreateFrameworkItemParams{
+		FrameworkID:      framework.ID,
+		FrameworkGroupID: group.ID,
+		Code:             "CANONICAL-01",
+		Title:            "Canonical item",
+		Summary:          "Canonical item",
+		Description:      "Canonical item",
+		SortOrder:        2,
+		AssetClass:       "Systems",
+		SecurityFunction: "RESPOND",
+		Tags:             []string{"canonical"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	conflictingAssessment, err := services.Assessments.CreateAssessment(ctx, admin, CreateAssessmentInput{
+		FrameworkID: framework.ID,
+		Name:        "Conflicting Assessment",
+		Scope:       "Production",
+		StartDate:   time.Date(2026, time.May, 1, 0, 0, 0, 0, time.UTC),
+		DueDate:     time.Date(2026, time.May, 31, 0, 0, 0, 0, time.UTC),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := repairFrameworkItemReferences(ctx, queries, framework.ID, map[string]string{
+		"LEGACY-01": "CANONICAL-01",
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	safeItems, err := services.Assessments.ListAssessmentItems(ctx, safeAssessment.ID.String(), AssessmentItemFilters{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := assessmentItemCodes(safeItems); len(got) != 1 || got[0] != "CANONICAL-01" {
+		t.Fatalf("expected safe assessment to rebind to CANONICAL-01, got %v", got)
+	}
+	safeControlRecord, err := queries.GetControlRecordByAssessmentItem(ctx, safeItems[0].ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if safeControlRecord.FrameworkItemID != canonicalItem.ID {
+		t.Fatalf("expected safe control record to point at canonical item, got %s want %s", safeControlRecord.FrameworkItemID, canonicalItem.ID)
+	}
+
+	conflictingItems, err := services.Assessments.ListAssessmentItems(ctx, conflictingAssessment.ID.String(), AssessmentItemFilters{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := assessmentItemCodes(conflictingItems); !reflect.DeepEqual(got, []string{"LEGACY-01", "CANONICAL-01"}) {
+		t.Fatalf("expected conflicting assessment to keep both items, got %v", got)
+	}
+	conflictingLegacyItem := findAssessmentItemByCode(t, conflictingItems, "LEGACY-01")
+	conflictingControlRecord, err := queries.GetControlRecordByAssessmentItem(ctx, conflictingLegacyItem.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if conflictingControlRecord.FrameworkItemID != legacyItem.ID {
+		t.Fatalf("expected conflicting legacy control record to stay on legacy item, got %s want %s", conflictingControlRecord.FrameworkItemID, legacyItem.ID)
+	}
+}
+
 func TestUpdateClearsNotesAndNotApplicableFlag(t *testing.T) {
 	databaseURL := os.Getenv("TEST_DATABASE_URL")
 	if databaseURL == "" {
@@ -430,6 +740,19 @@ func findAssessmentItem(t *testing.T, items []db.ListAssessmentItemsRow, framewo
 	return db.ListAssessmentItemsRow{}
 }
 
+func findAssessmentItemByCode(t *testing.T, items []db.ListAssessmentItemsRow, itemCode string) db.ListAssessmentItemsRow {
+	t.Helper()
+
+	for _, item := range items {
+		if item.ItemCode == itemCode {
+			return item
+		}
+	}
+
+	t.Fatalf("assessment item with code %s not found", itemCode)
+	return db.ListAssessmentItemsRow{}
+}
+
 func repoRoot(t *testing.T) string {
 	t.Helper()
 
@@ -511,6 +834,15 @@ func assessmentItemCodes(items []db.ListAssessmentItemsRow) []string {
 	return codes
 }
 
+func containsString(items []string, target string) bool {
+	for _, item := range items {
+		if item == target {
+			return true
+		}
+	}
+	return false
+}
+
 func testFrameworkSeedYAML(slug, version string, itemCodes ...string) string {
 	var builder strings.Builder
 	builder.WriteString("framework:\n")
@@ -535,4 +867,62 @@ func testFrameworkSeedYAML(slug, version string, itemCodes ...string) string {
 		builder.WriteString("      - ig1\n")
 	}
 	return builder.String()
+}
+
+func testOrderedFrameworkSeedYAML(slug string) string {
+	return fmt.Sprintf(`framework:
+  slug: %s
+  label: Ordered Framework
+  version: 1.0.0
+groups:
+  - code: "ZZ"
+    title: Group ZZ
+    summary: Group ZZ summary
+    description: Group ZZ description
+  - code: "AA"
+    title: Group AA
+    summary: Group AA summary
+    description: Group AA description
+  - code: "MM"
+    title: Group MM
+    summary: Group MM summary
+    description: Group MM description
+items:
+  - group_code: "ZZ"
+    code: "ZZ-two"
+    title: Control ZZ-two
+    summary: Control ZZ-two
+    description: Control ZZ-two
+    asset_class: Systems
+    security_function: Govern
+    tags:
+      - alpha
+  - group_code: "AA"
+    code: "AA-one"
+    title: Control AA-one
+    summary: Control AA-one
+    description: Control AA-one
+    asset_class: Systems
+    security_function: Govern
+    tags:
+      - beta
+  - group_code: "MM"
+    code: "MM-three"
+    title: Control MM-three
+    summary: Control MM-three
+    description: Control MM-three
+    asset_class: Systems
+    security_function: Govern
+    tags:
+      - gamma
+  - group_code: "AA"
+    code: "AA-nine"
+    title: Control AA-nine
+    summary: Control AA-nine
+    description: Control AA-nine
+    asset_class: Systems
+    security_function: Govern
+    tags:
+      - delta
+`, slug)
 }

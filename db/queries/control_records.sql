@@ -68,6 +68,13 @@ WHERE id = ANY(
     AND ai.id = ANY($1::uuid[])
 );
 
+-- name: RebindControlRecordsFrameworkItem :exec
+UPDATE control_records
+SET framework_item_id = sqlc.arg(new_framework_item_id)::uuid,
+    updated_at = NOW()
+WHERE framework_item_id = sqlc.arg(old_framework_item_id)::uuid
+  AND assessment_id = ANY(sqlc.arg(assessment_ids)::uuid[]);
+
 -- name: BulkAssignControlRecordReviewer :exec
 UPDATE control_records
 SET reviewer_user_id = $2,

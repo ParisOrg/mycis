@@ -156,6 +156,25 @@ func (q *Queries) GetControlRecordByAssessmentItem(ctx context.Context, id uuid.
 	return i, err
 }
 
+const rebindControlRecordsFrameworkItem = `-- name: RebindControlRecordsFrameworkItem :exec
+UPDATE control_records
+SET framework_item_id = $1::uuid,
+    updated_at = NOW()
+WHERE framework_item_id = $2::uuid
+  AND assessment_id = ANY($3::uuid[])
+`
+
+type RebindControlRecordsFrameworkItemParams struct {
+	NewFrameworkItemID uuid.UUID   `json:"new_framework_item_id"`
+	OldFrameworkItemID uuid.UUID   `json:"old_framework_item_id"`
+	AssessmentIds      []uuid.UUID `json:"assessment_ids"`
+}
+
+func (q *Queries) RebindControlRecordsFrameworkItem(ctx context.Context, arg RebindControlRecordsFrameworkItemParams) error {
+	_, err := q.db.Exec(ctx, rebindControlRecordsFrameworkItem, arg.NewFrameworkItemID, arg.OldFrameworkItemID, arg.AssessmentIds)
+	return err
+}
+
 const updateControlRecordNotes = `-- name: UpdateControlRecordNotes :exec
 UPDATE control_records
 SET notes = $2,

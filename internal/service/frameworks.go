@@ -20,6 +20,14 @@ type FrameworkService struct {
 	queries *db.Queries
 }
 
+// Repair maps are limited to safe one-to-one rebinding. Legacy many-to-one
+// consolidation needs explicit merge semantics and is intentionally unsupported.
+var frameworkItemRepairMaps = map[string]map[string]string{
+	"nist-csf-2-0": {
+		"PR.DS-04": "PR.IR-04",
+	},
+}
+
 func (s *FrameworkService) ListFrameworks(ctx context.Context) ([]db.ListFrameworksWithCountsRow, error) {
 	return s.queries.ListFrameworksWithCounts(ctx)
 }
@@ -62,6 +70,11 @@ func (s *FrameworkService) SeedFramework(ctx context.Context, slug string, force
 			}
 			if err := upsertFrameworkItems(ctx, q, existing.ID, groupMap, doc.Items); err != nil {
 				return struct{}{}, err
+			}
+			if repairMap, ok := frameworkItemRepairMaps[doc.Framework.Slug]; ok {
+				if err := repairFrameworkItemReferences(ctx, q, existing.ID, repairMap); err != nil {
+					return struct{}{}, err
+				}
 			}
 			if err := q.DeactivateMissingFrameworkItems(ctx, db.DeactivateMissingFrameworkItemsParams{
 				FrameworkID: existing.ID,
@@ -107,13 +120,14 @@ func (s *FrameworkService) SeedFramework(ctx context.Context, slug string, force
 
 func upsertFrameworkGroups(ctx context.Context, q *db.Queries, frameworkID uuid.UUID, groups []seed.Group) (map[string]uuid.UUID, error) {
 	groupMap := make(map[string]uuid.UUID, len(groups))
-	for _, group := range groups {
+	for i, group := range groups {
 		updated, err := q.UpsertFrameworkGroup(ctx, db.UpsertFrameworkGroupParams{
 			FrameworkID: frameworkID,
 			Code:        group.Code,
 			Title:       group.Title,
 			Summary:     group.Summary,
 			Description: group.Description,
+			SortOrder:   int32(i + 1),
 		})
 		if err != nil {
 			return nil, fmt.Errorf("upsert framework group %s: %w", group.Code, err)
@@ -124,7 +138,7 @@ func upsertFrameworkGroups(ctx context.Context, q *db.Queries, frameworkID uuid.
 }
 
 func upsertFrameworkItems(ctx context.Context, q *db.Queries, frameworkID uuid.UUID, groupMap map[string]uuid.UUID, items []seed.Item) error {
-	for _, item := range items {
+	for i, item := range items {
 		groupID, ok := groupMap[item.GroupCode]
 		if !ok {
 			return fmt.Errorf("%w: missing framework group %s", ErrInvalidInput, item.GroupCode)
@@ -136,6 +150,7 @@ func upsertFrameworkItems(ctx context.Context, q *db.Queries, frameworkID uuid.U
 			Title:            item.Title,
 			Summary:          item.Summary,
 			Description:      item.Description,
+			SortOrder:        int32(i + 1),
 			AssetClass:       item.AssetClass,
 			SecurityFunction: item.SecurityFunction,
 			Tags:             item.Tags,
@@ -148,13 +163,14 @@ func upsertFrameworkItems(ctx context.Context, q *db.Queries, frameworkID uuid.U
 
 func createFrameworkGroups(ctx context.Context, q *db.Queries, frameworkID uuid.UUID, groups []seed.Group) (map[string]uuid.UUID, error) {
 	groupMap := make(map[string]uuid.UUID, len(groups))
-	for _, group := range groups {
+	for i, group := range groups {
 		created, err := q.CreateFrameworkGroup(ctx, db.CreateFrameworkGroupParams{
 			FrameworkID: frameworkID,
 			Code:        group.Code,
 			Title:       group.Title,
 			Summary:     group.Summary,
 			Description: group.Description,
+			SortOrder:   int32(i + 1),
 		})
 		if err != nil {
 			return nil, fmt.Errorf("create framework group %s: %w", group.Code, err)
@@ -165,7 +181,7 @@ func createFrameworkGroups(ctx context.Context, q *db.Queries, frameworkID uuid.
 }
 
 func createFrameworkItems(ctx context.Context, q *db.Queries, frameworkID uuid.UUID, groupMap map[string]uuid.UUID, items []seed.Item) error {
-	for _, item := range items {
+	for i, item := range items {
 		groupID, ok := groupMap[item.GroupCode]
 		if !ok {
 			return fmt.Errorf("%w: missing framework group %s", ErrInvalidInput, item.GroupCode)
@@ -177,6 +193,7 @@ func createFrameworkItems(ctx context.Context, q *db.Queries, frameworkID uuid.U
 			Title:            item.Title,
 			Summary:          item.Summary,
 			Description:      item.Description,
+			SortOrder:        int32(i + 1),
 			AssetClass:       item.AssetClass,
 			SecurityFunction: item.SecurityFunction,
 			Tags:             item.Tags,
@@ -201,4 +218,59 @@ func frameworkItemCodes(items []seed.Item) []string {
 		codes = append(codes, item.Code)
 	}
 	return codes
+}
+
+func repairFrameworkItemReferences(ctx context.Context, q *db.Queries, frameworkID uuid.UUID, repairMap map[string]string) error {
+	for oldCode, newCode := range repairMap {
+		oldItem, err := q.GetFrameworkItemByCode(ctx, db.GetFrameworkItemByCodeParams{
+			FrameworkID: frameworkID,
+			Code:        oldCode,
+		})
+		if err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				continue
+			}
+			return fmt.Errorf("get legacy framework item %s: %w", oldCode, err)
+		}
+
+		newItem, err := q.GetFrameworkItemByCode(ctx, db.GetFrameworkItemByCodeParams{
+			FrameworkID: frameworkID,
+			Code:        newCode,
+		})
+		if err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				continue
+			}
+			return fmt.Errorf("get canonical framework item %s: %w", newCode, err)
+		}
+
+		assessmentIDs, err := q.ListAssessmentIDsEligibleForFrameworkItemRebind(ctx, db.ListAssessmentIDsEligibleForFrameworkItemRebindParams{
+			OldFrameworkItemID: oldItem.ID,
+			NewFrameworkItemID: newItem.ID,
+		})
+		if err != nil {
+			return fmt.Errorf("list eligible assessments for %s -> %s: %w", oldCode, newCode, err)
+		}
+		if len(assessmentIDs) == 0 {
+			continue
+		}
+
+		if err := q.RebindControlRecordsFrameworkItem(ctx, db.RebindControlRecordsFrameworkItemParams{
+			OldFrameworkItemID: oldItem.ID,
+			NewFrameworkItemID: newItem.ID,
+			AssessmentIds:      assessmentIDs,
+		}); err != nil {
+			return fmt.Errorf("rebind control records for %s -> %s: %w", oldCode, newCode, err)
+		}
+
+		if err := q.RebindAssessmentItemsFrameworkItem(ctx, db.RebindAssessmentItemsFrameworkItemParams{
+			OldFrameworkItemID: oldItem.ID,
+			NewFrameworkItemID: newItem.ID,
+			AssessmentIds:      assessmentIDs,
+		}); err != nil {
+			return fmt.Errorf("rebind assessment items for %s -> %s: %w", oldCode, newCode, err)
+		}
+	}
+
+	return nil
 }
