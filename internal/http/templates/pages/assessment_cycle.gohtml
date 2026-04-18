@@ -2,6 +2,7 @@
 <section class="max-w-2xl">
   <p class="text-sm text-muted-foreground">Create a new assessment cycle based on <strong>{{ .Assessment.Name }}</strong>. Owners and reviewers carry forward; scores and statuses reset.</p>
   <form class="mt-6" action="/assessments/{{ .Assessment.ID }}/cycle" method="post">
+    {{ template "csrf_field" . }}
     <div class="rounded-lg border border-border">
       <div class="p-5">
         <div class="grid gap-4 md:grid-cols-2">

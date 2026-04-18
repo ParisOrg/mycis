@@ -12,11 +12,13 @@ const userKey = "current_user"
 
 func (s *Server) withCurrentUser(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c *echo.Context) error {
-		session, _ := s.store.Get(c.Request(), sessionName)
-		if raw, ok := session.Values["user_id"].(string); ok && raw != "" {
-			user, err := s.services.Auth.GetUserByID(c.Request().Context(), raw)
-			if err == nil {
-				c.Set(userKey, &user)
+		session, err := s.session(c)
+		if err == nil {
+			if raw, ok := session.Values["user_id"].(string); ok && raw != "" {
+				user, err := s.services.Auth.GetUserByID(c.Request().Context(), raw)
+				if err == nil {
+					c.Set(userKey, &user)
+				}
 			}
 		}
 		return next(c)

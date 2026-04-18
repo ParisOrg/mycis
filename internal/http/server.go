@@ -84,10 +84,11 @@ func (s *Server) Router() http.Handler {
 	e.Static("/assets", "public/assets")
 	e.GET("/", s.handleRoot)
 	e.GET("/login", s.loginPage)
-	e.POST("/login", s.loginPost)
+	e.POST("/login", s.loginPost, s.protectCSRF)
 
 	auth := e.Group("")
 	auth.Use(s.requireAuth)
+	auth.Use(s.protectCSRF)
 	auth.POST("/logout", s.logoutPost)
 	auth.GET("/change-password", s.changePasswordPage)
 	auth.POST("/change-password", s.changePasswordPost)
@@ -200,7 +201,6 @@ func statusLabel(status any) string {
 	text := strings.ReplaceAll(fmt.Sprint(status), "_", " ")
 	return cases.Title(language.Und).String(text)
 }
-
 
 func scoreValue(value *int32) string {
 	if value == nil {

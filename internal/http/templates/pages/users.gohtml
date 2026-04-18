@@ -4,6 +4,7 @@
     <h2 class="section-heading">Create user</h2>
     <p class="mt-1 text-sm text-muted-foreground">Add an owner or reviewer account.</p>
     <form class="mt-5 space-y-4" action="/admin/users" method="post">
+      {{ template "csrf_field" . }}
       <div class="field">
         <label class="label" for="name">Name</label>
         <input class="input mt-1.5 w-full" id="name" name="name" type="text" required />

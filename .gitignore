@@ -20,6 +20,7 @@ public/assets/app.js
 # Air (live reload)
 tmp/
 build-errors.log
+.cache/
 
 # Go
 *.exe
