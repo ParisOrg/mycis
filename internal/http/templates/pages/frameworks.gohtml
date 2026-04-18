@@ -8,16 +8,18 @@
 
   {{/* ── Framework picker ──────────────────────────────────────────── */}}
   <div class="mb-8 max-w-sm">
-    <select class="select w-full text-sm"
-            onchange="window.location.href='/frameworks?framework_id='+this.value">
-      <option value="">Select a framework…</option>
-      {{ range .Frameworks }}
-        <option value="{{ .ID }}"
-          {{ if and $.SelectedFramework (eq $.SelectedFramework.ID .ID) }}selected{{ end }}>
-          {{ .Label }} {{ .Version }} ({{ .ItemCount }} items)
-        </option>
-      {{ end }}
-    </select>
+    <form class="flex items-center gap-2" action="/frameworks" method="get">
+      <select class="select w-full text-sm" id="framework_id" name="framework_id">
+        <option value="">Select a framework…</option>
+        {{ range .Frameworks }}
+          <option value="{{ .ID }}"
+            {{ if and $.SelectedFramework (eq $.SelectedFramework.ID .ID) }}selected{{ end }}>
+            {{ .Label }} {{ .Version }} ({{ .ItemCount }} items)
+          </option>
+        {{ end }}
+      </select>
+      <button class="btn btn-secondary btn-sm shrink-0" type="submit">View</button>
+    </form>
   </div>
 
   {{/* ── Framework detail ──────────────────────────────────────────── */}}
