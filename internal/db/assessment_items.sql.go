@@ -195,50 +195,6 @@ func (q *Queries) GetAssessmentItemDetail(ctx context.Context, id uuid.UUID) (Ge
 	return i, err
 }
 
-const listAssessmentIDsEligibleForFrameworkItemRebind = `-- name: ListAssessmentIDsEligibleForFrameworkItemRebind :many
-SELECT DISTINCT ai.assessment_id
-FROM assessment_items ai
-WHERE ai.framework_item_id = $1::uuid
-  AND NOT EXISTS (
-    SELECT 1
-    FROM assessment_items existing
-    WHERE existing.assessment_id = ai.assessment_id
-      AND existing.framework_item_id = $2::uuid
-  )
-  AND NOT EXISTS (
-    SELECT 1
-    FROM control_records existing
-    WHERE existing.assessment_id = ai.assessment_id
-      AND existing.framework_item_id = $2::uuid
-  )
-ORDER BY ai.assessment_id
-`
-
-type ListAssessmentIDsEligibleForFrameworkItemRebindParams struct {
-	OldFrameworkItemID uuid.UUID `json:"old_framework_item_id"`
-	NewFrameworkItemID uuid.UUID `json:"new_framework_item_id"`
-}
-
-func (q *Queries) ListAssessmentIDsEligibleForFrameworkItemRebind(ctx context.Context, arg ListAssessmentIDsEligibleForFrameworkItemRebindParams) ([]uuid.UUID, error) {
-	rows, err := q.db.Query(ctx, listAssessmentIDsEligibleForFrameworkItemRebind, arg.OldFrameworkItemID, arg.NewFrameworkItemID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []uuid.UUID
-	for rows.Next() {
-		var assessment_id uuid.UUID
-		if err := rows.Scan(&assessment_id); err != nil {
-			return nil, err
-		}
-		items = append(items, assessment_id)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
 const listAssessmentItems = `-- name: ListAssessmentItems :many
 SELECT
   ai.id,
@@ -264,7 +220,6 @@ SELECT
   fi.code AS item_code,
   fi.title AS item_title,
   fi.summary AS item_summary,
-  fi.sort_order AS item_sort_order,
   fi.tags,
   ou.name AS owner_name,
   ru.name AS reviewer_name,
@@ -323,7 +278,6 @@ type ListAssessmentItemsRow struct {
 	ItemCode        string               `json:"item_code"`
 	ItemTitle       string               `json:"item_title"`
 	ItemSummary     string               `json:"item_summary"`
-	ItemSortOrder   int32                `json:"item_sort_order"`
 	Tags            []string             `json:"tags"`
 	OwnerName       *string              `json:"owner_name"`
 	ReviewerName    *string              `json:"reviewer_name"`
@@ -371,7 +325,6 @@ func (q *Queries) ListAssessmentItems(ctx context.Context, arg ListAssessmentIte
 			&i.ItemCode,
 			&i.ItemTitle,
 			&i.ItemSummary,
-			&i.ItemSortOrder,
 			&i.Tags,
 			&i.OwnerName,
 			&i.ReviewerName,
@@ -387,22 +340,47 @@ func (q *Queries) ListAssessmentItems(ctx context.Context, arg ListAssessmentIte
 	return items, nil
 }
 
-const rebindAssessmentItemsFrameworkItem = `-- name: RebindAssessmentItemsFrameworkItem :exec
-UPDATE assessment_items
+const rebindFrameworkItemReferences = `-- name: RebindFrameworkItemReferences :exec
+WITH eligible_assessments AS (
+  SELECT DISTINCT ai.assessment_id
+  FROM assessment_items ai
+  WHERE ai.framework_item_id = $2::uuid
+    AND NOT EXISTS (
+      SELECT 1
+      FROM assessment_items existing
+      WHERE existing.assessment_id = ai.assessment_id
+        AND existing.framework_item_id = $1::uuid
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM control_records existing
+      WHERE existing.assessment_id = ai.assessment_id
+        AND existing.framework_item_id = $1::uuid
+    )
+),
+rebound_control_records AS (
+  UPDATE control_records cr
+  SET framework_item_id = $1::uuid,
+      updated_at = NOW()
+  FROM eligible_assessments ea
+  WHERE cr.framework_item_id = $2::uuid
+    AND cr.assessment_id = ea.assessment_id
+)
+UPDATE assessment_items ai
 SET framework_item_id = $1::uuid,
     updated_at = NOW()
-WHERE framework_item_id = $2::uuid
-  AND assessment_id = ANY($3::uuid[])
+FROM eligible_assessments ea
+WHERE ai.framework_item_id = $2::uuid
+  AND ai.assessment_id = ea.assessment_id
 `
 
-type RebindAssessmentItemsFrameworkItemParams struct {
-	NewFrameworkItemID uuid.UUID   `json:"new_framework_item_id"`
-	OldFrameworkItemID uuid.UUID   `json:"old_framework_item_id"`
-	AssessmentIds      []uuid.UUID `json:"assessment_ids"`
+type RebindFrameworkItemReferencesParams struct {
+	NewFrameworkItemID uuid.UUID `json:"new_framework_item_id"`
+	OldFrameworkItemID uuid.UUID `json:"old_framework_item_id"`
 }
 
-func (q *Queries) RebindAssessmentItemsFrameworkItem(ctx context.Context, arg RebindAssessmentItemsFrameworkItemParams) error {
-	_, err := q.db.Exec(ctx, rebindAssessmentItemsFrameworkItem, arg.NewFrameworkItemID, arg.OldFrameworkItemID, arg.AssessmentIds)
+func (q *Queries) RebindFrameworkItemReferences(ctx context.Context, arg RebindFrameworkItemReferencesParams) error {
+	_, err := q.db.Exec(ctx, rebindFrameworkItemReferences, arg.NewFrameworkItemID, arg.OldFrameworkItemID)
 	return err
 }
 

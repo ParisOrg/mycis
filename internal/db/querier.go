@@ -39,7 +39,6 @@ type Querier interface {
 	GetFrameworkItemByCode(ctx context.Context, arg GetFrameworkItemByCodeParams) (FrameworkItem, error)
 	GetUserByEmail(ctx context.Context, lower string) (User, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
-	ListAssessmentIDsEligibleForFrameworkItemRebind(ctx context.Context, arg ListAssessmentIDsEligibleForFrameworkItemRebindParams) ([]uuid.UUID, error)
 	ListAssessmentItems(ctx context.Context, arg ListAssessmentItemsParams) ([]ListAssessmentItemsRow, error)
 	ListAssessments(ctx context.Context) ([]ListAssessmentsRow, error)
 	ListAuditLogByEntity(ctx context.Context, arg ListAuditLogByEntityParams) ([]ListAuditLogByEntityRow, error)
@@ -53,8 +52,7 @@ type Querier interface {
 	ListFrameworkGroupsByFramework(ctx context.Context, frameworkID uuid.UUID) ([]ListFrameworkGroupsByFrameworkRow, error)
 	ListFrameworksWithCounts(ctx context.Context) ([]ListFrameworksWithCountsRow, error)
 	ListUsers(ctx context.Context) ([]User, error)
-	RebindAssessmentItemsFrameworkItem(ctx context.Context, arg RebindAssessmentItemsFrameworkItemParams) error
-	RebindControlRecordsFrameworkItem(ctx context.Context, arg RebindControlRecordsFrameworkItemParams) error
+	RebindFrameworkItemReferences(ctx context.Context, arg RebindFrameworkItemReferencesParams) error
 	UpdateAssessmentItem(ctx context.Context, arg UpdateAssessmentItemParams) (AssessmentItem, error)
 	UpdateControlRecordNotes(ctx context.Context, arg UpdateControlRecordNotesParams) error
 	UpdateControlRecordOwner(ctx context.Context, arg UpdateControlRecordOwnerParams) error

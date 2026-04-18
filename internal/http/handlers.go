@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -253,19 +254,39 @@ func (s *Server) assessmentDetailPage(c *echo.Context) error {
 }
 
 func buildGroupOptions(items []db.ListAssessmentItemsRow) []GroupOption {
+	type groupOptionWithSort struct {
+		GroupOption
+		SortOrder int32
+	}
+
 	seen := make(map[string]struct{}, len(items))
-	groups := make([]GroupOption, 0, len(items))
+	groups := make([]groupOptionWithSort, 0, len(items))
 	for _, item := range items {
 		if _, ok := seen[item.GroupCode]; ok {
 			continue
 		}
 		seen[item.GroupCode] = struct{}{}
-		groups = append(groups, GroupOption{
-			Code:  item.GroupCode,
-			Title: item.GroupTitle,
+		groups = append(groups, groupOptionWithSort{
+			GroupOption: GroupOption{
+				Code:  item.GroupCode,
+				Title: item.GroupTitle,
+			},
+			SortOrder: item.GroupSortOrder,
 		})
 	}
-	return groups
+
+	sort.SliceStable(groups, func(i, j int) bool {
+		if groups[i].SortOrder == groups[j].SortOrder {
+			return groups[i].Code < groups[j].Code
+		}
+		return groups[i].SortOrder < groups[j].SortOrder
+	})
+
+	options := make([]GroupOption, 0, len(groups))
+	for _, group := range groups {
+		options = append(options, group.GroupOption)
+	}
+	return options
 }
 
 func buildTagOptions(items []db.ListAssessmentItemsRow) []string {

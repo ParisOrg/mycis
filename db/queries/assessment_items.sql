@@ -23,7 +23,6 @@ SELECT
   fi.code AS item_code,
   fi.title AS item_title,
   fi.summary AS item_summary,
-  fi.sort_order AS item_sort_order,
   fi.tags,
   ou.name AS owner_name,
   ru.name AS reviewer_name,
@@ -47,30 +46,38 @@ WHERE ai.assessment_id = $1
   ))
 ORDER BY fi.sort_order, fi.code;
 
--- name: ListAssessmentIDsEligibleForFrameworkItemRebind :many
-SELECT DISTINCT ai.assessment_id
-FROM assessment_items ai
-WHERE ai.framework_item_id = sqlc.arg(old_framework_item_id)::uuid
-  AND NOT EXISTS (
-    SELECT 1
-    FROM assessment_items existing
-    WHERE existing.assessment_id = ai.assessment_id
-      AND existing.framework_item_id = sqlc.arg(new_framework_item_id)::uuid
-  )
-  AND NOT EXISTS (
-    SELECT 1
-    FROM control_records existing
-    WHERE existing.assessment_id = ai.assessment_id
-      AND existing.framework_item_id = sqlc.arg(new_framework_item_id)::uuid
-  )
-ORDER BY ai.assessment_id;
-
--- name: RebindAssessmentItemsFrameworkItem :exec
-UPDATE assessment_items
+-- name: RebindFrameworkItemReferences :exec
+WITH eligible_assessments AS (
+  SELECT DISTINCT ai.assessment_id
+  FROM assessment_items ai
+  WHERE ai.framework_item_id = sqlc.arg(old_framework_item_id)::uuid
+    AND NOT EXISTS (
+      SELECT 1
+      FROM assessment_items existing
+      WHERE existing.assessment_id = ai.assessment_id
+        AND existing.framework_item_id = sqlc.arg(new_framework_item_id)::uuid
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM control_records existing
+      WHERE existing.assessment_id = ai.assessment_id
+        AND existing.framework_item_id = sqlc.arg(new_framework_item_id)::uuid
+    )
+),
+rebound_control_records AS (
+  UPDATE control_records cr
+  SET framework_item_id = sqlc.arg(new_framework_item_id)::uuid,
+      updated_at = NOW()
+  FROM eligible_assessments ea
+  WHERE cr.framework_item_id = sqlc.arg(old_framework_item_id)::uuid
+    AND cr.assessment_id = ea.assessment_id
+)
+UPDATE assessment_items ai
 SET framework_item_id = sqlc.arg(new_framework_item_id)::uuid,
     updated_at = NOW()
-WHERE framework_item_id = sqlc.arg(old_framework_item_id)::uuid
-  AND assessment_id = ANY(sqlc.arg(assessment_ids)::uuid[]);
+FROM eligible_assessments ea
+WHERE ai.framework_item_id = sqlc.arg(old_framework_item_id)::uuid
+  AND ai.assessment_id = ea.assessment_id;
 
 -- name: GetAssessmentItemDetail :one
 SELECT

@@ -2,6 +2,7 @@ package httpui
 
 import (
 	"net/url"
+	"slices"
 	"testing"
 	"time"
 
@@ -10,7 +11,7 @@ import (
 	"mycis/internal/db"
 )
 
-func TestBuildGroupOptionsPreservesFirstSeenOrder(t *testing.T) {
+func TestBuildGroupOptionsUsesFrameworkSortOrder(t *testing.T) {
 	items := []db.ListAssessmentItemsRow{
 		{GroupCode: "RS", GroupTitle: "Respond", GroupSortOrder: 4},
 		{GroupCode: "GV", GroupTitle: "Govern", GroupSortOrder: 1},
@@ -24,11 +25,9 @@ func TestBuildGroupOptionsPreservesFirstSeenOrder(t *testing.T) {
 	}
 
 	got := []string{groups[0].Code, groups[1].Code, groups[2].Code}
-	want := []string{"RS", "GV", "ID"}
-	for i := range want {
-		if got[i] != want[i] {
-			t.Fatalf("unexpected group order: got %v want %v", got, want)
-		}
+	want := []string{"GV", "ID", "RS"}
+	if !slices.Equal(got, want) {
+		t.Fatalf("unexpected group order: got %v want %v", got, want)
 	}
 }
 
@@ -44,10 +43,8 @@ func TestBuildTagOptionsDedupesInFirstSeenItemOrder(t *testing.T) {
 	if len(tags) != len(want) {
 		t.Fatalf("unexpected tag count: got %d want %d", len(tags), len(want))
 	}
-	for i := range want {
-		if tags[i] != want[i] {
-			t.Fatalf("unexpected tag order: got %v want %v", tags, want)
-		}
+	if !slices.Equal(tags, want) {
+		t.Fatalf("unexpected tag order: got %v want %v", tags, want)
 	}
 }
 
