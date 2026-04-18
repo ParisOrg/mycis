@@ -1,0 +1,393 @@
+framework:
+  slug: "gdpr-2018"
+  label: "General Data Protection Regulation (GDPR)"
+  version: "2018"
+
+groups:
+  - code: "PRINCIPLES"
+    title: "Data Protection Principles (Art. 5)"
+    summary: "The seven core data protection principles: lawfulness/fairness/transparency, purpose limitation, data minimisation, accuracy, storage limitation, integrity/confidentiality, and accountability."
+
+  - code: "LAWFULNESS"
+    title: "Lawful Basis and Special Categories"
+    summary: "Identifying and documenting legal bases for processing, obtaining and managing consent, and applying additional safeguards for special category and criminal conviction data under Articles 6–10."
+
+  - code: "RIGHTS"
+    title: "Data Subject Rights"
+    summary: "Honouring rights of access, rectification, erasure, restriction, portability, objection, and safeguards against automated decision-making under Articles 15–22."
+
+  - code: "CONTROLLER"
+    title: "Controller and Processor Obligations"
+    summary: "Privacy by design and default, joint controller arrangements, data processing agreements, and designation of EU representatives under Articles 25–28."
+
+  - code: "RECORDS"
+    title: "Records of Processing Activities"
+    summary: "Maintaining controller and processor records of processing activities and providing transparent privacy notices to data subjects under Articles 13–14 and 30."
+
+  - code: "SECURITY"
+    title: "Security of Processing"
+    summary: "Appropriate technical and organisational security measures, regular testing and evaluation, and processor security obligations under Article 32."
+
+  - code: "BREACH"
+    title: "Personal Data Breach Management"
+    summary: "Breach detection, 72-hour notification to supervisory authorities, communication to affected data subjects, and maintaining a breach register under Articles 33–34."
+
+  - code: "DPIA"
+    title: "Data Protection Impact Assessment"
+    summary: "Identifying DPIA triggers, conducting assessments of high-risk processing activities, and prior consultation with supervisory authorities under Articles 35–36."
+
+  - code: "DPO"
+    title: "Data Protection Officer"
+    summary: "Mandatory DPO designation criteria, ensuring DPO independence and adequate resources, and the required tasks of the DPO under Articles 37–39."
+
+  - code: "TRANSFERS"
+    title: "International Data Transfers"
+    summary: "Mechanisms for transferring personal data to third countries: adequacy decisions, Standard Contractual Clauses, Binding Corporate Rules, and derogations under Articles 45–49."
+
+items:
+
+  # ── PRINCIPLES ────────────────────────────────────────────────────────────
+  - group_code: "PRINCIPLES"
+    code: "PRINCIPLES-01"
+    title: "Lawfulness, Fairness, and Transparency"
+    summary: "Process personal data lawfully, fairly, and in a transparent manner in relation to the data subject. Ensure that data subjects are informed about how their data is processed and that processing has a valid legal basis."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-5", "lawfulness", "transparency"]
+
+  - group_code: "PRINCIPLES"
+    code: "PRINCIPLES-02"
+    title: "Purpose Limitation"
+    summary: "Collect personal data for specified, explicit, and legitimate purposes and do not process it in a manner incompatible with those purposes. Further processing for archiving, research, or statistical purposes may be compatible."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-5", "purpose-limitation"]
+
+  - group_code: "PRINCIPLES"
+    code: "PRINCIPLES-03"
+    title: "Data Minimisation"
+    summary: "Ensure that personal data is adequate, relevant, and limited to what is necessary in relation to the purposes for which it is processed. Avoid collecting or retaining more personal data than needed."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-5", "data-minimisation"]
+
+  - group_code: "PRINCIPLES"
+    code: "PRINCIPLES-04"
+    title: "Accuracy"
+    summary: "Keep personal data accurate and, where necessary, up to date. Take every reasonable step to ensure that inaccurate personal data is erased or rectified without delay. Implement processes to verify data accuracy."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-5", "accuracy"]
+
+  - group_code: "PRINCIPLES"
+    code: "PRINCIPLES-05"
+    title: "Storage Limitation"
+    summary: "Keep personal data in a form that permits identification of data subjects for no longer than is necessary. Establish and enforce data retention schedules. Securely delete or anonymise data when retention periods expire."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-5", "storage-limitation", "retention"]
+
+  - group_code: "PRINCIPLES"
+    code: "PRINCIPLES-06"
+    title: "Integrity and Confidentiality"
+    summary: "Process personal data in a manner that ensures appropriate security, including protection against unauthorised or unlawful processing, accidental loss, destruction, or damage, using appropriate technical and organisational measures."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-5", "integrity", "confidentiality", "security"]
+
+  - group_code: "PRINCIPLES"
+    code: "PRINCIPLES-07"
+    title: "Accountability"
+    summary: "Take responsibility for and demonstrate compliance with the GDPR principles. Document processing activities, implement data protection policies, train staff, conduct DPIAs where required, and appoint a DPO where necessary."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-5", "accountability"]
+
+  # ── LAWFULNESS ────────────────────────────────────────────────────────────
+  - group_code: "LAWFULNESS"
+    code: "LAWFULNESS-01"
+    title: "Identifying and Documenting Legal Basis"
+    summary: "Identify and document the legal basis for each processing activity prior to processing. Choose from: consent, contract, legal obligation, vital interests, public task, or legitimate interests. Review legal bases regularly."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-6", "legal-basis", "documentation"]
+
+  - group_code: "LAWFULNESS"
+    code: "LAWFULNESS-02"
+    title: "Consent Management"
+    summary: "Where consent is the legal basis, obtain freely given, specific, informed, and unambiguous consent. Maintain records of consent, enable easy withdrawal, and refresh consent when processing purposes change."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-7", "consent", "withdrawal"]
+
+  - group_code: "LAWFULNESS"
+    code: "LAWFULNESS-03"
+    title: "Special Category Data Processing"
+    summary: "Apply additional safeguards when processing special categories of personal data (health, biometrics, race, religion, political opinions, etc.). Identify an explicit legal basis from Art. 9(2) and document it."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-9", "special-categories", "sensitive-data"]
+
+  - group_code: "LAWFULNESS"
+    code: "LAWFULNESS-04"
+    title: "Criminal Conviction Data"
+    summary: "Process personal data relating to criminal convictions and offences only under the control of official authority or when authorised by national law. Apply additional safeguards commensurate with the sensitivity."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-10", "criminal-data"]
+
+  # ── RIGHTS ────────────────────────────────────────────────────────────────
+  - group_code: "RIGHTS"
+    code: "RIGHTS-01"
+    title: "Right of Access"
+    summary: "Provide data subjects with a copy of their personal data and information about how it is processed, free of charge and within one month of request. Establish a process to verify identity and respond to access requests."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-15", "access-request", "dsar"]
+
+  - group_code: "RIGHTS"
+    code: "RIGHTS-02"
+    title: "Right to Rectification"
+    summary: "Correct inaccurate personal data and complete incomplete data upon request from the data subject without undue delay. Notify third parties to whom data was disclosed of any rectification."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-16", "rectification"]
+
+  - group_code: "RIGHTS"
+    code: "RIGHTS-03"
+    title: "Right to Erasure (Right to be Forgotten)"
+    summary: "Erase personal data without undue delay when it is no longer necessary, consent is withdrawn, or there is no other legal basis. Implement technical mechanisms to delete all copies including backups and third-party systems."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-17", "erasure", "right-to-be-forgotten"]
+
+  - group_code: "RIGHTS"
+    code: "RIGHTS-04"
+    title: "Right to Restriction of Processing"
+    summary: "Restrict the processing of personal data in specified circumstances including contested accuracy, unlawful processing, or pending objection. Mark restricted data and notify the data subject before lifting restrictions."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-18", "restriction"]
+
+  - group_code: "RIGHTS"
+    code: "RIGHTS-05"
+    title: "Right to Data Portability"
+    summary: "Provide personal data in a structured, commonly used, and machine-readable format to allow data subjects to transmit it to another controller where processing is based on consent or contract and is carried out by automated means."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-20", "portability"]
+
+  - group_code: "RIGHTS"
+    code: "RIGHTS-06"
+    title: "Right to Object"
+    summary: "Allow data subjects to object to processing based on legitimate interests or public task, including profiling. Honour objections unless compelling legitimate grounds exist. Always honour objections to direct marketing."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-21", "objection", "direct-marketing"]
+
+  - group_code: "RIGHTS"
+    code: "RIGHTS-07"
+    title: "Automated Decision-Making and Profiling"
+    summary: "Provide appropriate safeguards for decisions based solely on automated processing that produce legal or similarly significant effects. Allow data subjects to request human review, express their point of view, and contest decisions."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-22", "automated-decisions", "profiling"]
+
+  # ── CONTROLLER ────────────────────────────────────────────────────────────
+  - group_code: "CONTROLLER"
+    code: "CONTROLLER-01"
+    title: "Privacy by Design and Default"
+    summary: "Implement data protection by design and by default. Integrate data protection principles into processing activities from the outset. By default, only process personal data that is necessary for the specific purpose."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-25", "privacy-by-design", "privacy-by-default"]
+
+  - group_code: "CONTROLLER"
+    code: "CONTROLLER-02"
+    title: "Joint Controller Arrangements"
+    summary: "Where two or more controllers jointly determine the purposes and means of processing, establish joint controller arrangements. Define each party's responsibilities and make the essence of the arrangement available to data subjects."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-26", "joint-controllers"]
+
+  - group_code: "CONTROLLER"
+    code: "CONTROLLER-03"
+    title: "Data Processing Agreements"
+    summary: "Ensure that processors act only on documented instructions from the controller. Execute data processing agreements (DPAs) with all processors covering the subject matter, nature, purpose, duration, and obligations of processing."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-28", "dpa", "processor"]
+
+  - group_code: "CONTROLLER"
+    code: "CONTROLLER-04"
+    title: "Representatives in the EU"
+    summary: "Controllers and processors not established in the EU but offering goods or services to EU data subjects must designate a representative in an EU member state. Maintain the representative's details in all relevant communications."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-27", "representative", "territorial-scope"]
+
+  # ── RECORDS ───────────────────────────────────────────────────────────────
+  - group_code: "RECORDS"
+    code: "RECORDS-01"
+    title: "Controller Records of Processing"
+    summary: "Maintain a record of processing activities under the controller's responsibility. The record must include contact details, purposes, categories of data subjects and personal data, recipients, transfers, retention periods, and security measures."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-30", "ropa", "records"]
+
+  - group_code: "RECORDS"
+    code: "RECORDS-02"
+    title: "Processor Records of Processing"
+    summary: "Processors must maintain records of all categories of processing activities carried out on behalf of a controller, including contact details, categories of processing, and transfers to third countries."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-30", "ropa", "processor-records"]
+
+  - group_code: "RECORDS"
+    code: "RECORDS-03"
+    title: "Transparency and Privacy Notices"
+    summary: "Provide clear and accessible privacy notices to data subjects at the time of collection. Notices must include identity of controller, purposes, legal basis, recipients, retention periods, rights, and withdrawal of consent information."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-13", "art-14", "privacy-notice", "transparency"]
+
+  # ── SECURITY ──────────────────────────────────────────────────────────────
+  - group_code: "SECURITY"
+    code: "SECURITY-01"
+    title: "Technical and Organisational Security Measures"
+    summary: "Implement appropriate technical and organisational measures to ensure a level of security appropriate to the risk. Consider pseudonymisation, encryption, ensuring ongoing confidentiality, integrity, availability, and resilience."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-32", "security-measures", "encryption", "pseudonymisation"]
+
+  - group_code: "SECURITY"
+    code: "SECURITY-02"
+    title: "Regular Testing and Evaluation"
+    summary: "Establish a process for regularly testing, assessing, and evaluating the effectiveness of technical and organisational measures for ensuring the security of processing. Include testing in the information security programme."
+    asset_class: "Organization"
+    security_function: "Detect"
+    tags: ["art-32", "testing", "evaluation"]
+
+  - group_code: "SECURITY"
+    code: "SECURITY-03"
+    title: "Processor Security Obligations"
+    summary: "Require processors to implement appropriate technical and organisational measures to ensure the security of processing. Conduct due diligence and periodic audits of processors to verify compliance with security requirements."
+    asset_class: "Organization"
+    security_function: "Protect"
+    tags: ["art-32", "processor-security", "audit"]
+
+  # ── BREACH ────────────────────────────────────────────────────────────────
+  - group_code: "BREACH"
+    code: "BREACH-01"
+    title: "Breach Detection and Internal Reporting"
+    summary: "Establish processes to detect, contain, and assess personal data breaches. Implement internal reporting procedures to ensure the controller is notified of breaches within the organisation without undue delay."
+    asset_class: "Organization"
+    security_function: "Detect"
+    tags: ["art-33", "breach-detection"]
+
+  - group_code: "BREACH"
+    code: "BREACH-02"
+    title: "Breach Notification to Supervisory Authority"
+    summary: "Notify the competent supervisory authority of personal data breaches likely to result in a risk to individuals' rights and freedoms within 72 hours of becoming aware. Document all breaches regardless of whether notification is required."
+    asset_class: "Organization"
+    security_function: "Respond"
+    tags: ["art-33", "breach-notification", "72-hours", "supervisory-authority"]
+
+  - group_code: "BREACH"
+    code: "BREACH-03"
+    title: "Breach Communication to Data Subjects"
+    summary: "Communicate personal data breaches to affected data subjects without undue delay when the breach is likely to result in a high risk to their rights and freedoms. Provide clear information about the nature and recommended measures."
+    asset_class: "Organization"
+    security_function: "Respond"
+    tags: ["art-34", "breach-communication", "data-subjects"]
+
+  - group_code: "BREACH"
+    code: "BREACH-04"
+    title: "Breach Register"
+    summary: "Document all personal data breaches including those not requiring notification. The documentation must allow supervisory authorities to verify compliance and must include facts, effects, and remedial actions taken."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-33", "breach-register", "documentation"]
+
+  # ── DPIA ──────────────────────────────────────────────────────────────────
+  - group_code: "DPIA"
+    code: "DPIA-01"
+    title: "DPIA Triggers and Scope"
+    summary: "Conduct a DPIA before processing that is likely to result in a high risk to individuals, including systematic profiling, large-scale processing of sensitive data, systematic monitoring of public areas, or new technologies."
+    asset_class: "Organization"
+    security_function: "Identify"
+    tags: ["art-35", "dpia", "high-risk"]
+
+  - group_code: "DPIA"
+    code: "DPIA-02"
+    title: "DPIA Methodology and Content"
+    summary: "Ensure DPIAs include a description of the processing, an assessment of necessity and proportionality, an assessment of risks to individuals, and measures envisaged to address the risks. Consult the DPO before conducting DPIAs."
+    asset_class: "Organization"
+    security_function: "Identify"
+    tags: ["art-35", "dpia-content", "methodology"]
+
+  - group_code: "DPIA"
+    code: "DPIA-03"
+    title: "Prior Consultation with Supervisory Authority"
+    summary: "Where a DPIA indicates that processing would result in a high residual risk that cannot be mitigated, consult the supervisory authority prior to processing. Provide all relevant information about the processing operation."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-36", "prior-consultation"]
+
+  # ── DPO ───────────────────────────────────────────────────────────────────
+  - group_code: "DPO"
+    code: "DPO-01"
+    title: "DPO Designation"
+    summary: "Designate a Data Protection Officer when required: public bodies, controllers with large-scale systematic monitoring, or large-scale processing of special categories. Publish DPO contact details and communicate them to supervisory authorities."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-37", "dpo", "designation"]
+
+  - group_code: "DPO"
+    code: "DPO-02"
+    title: "DPO Independence and Resources"
+    summary: "Ensure the DPO acts independently, has necessary resources, access to data and processing operations, and is not instructed on how to exercise their tasks. The DPO may not be dismissed or penalised for performing their tasks."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-38", "dpo-independence", "resources"]
+
+  - group_code: "DPO"
+    code: "DPO-03"
+    title: "DPO Tasks"
+    summary: "The DPO must inform and advise on GDPR obligations, monitor compliance, advise on DPIAs, cooperate with supervisory authorities, and act as contact point for data subjects and supervisory authorities."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-39", "dpo-tasks"]
+
+  # ── TRANSFERS ─────────────────────────────────────────────────────────────
+  - group_code: "TRANSFERS"
+    code: "TRANSFERS-01"
+    title: "Adequacy Decisions"
+    summary: "Transfer personal data to third countries or international organisations covered by an adequacy decision from the European Commission. Monitor adequacy decisions for revocation or amendment that could invalidate the transfer."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-45", "adequacy", "international-transfer"]
+
+  - group_code: "TRANSFERS"
+    code: "TRANSFERS-02"
+    title: "Standard Contractual Clauses"
+    summary: "Use European Commission-approved Standard Contractual Clauses (SCCs) for transfers to third countries without adequacy decisions. Conduct transfer impact assessments to verify SCCs provide an essentially equivalent level of protection."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-46", "scc", "transfer-impact-assessment"]
+
+  - group_code: "TRANSFERS"
+    code: "TRANSFERS-03"
+    title: "Binding Corporate Rules"
+    summary: "Establish Binding Corporate Rules (BCRs) for intra-group international transfers. BCRs must be approved by the lead supervisory authority and must be legally binding and enforceable by all group members and data subjects."
+    asset_class: "Organization"
+    security_function: "Protect"
+    tags: ["art-47", "bcr", "intra-group"]
+
+  - group_code: "TRANSFERS"
+    code: "TRANSFERS-04"
+    title: "Derogations and Specific Situations"
+    summary: "Apply derogations for international transfers only in specific situations: explicit consent, contract performance, public interest, legal claims, vital interests, or public register. Document the applied derogation and its justification."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-49", "derogations"]

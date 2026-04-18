@@ -1,0 +1,401 @@
+framework:
+  slug: "eu-ai-act-2024"
+  label: "EU Artificial Intelligence Act"
+  version: "2024"
+
+groups:
+  - code: "PROHIBITED"
+    title: "Prohibited AI Practices (Art. 5)"
+    summary: "AI systems that are entirely prohibited: subliminal manipulation, exploitation of vulnerabilities, social scoring by public authorities, and real-time remote biometric identification in public spaces."
+
+  - code: "RISK_CLASS"
+    title: "Risk Classification and Scope"
+    summary: "Inventory and classification of AI systems by risk level (prohibited, high-risk, limited risk, minimal risk) per Annex III, including assessment of significant modifications under Articles 6–7."
+
+  - code: "RISK_MGMT"
+    title: "Risk Management System for High-Risk AI"
+    summary: "Establishing, implementing, and maintaining a lifecycle risk management system for high-risk AI systems: identification, analysis, evaluation, mitigation, and validation under Article 9."
+
+  - code: "DATA"
+    title: "Data and Data Governance (Art. 10)"
+    summary: "Governance practices for training, validation, and testing datasets: representativeness, bias examination, data lineage, and personal data compliance requirements."
+
+  - code: "DOCUMENTATION"
+    title: "Technical Documentation and Record Keeping"
+    summary: "Technical documentation (Annex IV), automatic event logging, deployer record-keeping obligations, and EU declaration of conformity requirements under Articles 11–12 and 47."
+
+  - code: "TRANSPARENCY"
+    title: "Transparency and Provision of Information"
+    summary: "Instructions for use to deployers, disclosure obligations to persons interacting with AI, synthetic content labelling, and emotion recognition disclosure under Articles 13 and 50."
+
+  - code: "OVERSIGHT"
+    title: "Human Oversight and Accuracy"
+    summary: "Human oversight mechanisms, deployer implementation of oversight, accuracy and robustness requirements, post-market monitoring, and serious incident reporting under Articles 14–15 and 72–73."
+
+  - code: "CYBERSEC"
+    title: "Cybersecurity for AI Systems"
+    summary: "AI-specific cybersecurity measures addressing adversarial attacks, model security and integrity, AI supply chain risks, and data poisoning protection under Article 15."
+
+  - code: "GOVERNANCE"
+    title: "AI Governance and Compliance"
+    summary: "Quality management system, conformity assessment procedures, EU database registration, fundamental rights impact assessment, and AI literacy requirements under Articles 4, 17, 27, 43, and 49."
+
+  - code: "GPAI"
+    title: "General Purpose AI Models (Art. 51-56)"
+    summary: "Technical documentation, copyright compliance, downstream transparency, systemic risk assessment, and cybersecurity safeguards for providers of general purpose AI (GPAI) models."
+
+items:
+
+  # ── PROHIBITED ────────────────────────────────────────────────────────────
+  - group_code: "PROHIBITED"
+    code: "PROHIBITED-01"
+    title: "Subliminal Manipulation Assessment"
+    summary: "Assess whether any deployed AI system employs techniques that influence persons without their awareness in a way that materially distorts their behaviour. Prohibit and remove any AI system using subliminal techniques capable of causing harm."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-5", "prohibited", "manipulation"]
+
+  - group_code: "PROHIBITED"
+    code: "PROHIBITED-02"
+    title: "Exploitation of Vulnerabilities Assessment"
+    summary: "Assess whether any AI system exploits the vulnerabilities of specific groups due to age, disability, or social/economic situation. Prohibit AI systems that target vulnerable individuals in ways likely to cause harm."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-5", "prohibited", "vulnerability-exploitation"]
+
+  - group_code: "PROHIBITED"
+    code: "PROHIBITED-03"
+    title: "Social Scoring by Public Authorities"
+    summary: "Prohibit AI systems that evaluate or classify natural persons based on social behaviour or personal characteristics, leading to detrimental or unfavourable treatment in unrelated contexts or disproportionate to the original conduct."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-5", "prohibited", "social-scoring"]
+
+  - group_code: "PROHIBITED"
+    code: "PROHIBITED-04"
+    title: "Real-Time Remote Biometric Identification"
+    summary: "Do not deploy real-time remote biometric identification systems in publicly accessible spaces for law enforcement unless specific exceptions apply. Apply controls to ensure compliance with Article 5 prohibitions on biometric surveillance."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-5", "prohibited", "biometric-identification", "surveillance"]
+
+  # ── RISK_CLASS ────────────────────────────────────────────────────────────
+  - group_code: "RISK_CLASS"
+    code: "RISK_CLASS-01"
+    title: "AI System Inventory and Classification"
+    summary: "Maintain an inventory of all AI systems used or deployed. Classify each system according to its risk level: prohibited, high-risk (Annex III), limited risk, or minimal risk. Document the classification rationale."
+    asset_class: "Systems"
+    security_function: "Identify"
+    tags: ["art-6", "risk-classification", "inventory"]
+
+  - group_code: "RISK_CLASS"
+    code: "RISK_CLASS-02"
+    title: "High-Risk AI System Identification"
+    summary: "Identify whether AI systems fall within high-risk categories under Annex III: biometric identification, critical infrastructure, education, employment, essential services, law enforcement, migration, or administration of justice."
+    asset_class: "Systems"
+    security_function: "Identify"
+    tags: ["art-6", "annex-iii", "high-risk", "classification"]
+
+  - group_code: "RISK_CLASS"
+    code: "RISK_CLASS-03"
+    title: "Significant Modifications and Reclassification"
+    summary: "Assess whether significant modifications to an existing AI system change its risk classification. Reclassify systems and apply corresponding compliance obligations when material changes affect the system's risk profile."
+    asset_class: "Systems"
+    security_function: "Identify"
+    tags: ["art-6", "modification", "reclassification"]
+
+  # ── RISK_MGMT ─────────────────────────────────────────────────────────────
+  - group_code: "RISK_MGMT"
+    code: "RISK_MGMT-01"
+    title: "Risk Management System Establishment"
+    summary: "Establish, implement, document, and maintain a risk management system for high-risk AI systems throughout their entire lifecycle. The risk management system must be iterative and continuously updated."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-9", "risk-management-system", "lifecycle"]
+
+  - group_code: "RISK_MGMT"
+    code: "RISK_MGMT-02"
+    title: "Risk Identification and Analysis"
+    summary: "Identify and analyse known and reasonably foreseeable risks associated with the high-risk AI system. Consider risks from intended use and reasonably foreseeable misuse, as well as cumulative risks from interactions with other AI systems."
+    asset_class: "Systems"
+    security_function: "Identify"
+    tags: ["art-9", "risk-identification", "misuse"]
+
+  - group_code: "RISK_MGMT"
+    code: "RISK_MGMT-03"
+    title: "Risk Estimation and Evaluation"
+    summary: "Estimate and evaluate risks that may emerge when the high-risk AI system is used for its intended purpose and under conditions of reasonably foreseeable misuse. Evaluate risks against the benefits and likelihood of occurrence."
+    asset_class: "Systems"
+    security_function: "Identify"
+    tags: ["art-9", "risk-evaluation"]
+
+  - group_code: "RISK_MGMT"
+    code: "RISK_MGMT-04"
+    title: "Risk Mitigation Measures"
+    summary: "Adopt appropriate risk management measures to eliminate or reduce identified risks to an acceptable level. Apply design and development measures first, followed by adequate information and, where appropriate, training for deployers."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-9", "risk-mitigation", "safeguards"]
+
+  - group_code: "RISK_MGMT"
+    code: "RISK_MGMT-05"
+    title: "Residual Risk Testing and Validation"
+    summary: "Test high-risk AI systems to identify the most appropriate risk management measures. Validate that risk management measures are effective and that the system performs as intended throughout its lifecycle."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-9", "testing", "validation", "residual-risk"]
+
+  # ── DATA ──────────────────────────────────────────────────────────────────
+  - group_code: "DATA"
+    code: "DATA-01"
+    title: "Training, Validation, and Testing Data Governance"
+    summary: "Establish data governance and management practices for training, validation, and testing datasets. Ensure data is relevant, sufficiently representative, and to the best extent possible free of errors and complete for the intended purpose."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-10", "data-governance", "training-data"]
+
+  - group_code: "DATA"
+    code: "DATA-02"
+    title: "Bias Examination and Mitigation"
+    summary: "Examine training, validation, and testing datasets for possible biases that could affect health, safety, and fundamental rights. Address identified biases through data collection, augmentation, or algorithmic measures."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-10", "bias", "fairness"]
+
+  - group_code: "DATA"
+    code: "DATA-03"
+    title: "Data Lineage and Provenance"
+    summary: "Document the provenance, collection methodology, preprocessing steps, and assumptions made in data preparation. Maintain records of the origin and transformation of training and test data to support auditability."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-10", "data-lineage", "provenance", "auditability"]
+
+  - group_code: "DATA"
+    code: "DATA-04"
+    title: "Personal Data in AI Training"
+    summary: "Where training datasets include personal data, apply GDPR requirements in addition to AI Act obligations. Ensure a valid legal basis exists for processing personal data in AI training and document the data protection measures applied."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-10", "personal-data", "gdpr", "training-data"]
+
+  # ── DOCUMENTATION ─────────────────────────────────────────────────────────
+  - group_code: "DOCUMENTATION"
+    code: "DOCUMENTATION-01"
+    title: "Technical Documentation (Art. 11)"
+    summary: "Prepare and maintain technical documentation for high-risk AI systems before placing on the market or putting into service. Documentation must demonstrate compliance and enable conformity assessment by supervisory authorities."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-11", "annex-iv", "technical-documentation"]
+
+  - group_code: "DOCUMENTATION"
+    code: "DOCUMENTATION-02"
+    title: "Automatic Logging and Audit Logs"
+    summary: "Ensure high-risk AI systems automatically generate event logs during operation. Logs must enable monitoring, detection of risks, and post-market monitoring. Retain logs for a minimum period as specified by applicable law."
+    asset_class: "Systems"
+    security_function: "Detect"
+    tags: ["art-12", "logging", "audit-trail"]
+
+  - group_code: "DOCUMENTATION"
+    code: "DOCUMENTATION-03"
+    title: "Deployer Record Keeping"
+    summary: "Deployers of high-risk AI systems must keep logs generated by the AI system to the extent that they are under their control. Logs must be retained for a period appropriate for the purpose of the system."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-26", "deployer", "record-keeping", "logs"]
+
+  - group_code: "DOCUMENTATION"
+    code: "DOCUMENTATION-04"
+    title: "Declaration of Conformity"
+    summary: "Before placing a high-risk AI system on the market, draw up a written EU declaration of conformity and maintain it for 10 years. The declaration must contain all information specified in Annex V of the AI Act."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-47", "annex-v", "conformity-declaration"]
+
+  # ── TRANSPARENCY ──────────────────────────────────────────────────────────
+  - group_code: "TRANSPARENCY"
+    code: "TRANSPARENCY-01"
+    title: "Instructions for Use"
+    summary: "Provide clear and comprehensive instructions for use to deployers of high-risk AI systems. Instructions must include the system's intended purpose, performance metrics, limitations, risks, and necessary human oversight measures."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-13", "instructions-for-use", "deployer-information"]
+
+  - group_code: "TRANSPARENCY"
+    code: "TRANSPARENCY-02"
+    title: "Transparency to Natural Persons"
+    summary: "Ensure that AI systems interacting with natural persons are designed and developed so that the person is informed they are interacting with an AI system, unless this is evident from context. Disclose AI interaction clearly."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-50", "transparency", "ai-disclosure"]
+
+  - group_code: "TRANSPARENCY"
+    code: "TRANSPARENCY-03"
+    title: "Deepfake and Synthetic Content Disclosure"
+    summary: "Label AI-generated or manipulated images, audio, or video content as artificially generated or manipulated. Implement technical solutions for labelling and watermarking AI-generated synthetic content."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-50", "deepfake", "synthetic-content", "watermarking"]
+
+  - group_code: "TRANSPARENCY"
+    code: "TRANSPARENCY-04"
+    title: "Emotion Recognition Disclosure"
+    summary: "Disclose to natural persons the operation of emotion recognition systems or biometric categorisation systems. Ensure individuals are informed when such systems are applied to them."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-50", "emotion-recognition", "biometric-categorisation"]
+
+  # ── OVERSIGHT ─────────────────────────────────────────────────────────────
+  - group_code: "OVERSIGHT"
+    code: "OVERSIGHT-01"
+    title: "Human Oversight Mechanisms"
+    summary: "Design and build high-risk AI systems with human oversight measures proportionate to the risks. Enable natural persons to understand capabilities and limitations, detect and address anomalies, and intervene or override the system."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-14", "human-oversight", "override"]
+
+  - group_code: "OVERSIGHT"
+    code: "OVERSIGHT-02"
+    title: "Deployer Human Oversight Implementation"
+    summary: "Deployers must implement human oversight measures appropriate for their use case. Assign appropriately trained individuals to perform oversight. Ensure the assigned persons have the authority to intervene and stop the system."
+    asset_class: "Organization"
+    security_function: "Protect"
+    tags: ["art-26", "deployer", "human-oversight", "training"]
+
+  - group_code: "OVERSIGHT"
+    code: "OVERSIGHT-03"
+    title: "Accuracy, Robustness, and Cybersecurity"
+    summary: "Achieve appropriate levels of accuracy and ensure high-risk AI systems are resilient against errors, faults, and inconsistencies. Implement measures to address risks from adversarial attacks, data poisoning, and model evasion."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-15", "accuracy", "robustness", "cybersecurity"]
+
+  - group_code: "OVERSIGHT"
+    code: "OVERSIGHT-04"
+    title: "Post-Market Monitoring"
+    summary: "Establish and implement a post-market monitoring system to actively collect, document, and analyse data on the performance and continued compliance of high-risk AI systems throughout their lifetime."
+    asset_class: "Systems"
+    security_function: "Detect"
+    tags: ["art-72", "post-market-monitoring", "surveillance"]
+
+  - group_code: "OVERSIGHT"
+    code: "OVERSIGHT-05"
+    title: "Serious Incident Reporting"
+    summary: "Report serious incidents involving high-risk AI systems to the national market surveillance authority without undue delay. Serious incidents include risks to health, safety, or fundamental rights, or non-compliance with AI Act obligations."
+    asset_class: "Organization"
+    security_function: "Respond"
+    tags: ["art-73", "serious-incidents", "reporting"]
+
+  # ── CYBERSEC ──────────────────────────────────────────────────────────────
+  - group_code: "CYBERSEC"
+    code: "CYBERSEC-01"
+    title: "AI-Specific Cybersecurity Measures"
+    summary: "Implement cybersecurity measures specifically addressing AI-related risks including model integrity, data integrity, adversarial attacks, model theft, and supply chain security. Conduct AI-specific threat modelling."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-15", "cybersecurity", "adversarial-attacks"]
+
+  - group_code: "CYBERSEC"
+    code: "CYBERSEC-02"
+    title: "Model Security and Integrity"
+    summary: "Protect AI models from unauthorised access, modification, or extraction. Apply access controls, encryption, and integrity verification to model files and parameters. Monitor for signs of model tampering or theft."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-15", "model-security", "model-integrity"]
+
+  - group_code: "CYBERSEC"
+    code: "CYBERSEC-03"
+    title: "AI Supply Chain Security"
+    summary: "Assess and manage cybersecurity risks in the AI supply chain including pre-trained models, datasets, libraries, and third-party AI components. Apply due diligence to AI suppliers and document supply chain dependencies."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-15", "supply-chain", "third-party-ai"]
+
+  - group_code: "CYBERSEC"
+    code: "CYBERSEC-04"
+    title: "Resilience Against Data Poisoning"
+    summary: "Implement measures to protect training data pipelines against poisoning attacks. Apply data validation, anomaly detection, and provenance verification to detect and prevent malicious manipulation of training data."
+    asset_class: "Data"
+    security_function: "Protect"
+    tags: ["art-15", "data-poisoning", "training-security"]
+
+  # ── GOVERNANCE ────────────────────────────────────────────────────────────
+  - group_code: "GOVERNANCE"
+    code: "GOVERNANCE-01"
+    title: "Quality Management System"
+    summary: "Providers of high-risk AI systems must establish a quality management system (QMS) covering all aspects of AI Act compliance. The QMS must address strategy, design, development, testing, deployment, and post-market monitoring."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-17", "qms", "quality-management"]
+
+  - group_code: "GOVERNANCE"
+    code: "GOVERNANCE-02"
+    title: "Conformity Assessment"
+    summary: "Conduct conformity assessment before placing a high-risk AI system on the market. Depending on the system category, this may be self-assessment against harmonised standards or third-party assessment by a notified body."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-43", "conformity-assessment", "notified-body"]
+
+  - group_code: "GOVERNANCE"
+    code: "GOVERNANCE-03"
+    title: "AI Act Registration"
+    summary: "Register high-risk AI systems in the EU database before placing on the market or putting into service. Deployers of high-risk AI systems in public services must also register. Keep registration information up to date."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-49", "registration", "eu-database"]
+
+  - group_code: "GOVERNANCE"
+    code: "GOVERNANCE-04"
+    title: "Fundamental Rights Impact Assessment"
+    summary: "Deployers of high-risk AI systems must conduct a fundamental rights impact assessment before deployment when the AI system affects public service delivery or decision-making significantly affecting individuals."
+    asset_class: "Organization"
+    security_function: "Identify"
+    tags: ["art-27", "fria", "fundamental-rights"]
+
+  - group_code: "GOVERNANCE"
+    code: "GOVERNANCE-05"
+    title: "Staff Training and AI Literacy"
+    summary: "Ensure that staff involved in operating AI systems and all personnel responsible for AI governance have sufficient AI literacy, competence, and training appropriate to their role. Promote AI literacy across the organisation."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-4", "art-26", "ai-literacy", "training"]
+
+  # ── GPAI ──────────────────────────────────────────────────────────────────
+  - group_code: "GPAI"
+    code: "GPAI-01"
+    title: "GPAI Model Technical Documentation"
+    summary: "Providers of general purpose AI models must prepare and maintain technical documentation including training methodology, evaluation results, compute resources, energy consumption, and a summary of training data."
+    asset_class: "Systems"
+    security_function: "Govern"
+    tags: ["art-53", "gpai", "technical-documentation"]
+
+  - group_code: "GPAI"
+    code: "GPAI-02"
+    title: "GPAI Copyright Compliance"
+    summary: "GPAI model providers must comply with EU copyright law and put in place a policy to respect copyright. Maintain a sufficiently detailed summary of the content used for training that can be made publicly available."
+    asset_class: "Data"
+    security_function: "Govern"
+    tags: ["art-53", "gpai", "copyright"]
+
+  - group_code: "GPAI"
+    code: "GPAI-03"
+    title: "GPAI Downstream Transparency"
+    summary: "GPAI providers must make available to downstream providers integrating the model information and documentation enabling compliance with AI Act obligations. Publish a publicly accessible summary of training data."
+    asset_class: "Organization"
+    security_function: "Govern"
+    tags: ["art-53", "gpai", "downstream", "transparency"]
+
+  - group_code: "GPAI"
+    code: "GPAI-04"
+    title: "Systemic Risk Assessment for Powerful GPAI Models"
+    summary: "Providers of GPAI models with systemic risk (exceeding the compute threshold of 10^25 FLOPs) must perform adversarial testing, model evaluations, and risk assessments. Report serious incidents to the AI Office."
+    asset_class: "Systems"
+    security_function: "Identify"
+    tags: ["art-55", "gpai", "systemic-risk", "adversarial-testing"]
+
+  - group_code: "GPAI"
+    code: "GPAI-05"
+    title: "Systemic Risk Cybersecurity Safeguards"
+    summary: "GPAI model providers with systemic risk must implement appropriate cybersecurity safeguards, including protection of model weights and parameters. Ensure physical and logical security measures protect the most capable AI models."
+    asset_class: "Systems"
+    security_function: "Protect"
+    tags: ["art-55", "gpai", "systemic-risk", "cybersecurity", "model-weights"]

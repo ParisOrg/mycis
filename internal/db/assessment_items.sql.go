@@ -216,6 +216,7 @@ SELECT
   ai.updated_at,
   fg.code AS group_code,
   fg.title AS group_title,
+  fg.sort_order AS group_sort_order,
   fi.code AS item_code,
   fi.title AS item_title,
   fi.summary AS item_summary,
@@ -240,15 +241,7 @@ WHERE ai.assessment_id = $1
     AND ai.due_date < CURRENT_DATE
     AND ai.status NOT IN ('validated', 'not_applicable')
   ))
-ORDER BY
-  CASE WHEN fi.code ~ '^[0-9]+(\.[0-9]+)?$' THEN 0 ELSE 1 END,
-  CASE
-    WHEN fi.code ~ '^[0-9]+(\.[0-9]+)?$' THEN split_part(fi.code, '.', 1)::int
-  END NULLS LAST,
-  CASE
-    WHEN fi.code ~ '^[0-9]+(\.[0-9]+)?$' AND position('.' IN fi.code) > 0 THEN split_part(fi.code, '.', 2)::numeric
-  END NULLS LAST,
-  fi.code
+ORDER BY fi.sort_order, fi.code
 `
 
 type ListAssessmentItemsParams struct {
@@ -281,6 +274,7 @@ type ListAssessmentItemsRow struct {
 	UpdatedAt       time.Time            `json:"updated_at"`
 	GroupCode       string               `json:"group_code"`
 	GroupTitle      string               `json:"group_title"`
+	GroupSortOrder  int32                `json:"group_sort_order"`
 	ItemCode        string               `json:"item_code"`
 	ItemTitle       string               `json:"item_title"`
 	ItemSummary     string               `json:"item_summary"`
@@ -327,6 +321,7 @@ func (q *Queries) ListAssessmentItems(ctx context.Context, arg ListAssessmentIte
 			&i.UpdatedAt,
 			&i.GroupCode,
 			&i.GroupTitle,
+			&i.GroupSortOrder,
 			&i.ItemCode,
 			&i.ItemTitle,
 			&i.ItemSummary,
@@ -343,6 +338,50 @@ func (q *Queries) ListAssessmentItems(ctx context.Context, arg ListAssessmentIte
 		return nil, err
 	}
 	return items, nil
+}
+
+const rebindFrameworkItemReferences = `-- name: RebindFrameworkItemReferences :exec
+WITH eligible_assessments AS (
+  SELECT DISTINCT ai.assessment_id
+  FROM assessment_items ai
+  WHERE ai.framework_item_id = $2::uuid
+    AND NOT EXISTS (
+      SELECT 1
+      FROM assessment_items existing
+      WHERE existing.assessment_id = ai.assessment_id
+        AND existing.framework_item_id = $1::uuid
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM control_records existing
+      WHERE existing.assessment_id = ai.assessment_id
+        AND existing.framework_item_id = $1::uuid
+    )
+),
+rebound_control_records AS (
+  UPDATE control_records cr
+  SET framework_item_id = $1::uuid,
+      updated_at = NOW()
+  FROM eligible_assessments ea
+  WHERE cr.framework_item_id = $2::uuid
+    AND cr.assessment_id = ea.assessment_id
+)
+UPDATE assessment_items ai
+SET framework_item_id = $1::uuid,
+    updated_at = NOW()
+FROM eligible_assessments ea
+WHERE ai.framework_item_id = $2::uuid
+  AND ai.assessment_id = ea.assessment_id
+`
+
+type RebindFrameworkItemReferencesParams struct {
+	NewFrameworkItemID uuid.UUID `json:"new_framework_item_id"`
+	OldFrameworkItemID uuid.UUID `json:"old_framework_item_id"`
+}
+
+func (q *Queries) RebindFrameworkItemReferences(ctx context.Context, arg RebindFrameworkItemReferencesParams) error {
+	_, err := q.db.Exec(ctx, rebindFrameworkItemReferences, arg.NewFrameworkItemID, arg.OldFrameworkItemID)
+	return err
 }
 
 const updateAssessmentItem = `-- name: UpdateAssessmentItem :one

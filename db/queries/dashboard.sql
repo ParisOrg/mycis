@@ -24,10 +24,7 @@ JOIN framework_items fi ON fi.id = ai.framework_item_id
 JOIN framework_groups fg ON fg.id = fi.framework_group_id
 WHERE ai.assessment_id = $1
 GROUP BY fg.id
-ORDER BY
-  CASE WHEN fg.code ~ '^[0-9]+$' THEN 0 ELSE 1 END,
-  CASE WHEN fg.code ~ '^[0-9]+$' THEN fg.code::int END NULLS LAST,
-  fg.code;
+ORDER BY fg.sort_order ASC, fg.code ASC;
 
 -- name: ListDashboardOwnerWorkload :many
 SELECT
@@ -62,7 +59,7 @@ LEFT JOIN users ou ON ou.id = cr.owner_user_id
 WHERE ai.assessment_id = $1
   AND ai.due_date < CURRENT_DATE
   AND ai.status NOT IN ('validated', 'not_applicable')
-ORDER BY ai.due_date ASC, fi.code ASC
+ORDER BY ai.due_date ASC, fg.sort_order ASC, fi.sort_order ASC, fi.code ASC
 LIMIT 10;
 
 -- name: ListDashboardReviewQueue :many
@@ -101,5 +98,5 @@ LEFT JOIN users ou ON ou.id = cr.owner_user_id
 WHERE ai.assessment_id = $1
   AND ai.score IS NOT NULL
   AND ai.score <= 2
-ORDER BY ai.score ASC, fi.code ASC
+ORDER BY ai.score ASC, fg.sort_order ASC, fi.sort_order ASC, fi.code ASC
 LIMIT 10;

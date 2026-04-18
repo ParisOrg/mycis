@@ -20,9 +20,9 @@
         </select>
         <select class="select h-8 w-full text-sm" name="tag">
           <option value="">All tags</option>
-          <option value="ig1" {{ if ptrEquals .Filters.Tag "ig1" }}selected{{ end }}>IG1</option>
-          <option value="ig2" {{ if ptrEquals .Filters.Tag "ig2" }}selected{{ end }}>IG2</option>
-          <option value="ig3" {{ if ptrEquals .Filters.Tag "ig3" }}selected{{ end }}>IG3</option>
+          {{ range .Tags }}
+            <option value="{{ . }}" {{ if ptrEquals $.Filters.Tag . }}selected{{ end }}>{{ tagLabel . }}</option>
+          {{ end }}
         </select>
         <select class="select h-8 w-full text-sm" name="status">
           <option value="">All statuses</option>

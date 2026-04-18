@@ -1,0 +1,884 @@
+framework:
+  slug: "iso-27001-2022"
+  label: "ISO/IEC 27001"
+  version: "2022"
+
+groups:
+  - code: "5"
+    title: "Organizational Controls"
+    summary: "Controls related to policies, roles, responsibilities, and governance processes that shape how the organization manages information security."
+    description: "Organizational controls establish the governance foundation of the ISMS. They cover policies, risk management, asset classification, access control, supplier relationships, incident management, and compliance obligations."
+
+  - code: "6"
+    title: "People Controls"
+    summary: "Controls addressing the human dimension of information security, from pre-employment screening through training, disciplinary processes, and post-employment obligations."
+    description: "People are frequently the weakest link in information security. These controls ensure that personnel understand their responsibilities, are vetted appropriately, receive ongoing training, and remain bound by security obligations throughout and after their employment."
+
+  - code: "7"
+    title: "Physical Controls"
+    summary: "Controls that protect the physical environment, infrastructure, and equipment of the organization from unauthorized access, damage, and interference."
+    description: "Physical controls create the secure environments in which information processing takes place. They cover perimeter security, access to facilities, environmental protections, equipment handling, and secure disposal."
+
+  - code: "8"
+    title: "Technological Controls"
+    summary: "Technical controls implemented in hardware, software, and networks to protect the confidentiality, integrity, and availability of information."
+    description: "Technological controls are the technical implementation layer of the ISMS. They address endpoint security, access management, cryptography, vulnerability management, logging, network security, secure development, and change management."
+
+
+items:
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # THEME 5 — ORGANIZATIONAL CONTROLS (37)
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - group_code: "5"
+    code: "5.1"
+    title: "Policies for information security"
+    summary: "Information security policies shall be defined, approved by management, published, communicated to and acknowledged by relevant personnel, and reviewed at planned intervals or when significant changes occur."
+    description: "An information security policy suite provides the overarching direction and management intent for protecting information. It should cover objectives, principles, and high-level requirements, and be supported by topic-specific policies."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["governance", "policy"]
+
+  - group_code: "5"
+    code: "5.2"
+    title: "Information security roles and responsibilities"
+    summary: "Information security roles and responsibilities shall be defined and allocated according to the needs of the organization."
+    description: "Clearly defined roles ensure accountability. This includes identifying who is responsible for assets, processes, risk decisions, and the operation of individual controls."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["governance", "roles"]
+
+  - group_code: "5"
+    code: "5.3"
+    title: "Segregation of duties"
+    summary: "Conflicting duties and areas of responsibility shall be segregated to reduce opportunities for unauthorized or unintentional modification or misuse of the organization's assets."
+    description: "Segregation of duties prevents a single individual from controlling all critical aspects of a process, reducing fraud, error, and abuse. It applies to IT operations, financial processes, and security functions."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["governance", "access-control"]
+
+  - group_code: "5"
+    code: "5.4"
+    title: "Management responsibilities"
+    summary: "Management shall require all personnel to apply information security in accordance with the established information security policy, topic-specific policies and procedures of the organization."
+    description: "Active management engagement reinforces the importance of information security and ensures that personnel understand and fulfil their security responsibilities."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["governance"]
+
+  - group_code: "5"
+    code: "5.5"
+    title: "Contact with authorities"
+    summary: "The organization shall establish and maintain contact with relevant authorities such as law enforcement, regulatory bodies, and emergency services."
+    description: "Pre-established relationships with authorities speed up response when incidents require regulatory notification or law enforcement involvement, such as cybercrime or data breaches."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["governance", "incident-management"]
+
+  - group_code: "5"
+    code: "5.6"
+    title: "Contact with special interest groups"
+    summary: "The organization shall establish and maintain contact with special interest groups, security forums, and professional associations to stay informed about the threat and vulnerability landscape."
+    description: "Engagement with ISACs, vendor security groups, and professional communities provides early warnings about emerging threats and opportunities to share knowledge and best practices."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["governance", "threat-intelligence"]
+
+  - group_code: "5"
+    code: "5.7"
+    title: "Threat intelligence"
+    summary: "Information relating to information security threats shall be collected and analysed to produce threat intelligence."
+    description: "Threat intelligence enables proactive risk decisions. It covers collection, analysis, and dissemination of information about threats, threat actors, and attack techniques relevant to the organization. (New in ISO 27001:2022)"
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["threat-intelligence", "new-2022"]
+
+  - group_code: "5"
+    code: "5.8"
+    title: "Information security in project management"
+    summary: "Information security shall be integrated into project management throughout the project lifecycle."
+    description: "Embedding security into project management ensures that new systems, processes, and changes are evaluated for information security risks before deployment, rather than as an afterthought."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["governance", "project-management"]
+
+  - group_code: "5"
+    code: "5.9"
+    title: "Inventory of information and other associated assets"
+    summary: "An inventory of information and other associated assets, including owners, shall be developed and maintained."
+    description: "Asset inventories are fundamental to risk management — you cannot protect what you do not know you have. Inventories should cover information, hardware, software, services, and facilities."
+    security_function: "Organizational"
+    asset_class: "All"
+    tags: ["asset-management"]
+
+  - group_code: "5"
+    code: "5.10"
+    title: "Acceptable use of information and other associated assets"
+    summary: "Rules for the acceptable use and procedures for handling information and other associated assets shall be identified, documented and implemented."
+    description: "Acceptable use policies define what is permitted and prohibited when using organizational assets, reducing the risk of deliberate or accidental misuse."
+    security_function: "Organizational"
+    asset_class: "All"
+    tags: ["asset-management", "policy"]
+
+  - group_code: "5"
+    code: "5.11"
+    title: "Return of assets"
+    summary: "Personnel and other interested parties shall return all the organization's assets in their possession upon change or termination of their employment, contract or agreement."
+    description: "Ensuring assets are returned on departure prevents unauthorized retention of sensitive information or equipment after an individual's relationship with the organization ends."
+    security_function: "Organizational"
+    asset_class: "All"
+    tags: ["asset-management", "hr-security"]
+
+  - group_code: "5"
+    code: "5.12"
+    title: "Classification of information"
+    summary: "Information shall be classified according to the information security needs of the organization based on confidentiality, integrity, availability, and relevant interested party requirements."
+    description: "Classification provides the basis for applying appropriate protective controls. Common classification levels include public, internal, confidential, and restricted."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["asset-management", "data-classification"]
+
+  - group_code: "5"
+    code: "5.13"
+    title: "Labelling of information"
+    summary: "An appropriate set of procedures for information labelling shall be developed and implemented in accordance with the information classification scheme adopted by the organization."
+    description: "Labelling makes classification visible, enabling personnel and systems to apply the correct handling rules. Labels may be physical (stamps, headers) or electronic (metadata, tags)."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["asset-management", "data-classification"]
+
+  - group_code: "5"
+    code: "5.14"
+    title: "Information transfer"
+    summary: "Information transfer rules, procedures, or agreements shall be in place for all types of transfer facilities within the organization and between the organization and other parties."
+    description: "Controls on information transfer prevent data loss, interception, or unauthorized disclosure during internal and external communication — covering email, file sharing, physical media, and verbal exchange."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["data-security", "communications"]
+
+  - group_code: "5"
+    code: "5.15"
+    title: "Access control"
+    summary: "Rules to control physical and logical access to information and other associated assets shall be established and implemented based on business and information security requirements."
+    description: "An access control policy defines principles such as need-to-know, least privilege, and segregation of duties that govern all access to information and systems."
+    security_function: "Organizational"
+    asset_class: "All"
+    tags: ["access-control"]
+
+  - group_code: "5"
+    code: "5.16"
+    title: "Identity management"
+    summary: "The full lifecycle of identities shall be managed."
+    description: "Identity management covers provisioning, maintenance, and deprovisioning of user, service, and device identities, ensuring that only authorized entities can access information and systems."
+    security_function: "Organizational"
+    asset_class: "Users"
+    tags: ["access-control", "identity-management"]
+
+  - group_code: "5"
+    code: "5.17"
+    title: "Authentication information"
+    summary: "Allocation and management of authentication information shall be controlled by a management process, including advising personnel on appropriate handling of authentication information."
+    description: "This control covers the management of passwords, tokens, keys, and other authentication secrets — including policies on complexity, storage, sharing, and reset procedures."
+    security_function: "Organizational"
+    asset_class: "Users"
+    tags: ["access-control", "authentication"]
+
+  - group_code: "5"
+    code: "5.18"
+    title: "Access rights"
+    summary: "Access rights to information and other associated assets shall be provisioned, reviewed, modified and removed in accordance with the organization's topic-specific policy on and rules for access control."
+    description: "Formal processes for granting, reviewing, and revoking access rights ensure that access is current, appropriate, and aligned with job responsibilities — including periodic access reviews and timely revocation on role change."
+    security_function: "Organizational"
+    asset_class: "Users"
+    tags: ["access-control"]
+
+  - group_code: "5"
+    code: "5.19"
+    title: "Information security in supplier relationships"
+    summary: "Processes and procedures shall be defined and implemented to manage the information security risks associated with the use of supplier's products or services."
+    description: "Supplier security management addresses the risks introduced by third parties who access, process, or store the organization's information, covering risk assessment, contractual requirements, and ongoing monitoring."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["supplier-security", "supply-chain"]
+
+  - group_code: "5"
+    code: "5.20"
+    title: "Addressing information security within supplier agreements"
+    summary: "Relevant information security requirements shall be established and agreed with each supplier based on the type of supplier relationship."
+    description: "Supplier agreements should include security obligations such as minimum security standards, audit rights, incident notification, data protection requirements, and the handling of confidential information."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["supplier-security", "supply-chain"]
+
+  - group_code: "5"
+    code: "5.21"
+    title: "Managing information security in the ICT supply chain"
+    summary: "Processes and procedures shall be defined and implemented to manage the information security risks associated with the ICT products and services supply chain."
+    description: "ICT supply chain risks include malicious or compromised hardware/software, inadequate security practices by sub-suppliers, and counterfeit components. Controls include SBOM requirements and provenance verification."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["supplier-security", "supply-chain"]
+
+  - group_code: "5"
+    code: "5.22"
+    title: "Monitoring, review and change management of supplier services"
+    summary: "The organization shall regularly monitor, review, evaluate and manage change in supplier information security practices and service delivery."
+    description: "Ongoing monitoring of supplier performance and security posture ensures that contractual security obligations are being met and that changes in supplier services or risk levels are identified and addressed."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["supplier-security", "supply-chain"]
+
+  - group_code: "5"
+    code: "5.23"
+    title: "Information security for use of cloud services"
+    summary: "Processes for acquisition, use, management and exit from cloud services shall be established in accordance with the organization's information security requirements."
+    description: "Cloud services introduce shared responsibility models, data residency concerns, and new attack surfaces. Controls address provider selection, configuration, monitoring, and exit strategies. (New in ISO 27001:2022)"
+    security_function: "Organizational"
+    asset_class: "Systems"
+    tags: ["cloud-security", "new-2022"]
+
+  - group_code: "5"
+    code: "5.24"
+    title: "Information security incident management planning and preparation"
+    summary: "The organization shall plan and prepare for managing information security incidents by defining, establishing and communicating information security incident management processes, roles and responsibilities."
+    description: "Effective incident management requires preparation: documented processes, trained responders, defined roles, communication plans, and tested playbooks — all established before an incident occurs."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["incident-management"]
+
+  - group_code: "5"
+    code: "5.25"
+    title: "Assessment and decision on information security events"
+    summary: "The organization shall assess information security events and decide if they are to be categorized as information security incidents."
+    description: "Not every security event is an incident. This control covers the triage process: evaluating events against defined criteria to determine severity, categorization, and whether to escalate to incident response."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["incident-management"]
+
+  - group_code: "5"
+    code: "5.26"
+    title: "Response to information security incidents"
+    summary: "Information security incidents shall be responded to in accordance with the documented procedures."
+    description: "Incident response covers containment, eradication, recovery, and post-incident review. Responses must be executed in a coordinated, documented manner to minimize impact and support forensic requirements."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["incident-management"]
+
+  - group_code: "5"
+    code: "5.27"
+    title: "Learning from information security incidents"
+    summary: "Knowledge gained from information security incidents shall be used to strengthen and improve information security controls."
+    description: "Post-incident reviews and lessons-learned processes convert incidents into improvements — updating controls, processes, training, and detection capabilities based on real-world findings."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["incident-management", "continual-improvement"]
+
+  - group_code: "5"
+    code: "5.28"
+    title: "Collection of evidence"
+    summary: "The organization shall establish and implement procedures for the identification, collection, acquisition and preservation of evidence related to information security events."
+    description: "Proper evidence handling ensures that digital evidence is admissible in legal proceedings. Procedures should follow forensic best practices including chain of custody, integrity verification, and non-destructive collection."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["incident-management", "forensics"]
+
+  - group_code: "5"
+    code: "5.29"
+    title: "Information security during disruption"
+    summary: "The organization shall plan how to maintain information security at an appropriate level during disruption."
+    description: "Business continuity plans must address information security requirements — ensuring that security controls remain effective even when operating under degraded conditions or in recovery mode."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["business-continuity"]
+
+  - group_code: "5"
+    code: "5.30"
+    title: "ICT readiness for business continuity"
+    summary: "ICT readiness shall be planned, implemented, maintained and tested based on business continuity objectives and ICT continuity requirements."
+    description: "ICT continuity covers the availability and recovery of technology systems that support critical business processes, including RTO/RPO definition, backup systems, failover capabilities, and regular testing. (New in ISO 27001:2022)"
+    security_function: "Organizational"
+    asset_class: "Systems"
+    tags: ["business-continuity", "new-2022"]
+
+  - group_code: "5"
+    code: "5.31"
+    title: "Legal, statutory, regulatory and contractual requirements"
+    summary: "Legal, statutory, regulatory and contractual requirements relevant to information security and the organization's approach to meet these requirements shall be identified, documented and kept up to date."
+    description: "Compliance with applicable laws and regulations (e.g., GDPR, sector-specific regulations) must be actively managed, with requirements tracked and controls mapped to obligations."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["compliance"]
+
+  - group_code: "5"
+    code: "5.32"
+    title: "Intellectual property rights"
+    summary: "The organization shall implement appropriate procedures to protect intellectual property rights."
+    description: "Controls address the use of licensed software, protection of the organization's own intellectual property, and compliance with copyright and licensing obligations."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["compliance", "legal"]
+
+  - group_code: "5"
+    code: "5.33"
+    title: "Protection of records"
+    summary: "Records shall be protected from loss, destruction, falsification, unauthorized access and unauthorized release."
+    description: "Records management ensures that information required for legal, regulatory, and business purposes is retained for the appropriate period, protected from tampering, and disposed of securely."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["compliance", "data-security"]
+
+  - group_code: "5"
+    code: "5.34"
+    title: "Privacy and protection of PII"
+    summary: "The organization shall identify and meet the requirements regarding the preservation of privacy and protection of PII according to applicable laws and regulations and contractual requirements."
+    description: "Privacy controls cover the collection, storage, processing, and disposal of personally identifiable information, ensuring compliance with applicable data protection laws such as GDPR."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["compliance", "privacy"]
+
+  - group_code: "5"
+    code: "5.35"
+    title: "Independent review of information security"
+    summary: "The organization's approach to managing information security and its implementation shall be reviewed independently at planned intervals or when significant changes occur."
+    description: "Independent reviews — whether internal audits or external assessments — provide assurance that the ISMS is operating effectively and identify areas for improvement."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["audit", "governance"]
+
+  - group_code: "5"
+    code: "5.36"
+    title: "Compliance with policies, rules and standards for information security"
+    summary: "Compliance with the organization's information security policy, topic-specific policies, rules and standards shall be regularly reviewed."
+    description: "Regular compliance checks — including technical assessments, configuration reviews, and process audits — verify that implemented controls continue to operate as intended."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["audit", "compliance"]
+
+  - group_code: "5"
+    code: "5.37"
+    title: "Documented operating procedures"
+    summary: "Operating procedures for information processing facilities shall be documented and made available to personnel who need them."
+    description: "Documented procedures ensure consistency, reduce reliance on individual knowledge, and provide a reference for training and auditing. They should cover routine operations, incident response, and maintenance tasks."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["governance", "operations"]
+
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # THEME 6 — PEOPLE CONTROLS (8)
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - group_code: "6"
+    code: "6.1"
+    title: "Screening"
+    summary: "Background verification checks on all candidates for employment shall be carried out prior to joining the organization and on an ongoing basis, taking into consideration applicable laws, regulations and ethics and be proportional to the business requirements, the classification of the information to be accessed and the perceived risks."
+    description: "Pre-employment screening (identity verification, criminal records, reference checks, qualifications) reduces the risk of hiring individuals who pose an insider threat or who may misuse privileged access."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["hr-security"]
+
+  - group_code: "6"
+    code: "6.2"
+    title: "Terms and conditions of employment"
+    summary: "Employment contractual agreements shall state the personnel's and the organization's responsibilities for information security."
+    description: "Contracts and appointment letters should explicitly reference security responsibilities, confidentiality obligations, acceptable use requirements, and consequences for non-compliance."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["hr-security", "legal"]
+
+  - group_code: "6"
+    code: "6.3"
+    title: "Information security awareness, education and training"
+    summary: "Personnel of the organization and relevant interested parties shall receive appropriate information security awareness, education and training and regular updates of the organization's information security policy, topic-specific policies and procedures, as relevant for their job function."
+    description: "Effective security awareness programs reduce human-enabled incidents by ensuring that personnel understand threats, recognize social engineering, and know how to respond. Training should be role-appropriate and regularly updated."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["hr-security", "awareness-training"]
+
+  - group_code: "6"
+    code: "6.4"
+    title: "Disciplinary process"
+    summary: "A disciplinary process shall be formalized and communicated to take action against personnel who have committed an information security policy violation."
+    description: "A clear, fair, and enforced disciplinary process deters deliberate policy violations. It should cover the range of sanctions from verbal warnings to termination, depending on severity."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["hr-security"]
+
+  - group_code: "6"
+    code: "6.5"
+    title: "Responsibilities after termination or change of employment"
+    summary: "Information security responsibilities and duties that remain valid after termination or change of employment shall be defined, enforced and communicated to relevant personnel and other interested parties."
+    description: "Post-employment obligations include continued confidentiality of sensitive information and return of assets. NDA provisions and offboarding checklists support compliance."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["hr-security"]
+
+  - group_code: "6"
+    code: "6.6"
+    title: "Confidentiality or non-disclosure agreements"
+    summary: "Confidentiality or non-disclosure agreements reflecting the organization's needs for the protection of information shall be identified, documented, regularly reviewed and signed by personnel and other relevant interested parties."
+    description: "NDAs legally bind employees, contractors, and partners to confidentiality obligations, providing a basis for legal action in the event of unauthorized disclosure."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["hr-security", "legal"]
+
+  - group_code: "6"
+    code: "6.7"
+    title: "Remote working"
+    summary: "Security measures shall be implemented when personnel are working remotely to protect information accessed, processed or stored outside the organization's premises."
+    description: "Remote work introduces risks including unsecured home networks, device sharing, and shoulder surfing. Controls include VPN, endpoint security, screen lock policies, and secure handling of physical documents."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["remote-working", "hr-security"]
+
+  - group_code: "6"
+    code: "6.8"
+    title: "Information security event reporting"
+    summary: "The organization shall provide a mechanism for personnel to report observed or suspected information security events through appropriate channels in a timely manner."
+    description: "Clear reporting channels and a blame-free culture encourage early reporting of security events, enabling faster detection and response. All personnel should know how and where to report suspicious activity."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["incident-management", "hr-security"]
+
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # THEME 7 — PHYSICAL CONTROLS (14)
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - group_code: "7"
+    code: "7.1"
+    title: "Physical security perimeters"
+    summary: "Security perimeters shall be defined and used to protect areas that contain information and other associated assets."
+    description: "Physical perimeters — fences, walls, locked doors, security guards — create concentric zones of protection that restrict unauthorized physical access to sensitive areas such as data centres and server rooms."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["physical-security"]
+
+  - group_code: "7"
+    code: "7.2"
+    title: "Physical entry"
+    summary: "Secure areas shall be protected by appropriate entry controls and access points to ensure that only authorized personnel are allowed access."
+    description: "Entry controls — badges, biometrics, PIN pads, security guards, visitor management — verify identity and enforce access policies at physical perimeters, logging and auditing all access events."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["physical-security", "access-control"]
+
+  - group_code: "7"
+    code: "7.3"
+    title: "Securing offices, rooms and facilities"
+    summary: "Physical security for offices, rooms and facilities shall be designed and implemented."
+    description: "Controls include locked offices, restricted access to server rooms and network closets, cable management to prevent unauthorized connections, and protecting sensitive discussions from eavesdropping."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["physical-security"]
+
+  - group_code: "7"
+    code: "7.4"
+    title: "Physical security monitoring"
+    summary: "Premises shall be continuously monitored for unauthorized physical access."
+    description: "Monitoring systems — CCTV, access control logs, intrusion detection alarms — detect unauthorized physical access attempts. Monitoring should cover all entry points and sensitive areas. (New in ISO 27001:2022)"
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["physical-security", "new-2022"]
+
+  - group_code: "7"
+    code: "7.5"
+    title: "Protecting against physical and environmental threats"
+    summary: "Protection against physical and environmental threats, such as natural disasters, malicious attacks or accidents shall be designed and implemented."
+    description: "Environmental controls address fire, flood, earthquake, extreme temperature, and power failures — implementing both preventive measures (raised floors, fire suppression) and monitoring systems."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["physical-security", "business-continuity"]
+
+  - group_code: "7"
+    code: "7.6"
+    title: "Working in secure areas"
+    summary: "Security measures for working in secure areas shall be designed and implemented."
+    description: "Controls for secure areas include need-to-know access, no unattended work, restrictions on recording devices, supervision of visitors, and clear desk/screen policies within sensitive zones."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["physical-security"]
+
+  - group_code: "7"
+    code: "7.7"
+    title: "Clear desk and clear screen"
+    summary: "Clear desk rules for papers and removable storage media and clear screen rules for information processing facilities shall be defined and appropriately enforced."
+    description: "Clear desk and screen policies prevent unauthorized access to sensitive information left unattended on physical desks or unlocked screens, reducing the risk of shoulder surfing and physical snooping."
+    security_function: "Physical"
+    asset_class: "Users"
+    tags: ["physical-security", "hr-security"]
+
+  - group_code: "7"
+    code: "7.8"
+    title: "Equipment siting and protection"
+    summary: "Equipment shall be sited securely and protected to reduce the risks from physical and environmental threats and from unauthorized access."
+    description: "Equipment placement should minimize exposure to environmental hazards (heat, moisture, vibration) and reduce the risk of unauthorized access or observation of screens and sensitive information."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["physical-security", "asset-management"]
+
+  - group_code: "7"
+    code: "7.9"
+    title: "Security of assets off-premises"
+    summary: "Off-site assets shall be protected."
+    description: "Laptops, mobile devices, and portable storage taken outside organizational premises face elevated risks of theft, loss, and unauthorized access. Controls include full-disk encryption, remote wipe, and physical locks."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["physical-security", "asset-management", "remote-working"]
+
+  - group_code: "7"
+    code: "7.10"
+    title: "Storage media"
+    summary: "Storage media shall be managed through its lifecycle of acquisition, use, transportation and disposal in accordance with the organization's classification scheme and handling requirements."
+    description: "Controls cover the full lifecycle of removable media: procurement, labelling, secure storage, encrypted transport, and certified destruction — preventing unauthorized data extraction or disclosure."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["physical-security", "data-security", "asset-management"]
+
+  - group_code: "7"
+    code: "7.11"
+    title: "Supporting utilities"
+    summary: "Information processing facilities shall be protected from power failures and other disruptions caused by failures in supporting utilities."
+    description: "Supporting utilities include electrical power, cooling, water, and telecommunications. Controls include UPS, generators, redundant feeds, and monitoring to ensure continuous operation of critical facilities."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["physical-security", "business-continuity"]
+
+  - group_code: "7"
+    code: "7.12"
+    title: "Cabling security"
+    summary: "Cables carrying power or data or supporting information services shall be protected from interception, interference or damage."
+    description: "Cable protection measures include conduits, cable trays, locked cabinets, separation of power and data cabling, and periodic inspection to prevent tapping, damage, or accidental disconnection."
+    security_function: "Physical"
+    asset_class: "Networks"
+    tags: ["physical-security"]
+
+  - group_code: "7"
+    code: "7.13"
+    title: "Equipment maintenance"
+    summary: "Equipment shall be maintained correctly to ensure availability, integrity and confidentiality of information."
+    description: "Regular maintenance — hardware servicing, firmware updates, cleaning — keeps equipment reliable. Maintenance procedures should ensure that sensitive data is not exposed to third-party engineers."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["physical-security", "asset-management"]
+
+  - group_code: "7"
+    code: "7.14"
+    title: "Secure disposal or re-use of equipment"
+    summary: "Items of equipment containing storage media shall be verified to ensure that any sensitive data and licensed software has been removed or securely overwritten prior to disposal or re-use."
+    description: "Equipment disposal and reuse must include data sanitization to prevent recovery of sensitive information. Disposal should follow NIST SP 800-88 or equivalent standards, with certificate of destruction where required."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["physical-security", "data-security", "asset-management"]
+
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # THEME 8 — TECHNOLOGICAL CONTROLS (34)
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - group_code: "8"
+    code: "8.1"
+    title: "User endpoint devices"
+    summary: "Information stored on, processed by or accessible via user endpoint devices shall be protected."
+    description: "Endpoint controls include full-disk encryption, endpoint protection platforms (AV/EDR), screen lock, MDM enrollment, patch management, and restrictions on unapproved software and removable media."
+    security_function: "Technological"
+    asset_class: "Devices"
+    tags: ["endpoint-security"]
+
+  - group_code: "8"
+    code: "8.2"
+    title: "Privileged access rights"
+    summary: "The allocation and use of privileged access rights shall be restricted and managed."
+    description: "Privileged access management (PAM) limits and monitors administrative access. Controls include just-in-time access, privileged account vaulting, session recording, and regular review of privileged entitlements."
+    security_function: "Technological"
+    asset_class: "Users"
+    tags: ["access-control", "privileged-access"]
+
+  - group_code: "8"
+    code: "8.3"
+    title: "Information access restriction"
+    summary: "Access to information and other associated assets shall be restricted in accordance with the established topic-specific policy on access control."
+    description: "Technical access controls — RBAC, ABAC, ACLs, database permissions — enforce the access control policy by limiting what information individual users, services, and systems can read, write, or execute."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["access-control"]
+
+  - group_code: "8"
+    code: "8.4"
+    title: "Access to source code"
+    summary: "Read and write access to source code, development tools and software libraries shall be appropriately managed."
+    description: "Protecting source code from unauthorized access, modification, or theft requires access controls, code repositories with audit logs, and separation of development from production environments."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["access-control", "secure-development"]
+
+  - group_code: "8"
+    code: "8.5"
+    title: "Secure authentication"
+    summary: "Secure authentication technologies and procedures shall be implemented based on information access restrictions and the topic-specific policy on access control."
+    description: "Authentication controls include multi-factor authentication (MFA), single sign-on (SSO) with strong protocols, session management, anti-phishing protections, and authentication failure lockout."
+    security_function: "Technological"
+    asset_class: "Users"
+    tags: ["access-control", "authentication"]
+
+  - group_code: "8"
+    code: "8.6"
+    title: "Capacity management"
+    summary: "The use of resources shall be monitored and adjusted, and projections made of future capacity requirements to ensure the required system performance."
+    description: "Capacity management ensures that systems have sufficient compute, storage, and bandwidth to meet current and projected demand, preventing availability failures due to resource exhaustion."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["operations", "availability"]
+
+  - group_code: "8"
+    code: "8.7"
+    title: "Protection against malware"
+    summary: "Protection against malware shall be implemented and supported by appropriate user awareness."
+    description: "Anti-malware controls include endpoint protection platforms, email security gateways, web content filtering, application allowlisting, and user awareness training about phishing and malicious downloads."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["malware-protection", "endpoint-security"]
+
+  - group_code: "8"
+    code: "8.8"
+    title: "Management of technical vulnerabilities"
+    summary: "Information about technical vulnerabilities of information systems in use shall be obtained in a timely fashion, the organization's exposure to such vulnerabilities evaluated and appropriate measures taken."
+    description: "Vulnerability management includes regular scanning, timely patching, risk-based prioritization, and tracking remediation. It covers operating systems, applications, firmware, and third-party components."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["vulnerability-management"]
+
+  - group_code: "8"
+    code: "8.9"
+    title: "Configuration management"
+    summary: "Configurations, including security configurations, of hardware, software, services and networks shall be established, documented, implemented, monitored and reviewed."
+    description: "Configuration management ensures that systems are deployed and maintained with secure baselines, and that configuration drift — intentional or accidental — is detected and corrected. (New in ISO 27001:2022)"
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["configuration-management", "new-2022"]
+
+  - group_code: "8"
+    code: "8.10"
+    title: "Information deletion"
+    summary: "Information stored in information systems, devices or in any other storage media shall be deleted when no longer required."
+    description: "Timely data deletion reduces the risk of unauthorized access to data that has exceeded its retention period. This includes data on endpoints, servers, cloud storage, and backups. (New in ISO 27001:2022)"
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["data-security", "new-2022"]
+
+  - group_code: "8"
+    code: "8.11"
+    title: "Data masking"
+    summary: "Data masking shall be used in accordance with the organization's topic-specific policy on access control and other related topic-specific policies, and business requirements, taking applicable legislation into consideration."
+    description: "Data masking protects sensitive data — particularly in non-production environments — by replacing real values with realistic but fictitious ones. Techniques include tokenization, pseudonymization, and anonymization. (New in ISO 27001:2022)"
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["data-security", "privacy", "new-2022"]
+
+  - group_code: "8"
+    code: "8.12"
+    title: "Data leakage prevention"
+    summary: "Data leakage prevention measures shall be applied to systems, networks and any other devices that process, store or transmit sensitive information."
+    description: "DLP controls monitor, detect, and block unauthorized transmission of sensitive data via email, web, USB, and cloud channels. They are informed by data classification and used to enforce handling policies. (New in ISO 27001:2022)"
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["data-security", "new-2022"]
+
+  - group_code: "8"
+    code: "8.13"
+    title: "Information backup"
+    summary: "Backup copies of information, software and systems shall be maintained and regularly tested in accordance with the agreed topic-specific policy on backup."
+    description: "Backup controls ensure that data can be recovered after loss, corruption, or ransomware attack. Key elements include backup frequency, retention, offsite/offline storage, encryption, integrity verification, and regular restoration tests."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["backup", "business-continuity"]
+
+  - group_code: "8"
+    code: "8.14"
+    title: "Redundancy of information processing facilities"
+    summary: "Information processing facilities shall be implemented with redundancy sufficient to meet availability requirements."
+    description: "Redundancy measures — clustering, failover, load balancing, redundant network paths — ensure that single points of failure do not result in unacceptable downtime for critical systems."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["availability", "business-continuity"]
+
+  - group_code: "8"
+    code: "8.15"
+    title: "Logging"
+    summary: "Logs that record activities, exceptions, faults and other relevant events shall be produced, stored, protected and analysed."
+    description: "Comprehensive logging is essential for incident detection, investigation, and compliance. Logs should be tamper-evident, retained for an appropriate period, and centralized in a SIEM for analysis."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["logging", "monitoring"]
+
+  - group_code: "8"
+    code: "8.16"
+    title: "Monitoring activities"
+    summary: "Networks, systems and applications shall be monitored for anomalous behaviour and appropriate actions taken to evaluate potential information security incidents."
+    description: "Continuous monitoring uses SIEM, IDS/IPS, UEBA, and other tools to detect anomalies, indicators of compromise, and policy violations in real time. (New in ISO 27001:2022)"
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["monitoring", "new-2022"]
+
+  - group_code: "8"
+    code: "8.17"
+    title: "Clock synchronisation"
+    summary: "The clocks of information processing systems used by the organization shall be synchronized to approved time sources."
+    description: "Synchronized clocks are essential for accurate log correlation during incident investigations. NTP with authenticated sources should be used consistently across all systems."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["operations", "logging"]
+
+  - group_code: "8"
+    code: "8.18"
+    title: "Use of privileged utility programs"
+    summary: "The use of utility programs that might be capable of overriding system and application controls shall be restricted and tightly controlled."
+    description: "System utilities (e.g., diagnostic tools, packet analyzers, password recovery tools) can bypass security controls if misused. Access should be restricted, logged, and subject to change management."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["access-control", "privileged-access", "operations"]
+
+  - group_code: "8"
+    code: "8.19"
+    title: "Installation of software on operational systems"
+    summary: "Procedures and measures shall be implemented to securely manage software installation on operational systems."
+    description: "Controls prevent unauthorized software installation through technical restrictions (allowlisting, MDM), change management processes, and testing requirements before production deployment."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["configuration-management", "operations"]
+
+  - group_code: "8"
+    code: "8.20"
+    title: "Networks security"
+    summary: "Networks and network devices shall be secured, managed and controlled to protect information in systems and applications."
+    description: "Network security controls include firewalls, network segmentation, secure network device configurations, encrypted management interfaces, and regular network security reviews."
+    security_function: "Technological"
+    asset_class: "Networks"
+    tags: ["network-security"]
+
+  - group_code: "8"
+    code: "8.21"
+    title: "Security of network services"
+    summary: "Security mechanisms, service levels and service requirements of network services shall be identified, implemented and monitored."
+    description: "Controls cover both internally provided and externally sourced network services (leased lines, WAN, cloud connectivity), including security requirements in SLAs and regular performance and security monitoring."
+    security_function: "Technological"
+    asset_class: "Networks"
+    tags: ["network-security", "supplier-security"]
+
+  - group_code: "8"
+    code: "8.22"
+    title: "Segregation of networks"
+    summary: "Groups of information services, users and information systems shall be segregated in networks."
+    description: "Network segmentation using VLANs, firewalls, DMZs, and micro-segmentation limits lateral movement by attackers and contains the blast radius of a breach."
+    security_function: "Technological"
+    asset_class: "Networks"
+    tags: ["network-security"]
+
+  - group_code: "8"
+    code: "8.23"
+    title: "Web filtering"
+    summary: "Access to external websites shall be managed to reduce exposure to malicious content."
+    description: "Web filtering prevents users from accessing malicious, inappropriate, or unauthorized web content. It protects against drive-by downloads, phishing sites, command-and-control infrastructure, and data exfiltration via web. (New in ISO 27001:2022)"
+    security_function: "Technological"
+    asset_class: "Networks"
+    tags: ["network-security", "malware-protection", "new-2022"]
+
+  - group_code: "8"
+    code: "8.24"
+    title: "Use of cryptography"
+    summary: "Rules for the effective use of cryptography, including cryptographic key management, shall be defined and implemented."
+    description: "A cryptography policy covers approved algorithms, key lengths, key management lifecycle (generation, distribution, storage, rotation, destruction), and use cases for encryption, signing, and hashing."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["cryptography", "data-security"]
+
+  - group_code: "8"
+    code: "8.25"
+    title: "Secure development life cycle"
+    summary: "Rules for the secure development of software and systems shall be established and applied."
+    description: "A secure SDLC integrates security at every phase: requirements, design, coding, testing, deployment, and maintenance. It includes threat modelling, security requirements, code review, and security testing gates."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["secure-development"]
+
+  - group_code: "8"
+    code: "8.26"
+    title: "Application security requirements"
+    summary: "Information security requirements shall be identified, specified and approved when developing or acquiring applications."
+    description: "Security requirements for applications should be defined alongside functional requirements, covering authentication, authorization, input validation, cryptography, logging, and error handling."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["secure-development"]
+
+  - group_code: "8"
+    code: "8.27"
+    title: "Secure system architecture and engineering principles"
+    summary: "Principles for engineering secure systems shall be established, documented, maintained and applied to any information system development activities."
+    description: "Security engineering principles — defence in depth, least privilege, secure defaults, fail-safe design, zero trust — should guide architectural decisions for new systems and significant changes."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["secure-development", "architecture"]
+
+  - group_code: "8"
+    code: "8.28"
+    title: "Secure coding"
+    summary: "Secure coding principles shall be applied to software development."
+    description: "Secure coding practices prevent common vulnerabilities (OWASP Top 10, CWE) through developer training, coding standards, SAST/DAST tooling, code review, and security-focused testing. (New in ISO 27001:2022)"
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["secure-development", "new-2022"]
+
+  - group_code: "8"
+    code: "8.29"
+    title: "Security testing in development and acceptance"
+    summary: "Security testing processes shall be defined and implemented in the development lifecycle."
+    description: "Security testing includes SAST, DAST, IAST, SCA, penetration testing, and security acceptance criteria — all integrated into the CI/CD pipeline to catch vulnerabilities before production deployment."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["secure-development", "testing"]
+
+  - group_code: "8"
+    code: "8.30"
+    title: "Outsourced development"
+    summary: "The organization shall direct, monitor and review the activities related to outsourced system development."
+    description: "When development is outsourced, the organization must ensure that suppliers follow its secure development standards, with contractual obligations, code reviews, and security testing requirements."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["secure-development", "supplier-security"]
+
+  - group_code: "8"
+    code: "8.31"
+    title: "Separation of development, test and production environments"
+    summary: "Development, testing and production environments shall be separated and secured."
+    description: "Environment separation prevents unauthorized access to production data, reduces the risk of accidental changes to live systems, and ensures that testing does not affect production availability."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["secure-development", "operations"]
+
+  - group_code: "8"
+    code: "8.32"
+    title: "Change management"
+    summary: "Changes to information processing facilities and information systems shall be subject to change management procedures."
+    description: "Change management processes ensure that all changes are assessed for risk, tested, approved, documented, and reversible — preventing unplanned changes from introducing vulnerabilities or causing outages."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["change-management", "operations"]
+
+  - group_code: "8"
+    code: "8.33"
+    title: "Test information"
+    summary: "Test information shall be appropriately selected, protected and managed."
+    description: "Test data containing real personal or sensitive information must be protected. Where possible, production data should be anonymized or replaced with synthetic data before use in test environments."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["secure-development", "data-security", "privacy"]
+
+  - group_code: "8"
+    code: "8.34"
+    title: "Protection of information systems during audit testing"
+    summary: "Audit tests and other assurance activities involving assessment of operational systems shall be planned and agreed between the tester and appropriate management."
+    description: "Audit and penetration testing activities must be carefully scoped, scheduled, and controlled to avoid disrupting production systems, with appropriate authorization, tool management, and result handling."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["audit", "testing"]

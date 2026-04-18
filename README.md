@@ -111,6 +111,14 @@ After the containers are up, apply migrations, create an admin, and seed the def
 docker compose exec app /app/app migrate
 docker compose exec app /app/app create-admin -email admin@example.com -name "Admin User"
 docker compose exec app /app/app seed-framework -slug cis-v8-1
+docker compose exec app /app/app seed-framework -slug nist-csf-2-0
+docker compose exec app /app/app seed-framework -slug iso-27001-2022
+docker compose exec app /app/app seed-framework -slug iso-27002-2022
+docker compose exec app /app/app seed-framework -slug soc2-2017
+docker compose exec app /app/app seed-framework -slug nis2-2022
+docker compose exec app /app/app seed-framework -slug dora-2025
+docker compose exec app /app/app seed-framework -slug gdpr-2018
+docker compose exec app /app/app seed-framework -slug eu-ai-act-2024
 ```
 
 **Alternative (host binary):** build `./bin/mycis` locally, set `DATABASE_URL` to the **host** Postgres port (`5432` or `55432` if `docker-compose.override.yml` is active), set `APP_SESSION_KEY` to match Compose (or any valid 32+ character secret for DB-only commands), then run the same three commands against `./bin/mycis`.
@@ -159,10 +167,18 @@ If you previously ran an earlier local version of migration `000003_control_reco
 
 ### 5. Bootstrap data and admin
 
-Seed at least one framework (YAML under `seed/frameworks/`):
+Seed one or more frameworks (YAML under `seed/frameworks/`):
 
 ```bash
 go run ./cmd/app seed-framework -slug cis-v8-1
+go run ./cmd/app seed-framework -slug nist-csf-2-0
+go run ./cmd/app seed-framework -slug iso-27001-2022
+go run ./cmd/app seed-framework -slug iso-27002-2022
+go run ./cmd/app seed-framework -slug soc2-2017
+go run ./cmd/app seed-framework -slug nis2-2022
+go run ./cmd/app seed-framework -slug dora-2025
+go run ./cmd/app seed-framework -slug gdpr-2018
+go run ./cmd/app seed-framework -slug eu-ai-act-2024
 ```
 
 Create an admin user:
@@ -226,6 +242,21 @@ If omitted, `command` defaults to `web`.
 | Flag | Default | Meaning |
 |------|---------|---------|
 | `-slug` | `cis-v8-1` | Slug matching `seed/frameworks/<slug>.yaml`. |
+| `-force` | false | Re-seed an existing framework (upserts groups/items, deactivates removed ones). |
+
+Available slugs shipped in this repository:
+
+| Slug | Framework |
+|------|-----------|
+| `cis-v8-1` | CIS Controls v8.1 |
+| `nist-csf-2-0` | NIST Cybersecurity Framework 2.0 |
+| `iso-27001-2022` | ISO/IEC 27001:2022 |
+| `iso-27002-2022` | ISO/IEC 27002:2022 |
+| `soc2-2017` | SOC 2 Trust Service Criteria (2017) |
+| `nis2-2022` | NIS2 Directive (2022) |
+| `dora-2025` | Digital Operational Resilience Act (DORA) |
+| `gdpr-2018` | General Data Protection Regulation (GDPR) |
+| `eu-ai-act-2024` | EU Artificial Intelligence Act (2024) |
 
 To add another framework, add a new YAML file under `seed/frameworks/` and run `seed-framework` with that slug.
 

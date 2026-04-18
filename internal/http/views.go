@@ -65,6 +65,7 @@ type AssessmentDetailPageData struct {
 	Items      []db.ListAssessmentItemsRow
 	Users      []db.User
 	Groups     []GroupOption
+	Tags       []string
 	Filters    service.AssessmentItemFilters
 }
 

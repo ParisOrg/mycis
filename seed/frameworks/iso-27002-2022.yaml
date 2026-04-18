@@ -1,0 +1,881 @@
+framework:
+  slug: "iso-27002-2022"
+  label: "ISO/IEC 27002"
+  version: "2022"
+
+groups:
+  - code: "5"
+    title: "Organizational Controls"
+    summary: "Controls related to policies, roles, responsibilities, and governance processes that shape how the organization manages information security."
+    description: "ISO 27002:2022 Chapter 5 provides detailed implementation guidance for the 37 organizational controls of ISO 27001:2022 Annex A. Each control includes purpose, guidance, and implementation examples, along with attributes covering control type, security properties, cybersecurity concepts, operational capabilities, and security domains."
+
+  - code: "6"
+    title: "People Controls"
+    summary: "Controls addressing the human dimension of information security, from pre-employment screening through training, disciplinary processes, and post-employment obligations."
+    description: "ISO 27002:2022 Chapter 6 elaborates on the 8 people controls with detailed guidance on implementation, including HR policy alignment, training design, and offboarding procedures."
+
+  - code: "7"
+    title: "Physical Controls"
+    summary: "Controls that protect the physical environment, infrastructure, and equipment from unauthorized access, damage, and interference."
+    description: "ISO 27002:2022 Chapter 7 provides implementation guidance for the 14 physical controls including facility design, environmental monitoring, equipment lifecycle management, and media handling."
+
+  - code: "8"
+    title: "Technological Controls"
+    summary: "Technical controls implemented in hardware, software, and networks to protect the confidentiality, integrity, and availability of information."
+    description: "ISO 27002:2022 Chapter 8 covers the 34 technological controls with detailed implementation guidance. Notable additions in 2022 include configuration management, data masking, DLP, web filtering, secure coding, and monitoring activities."
+
+
+items:
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # THEME 5 — ORGANIZATIONAL CONTROLS (37)
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - group_code: "5"
+    code: "5.1"
+    title: "Policies for information security"
+    summary: "Define, approve, publish, communicate and regularly review information security policies."
+    description: "Purpose: Provide management direction and support for information security. A top-level information security policy should be supplemented by topic-specific policies. Review should be triggered by significant changes or at planned intervals."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "governance", "policy"]
+
+  - group_code: "5"
+    code: "5.2"
+    title: "Information security roles and responsibilities"
+    summary: "Define and allocate information security roles and responsibilities."
+    description: "Purpose: Establish a defined, approved, and understood structure of responsibilities for information security. Responsibilities include protection of assets, execution of specific security processes, and reporting."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "governance"]
+
+  - group_code: "5"
+    code: "5.3"
+    title: "Segregation of duties"
+    summary: "Segregate conflicting duties and areas of responsibility to reduce unauthorized modification or misuse."
+    description: "Purpose: Reduce the risk of fraud, error, or unauthorized use by ensuring that no single person can both initiate and approve the same sensitive action. Apply across IT operations, financial processes, and security functions."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "governance", "access-control"]
+
+  - group_code: "5"
+    code: "5.4"
+    title: "Management responsibilities"
+    summary: "Require all personnel to apply information security in accordance with established policies and procedures."
+    description: "Purpose: Ensure that management actively promotes and enforces security rather than delegating it entirely to the security team. Include security accountability in performance objectives."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "governance"]
+
+  - group_code: "5"
+    code: "5.5"
+    title: "Contact with authorities"
+    summary: "Establish and maintain contact with relevant authorities including law enforcement, regulators, and emergency services."
+    description: "Purpose: Ensure that appropriate action can be taken quickly when an incident requires law enforcement involvement or regulatory notification. Maintain up-to-date contact lists and test communications."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "corrective", "governance", "incident-management"]
+
+  - group_code: "5"
+    code: "5.6"
+    title: "Contact with special interest groups"
+    summary: "Maintain contact with security forums, professional associations, and information sharing groups."
+    description: "Purpose: Ensure that the organization stays informed about threats and vulnerabilities through information sharing communities (ISACs, CERTs, vendor security teams)."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "governance", "threat-intelligence"]
+
+  - group_code: "5"
+    code: "5.7"
+    title: "Threat intelligence"
+    summary: "Collect, analyse, and produce threat intelligence to inform risk management decisions."
+    description: "Purpose: Ensure awareness of the threat environment to enable proactive risk decisions. Covers tactical (IOCs), operational (TTPs), and strategic (threat actor intent) intelligence. New in ISO 27002:2022."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "detective", "threat-intelligence", "new-2022"]
+
+  - group_code: "5"
+    code: "5.8"
+    title: "Information security in project management"
+    summary: "Integrate information security throughout all project types and phases."
+    description: "Purpose: Ensure that information security risks are identified and addressed in projects before systems go live, rather than retroactively. Applies to IT projects, change initiatives, and operational projects."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "governance", "project-management"]
+
+  - group_code: "5"
+    code: "5.9"
+    title: "Inventory of information and other associated assets"
+    summary: "Develop and maintain an inventory of information and other associated assets, including owners."
+    description: "Purpose: Ensure assets can be appropriately protected. Inventories should be accurate, complete, and regularly updated. Each asset requires an identified owner responsible for its protection."
+    security_function: "Organizational"
+    asset_class: "All"
+    tags: ["preventive", "asset-management"]
+
+  - group_code: "5"
+    code: "5.10"
+    title: "Acceptable use of information and other associated assets"
+    summary: "Identify, document, and implement rules for acceptable use of information and assets."
+    description: "Purpose: Ensure that personnel understand what is and is not permitted when using organizational assets. Policies should cover personal use, internet use, removable media, and handling of sensitive information."
+    security_function: "Organizational"
+    asset_class: "All"
+    tags: ["preventive", "asset-management", "policy"]
+
+  - group_code: "5"
+    code: "5.11"
+    title: "Return of assets"
+    summary: "Ensure return of all organizational assets upon termination or change of employment."
+    description: "Purpose: Prevent unauthorized retention of organizational information or equipment after departure. Offboarding checklists should cover physical assets, credentials, and data stored on personal devices."
+    security_function: "Organizational"
+    asset_class: "All"
+    tags: ["preventive", "asset-management", "hr-security"]
+
+  - group_code: "5"
+    code: "5.12"
+    title: "Classification of information"
+    summary: "Classify information according to confidentiality, integrity, and availability requirements."
+    description: "Purpose: Ensure that information receives appropriate levels of protection. Classifications should be kept simple (typically 3–4 levels), clearly defined, and aligned with the organization's risk appetite."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["preventive", "asset-management", "data-classification"]
+
+  - group_code: "5"
+    code: "5.13"
+    title: "Labelling of information"
+    summary: "Develop and implement procedures for labelling information in accordance with the classification scheme."
+    description: "Purpose: Make the classification of information visible to ensure appropriate handling. Labels can be physical (headers, stamps) or electronic (metadata, tags, watermarks)."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["preventive", "asset-management", "data-classification"]
+
+  - group_code: "5"
+    code: "5.14"
+    title: "Information transfer"
+    summary: "Maintain rules, procedures, or agreements for information transfer across all transfer facilities."
+    description: "Purpose: Protect information in transit between the organization and external parties. Covers email, file transfer, verbal communication, physical media, and electronic messaging."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["preventive", "data-security", "communications"]
+
+  - group_code: "5"
+    code: "5.15"
+    title: "Access control"
+    summary: "Establish and implement access control rules based on business and security requirements."
+    description: "Purpose: Ensure that access to information and assets is limited to authorized entities. The access control policy should address need-to-know, least privilege, and segregation of duties principles."
+    security_function: "Organizational"
+    asset_class: "All"
+    tags: ["preventive", "access-control"]
+
+  - group_code: "5"
+    code: "5.16"
+    title: "Identity management"
+    summary: "Manage the full lifecycle of identities — creation, maintenance, and deletion."
+    description: "Purpose: Ensure that unique identities are assigned and maintained for all entities (users, devices, services) that access information systems, enabling accountability and access control."
+    security_function: "Organizational"
+    asset_class: "Users"
+    tags: ["preventive", "access-control", "identity-management"]
+
+  - group_code: "5"
+    code: "5.17"
+    title: "Authentication information"
+    summary: "Control the allocation and management of authentication information including passwords and tokens."
+    description: "Purpose: Ensure that authentication credentials are generated, distributed, stored, and changed securely. Covers initial credential allocation, self-service password reset, shared account controls, and token management."
+    security_function: "Organizational"
+    asset_class: "Users"
+    tags: ["preventive", "access-control", "authentication"]
+
+  - group_code: "5"
+    code: "5.18"
+    title: "Access rights"
+    summary: "Provision, review, modify, and remove access rights according to the access control policy."
+    description: "Purpose: Ensure that access rights remain appropriate over time through formal provisioning, timely deprovisioning, and periodic recertification. Includes privileged access and remote access."
+    security_function: "Organizational"
+    asset_class: "Users"
+    tags: ["preventive", "access-control"]
+
+  - group_code: "5"
+    code: "5.19"
+    title: "Information security in supplier relationships"
+    summary: "Define and implement processes to manage information security risks in supplier relationships."
+    description: "Purpose: Protect organizational assets accessible to suppliers. Covers supplier selection, contracting, monitoring, and termination — aligned with the supplier's access to and impact on the organization's information."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "supplier-security", "supply-chain"]
+
+  - group_code: "5"
+    code: "5.20"
+    title: "Addressing information security within supplier agreements"
+    summary: "Establish and agree on information security requirements in supplier agreements."
+    description: "Purpose: Ensure that information security obligations are contractually binding on suppliers. Agreements should address data handling, incident notification, audit rights, sub-contractor rules, and security baselines."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "supplier-security", "supply-chain"]
+
+  - group_code: "5"
+    code: "5.21"
+    title: "Managing information security in the ICT supply chain"
+    summary: "Define and implement processes to manage security risks in the ICT supply chain."
+    description: "Purpose: Address risks introduced by hardware components, software packages, and cloud services from the broader supply chain. Covers component provenance, SBOM requirements, and sub-supplier security."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "supplier-security", "supply-chain"]
+
+  - group_code: "5"
+    code: "5.22"
+    title: "Monitoring, review and change management of supplier services"
+    summary: "Regularly monitor, review, and manage changes to supplier information security practices."
+    description: "Purpose: Maintain assurance that suppliers continue to meet their security obligations and that changes in supplier services or risk levels are managed. Includes periodic reviews and service delivery assessments."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "detective", "supplier-security"]
+
+  - group_code: "5"
+    code: "5.23"
+    title: "Information security for use of cloud services"
+    summary: "Establish processes for acquisition, use, management, and exit from cloud services."
+    description: "Purpose: Manage information security risks specific to cloud services, including shared responsibility models, data residency, multi-tenancy, and provider lock-in. New in ISO 27002:2022."
+    security_function: "Organizational"
+    asset_class: "Systems"
+    tags: ["preventive", "cloud-security", "new-2022"]
+
+  - group_code: "5"
+    code: "5.24"
+    title: "Information security incident management planning and preparation"
+    summary: "Plan and prepare for incident management by defining processes, roles, and responsibilities."
+    description: "Purpose: Ensure that the organization can respond effectively and consistently to security incidents. Preparation includes documented playbooks, trained responders, communication plans, and tested procedures."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["corrective", "incident-management"]
+
+  - group_code: "5"
+    code: "5.25"
+    title: "Assessment and decision on information security events"
+    summary: "Assess security events and decide whether to categorize them as incidents."
+    description: "Purpose: Ensure that security events are consistently triaged, evaluated, and escalated as appropriate, distinguishing genuine incidents from false positives. Triage criteria should be documented and tested."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["detective", "corrective", "incident-management"]
+
+  - group_code: "5"
+    code: "5.26"
+    title: "Response to information security incidents"
+    summary: "Respond to incidents in accordance with documented procedures."
+    description: "Purpose: Ensure that security incidents are contained, investigated, and remediated in a timely, coordinated, and documented manner, minimizing business impact and preserving evidence."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["corrective", "incident-management", "response"]
+
+  - group_code: "5"
+    code: "5.27"
+    title: "Learning from information security incidents"
+    summary: "Use knowledge from incidents to improve security controls."
+    description: "Purpose: Convert incidents into organizational learning. Post-incident reviews should result in documented lessons learned, updated controls or procedures, and feedback into the risk management process."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["corrective", "incident-management", "continual-improvement"]
+
+  - group_code: "5"
+    code: "5.28"
+    title: "Collection of evidence"
+    summary: "Establish procedures for identifying, collecting, and preserving evidence related to security events."
+    description: "Purpose: Ensure that digital evidence is collected in a manner that preserves its integrity and admissibility. Procedures should follow forensic best practices including chain of custody documentation."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["corrective", "incident-management", "forensics"]
+
+  - group_code: "5"
+    code: "5.29"
+    title: "Information security during disruption"
+    summary: "Plan to maintain information security at an appropriate level during disruption."
+    description: "Purpose: Ensure that security controls remain effective even under degraded operating conditions. Business continuity plans must address information security requirements and not just operational continuity."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["corrective", "business-continuity"]
+
+  - group_code: "5"
+    code: "5.30"
+    title: "ICT readiness for business continuity"
+    summary: "Plan, implement, maintain, and test ICT readiness based on business continuity objectives."
+    description: "Purpose: Ensure that ICT systems can be recovered within agreed RTO/RPO objectives. Covers backup systems, failover capabilities, recovery procedures, and regular testing. New in ISO 27002:2022."
+    security_function: "Organizational"
+    asset_class: "Systems"
+    tags: ["corrective", "business-continuity", "new-2022"]
+
+  - group_code: "5"
+    code: "5.31"
+    title: "Legal, statutory, regulatory and contractual requirements"
+    summary: "Identify and manage legal, regulatory, and contractual requirements relevant to information security."
+    description: "Purpose: Ensure that the organization avoids breaches of legal obligations. Requirements should be tracked, documented, mapped to controls, and reviewed when the regulatory environment changes."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "compliance"]
+
+  - group_code: "5"
+    code: "5.32"
+    title: "Intellectual property rights"
+    summary: "Implement procedures to protect intellectual property rights."
+    description: "Purpose: Ensure compliance with copyright, licensing, and patent obligations. Covers software licensing management, protection of the organization's own IP, and restrictions on unauthorized copying."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["preventive", "compliance", "legal"]
+
+  - group_code: "5"
+    code: "5.33"
+    title: "Protection of records"
+    summary: "Protect records from loss, destruction, falsification, unauthorized access and release."
+    description: "Purpose: Ensure that records required for legal, regulatory, and business purposes are retained appropriately, protected from modification, and disposed of securely at end of retention."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["preventive", "compliance", "data-security"]
+
+  - group_code: "5"
+    code: "5.34"
+    title: "Privacy and protection of PII"
+    summary: "Identify and meet requirements for protecting personally identifiable information."
+    description: "Purpose: Ensure compliance with applicable privacy laws (GDPR, local data protection legislation). Controls cover data minimization, purpose limitation, retention, security, and data subject rights."
+    security_function: "Organizational"
+    asset_class: "Data"
+    tags: ["preventive", "compliance", "privacy"]
+
+  - group_code: "5"
+    code: "5.35"
+    title: "Independent review of information security"
+    summary: "Review the organization's approach to managing information security independently at planned intervals."
+    description: "Purpose: Provide objective assurance that the ISMS is operating effectively. Independent reviews may include internal audits, second-party assessments, or third-party certifications."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["detective", "audit", "governance"]
+
+  - group_code: "5"
+    code: "5.36"
+    title: "Compliance with policies, rules and standards for information security"
+    summary: "Regularly review compliance with information security policies, rules, and standards."
+    description: "Purpose: Ensure that controls operate as intended. Regular reviews include technical assessments (vulnerability scans, configuration audits) and process compliance checks."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["detective", "audit", "compliance"]
+
+  - group_code: "5"
+    code: "5.37"
+    title: "Documented operating procedures"
+    summary: "Document and make available operating procedures for information processing facilities."
+    description: "Purpose: Ensure consistent, correct operation of information processing systems. Procedures reduce reliance on individual knowledge, support training, and provide audit evidence."
+    security_function: "Organizational"
+    asset_class: "Organization"
+    tags: ["preventive", "governance", "operations"]
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # THEME 6 — PEOPLE CONTROLS (8)
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - group_code: "6"
+    code: "6.1"
+    title: "Screening"
+    summary: "Perform background verification checks on all candidates prior to joining, proportional to data sensitivity and role risk."
+    description: "Purpose: Reduce the risk of hiring individuals who pose an insider threat. Screening should be proportionate to the role's access to sensitive information and relevant legal constraints."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["preventive", "hr-security"]
+
+  - group_code: "6"
+    code: "6.2"
+    title: "Terms and conditions of employment"
+    summary: "Employment agreements shall state personnel and organizational responsibilities for information security."
+    description: "Purpose: Ensure that security responsibilities are legally binding from day one. Contracts should reference security policies, confidentiality obligations, and consequences for breaches."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["preventive", "hr-security", "legal"]
+
+  - group_code: "6"
+    code: "6.3"
+    title: "Information security awareness, education and training"
+    summary: "Provide relevant information security awareness, education, and training to all personnel."
+    description: "Purpose: Ensure that personnel can perform their security-related tasks and avoid becoming a security risk. Training should be role-specific, regularly updated, and effectiveness measured."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["preventive", "hr-security", "awareness-training"]
+
+  - group_code: "6"
+    code: "6.4"
+    title: "Disciplinary process"
+    summary: "Establish and communicate a disciplinary process for information security policy violations."
+    description: "Purpose: Deter security violations and provide a fair, consistent response when violations occur. The process should be graduated (warning through termination) and documented."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["corrective", "hr-security"]
+
+  - group_code: "6"
+    code: "6.5"
+    title: "Responsibilities after termination or change of employment"
+    summary: "Enforce information security responsibilities that remain valid after termination or role change."
+    description: "Purpose: Prevent former employees from using information or credentials obtained during employment. NDAs, access revocation, and asset return must be completed as part of offboarding."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["preventive", "hr-security"]
+
+  - group_code: "6"
+    code: "6.6"
+    title: "Confidentiality or non-disclosure agreements"
+    summary: "Identify, document, regularly review, and have relevant parties sign confidentiality agreements."
+    description: "Purpose: Legally bind employees, contractors, and partners to confidentiality obligations. NDAs should be reviewed when legal requirements change and re-signed when roles or access levels change."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["preventive", "hr-security", "legal"]
+
+  - group_code: "6"
+    code: "6.7"
+    title: "Remote working"
+    summary: "Implement security measures to protect information accessed, processed, or stored by remote workers."
+    description: "Purpose: Ensure that remote working does not reduce the security of information. Controls cover device security, secure connectivity (VPN/ZTNA), screen privacy, and physical security at remote locations."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["preventive", "remote-working", "hr-security"]
+
+  - group_code: "6"
+    code: "6.8"
+    title: "Information security event reporting"
+    summary: "Provide a mechanism for personnel to report security events through appropriate channels."
+    description: "Purpose: Enable early detection of security events by creating clear, accessible reporting channels. A blame-free culture and simple reporting mechanisms maximize the likelihood of prompt reporting."
+    security_function: "People"
+    asset_class: "Users"
+    tags: ["detective", "incident-management", "hr-security"]
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # THEME 7 — PHYSICAL CONTROLS (14)
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - group_code: "7"
+    code: "7.1"
+    title: "Physical security perimeters"
+    summary: "Define and use security perimeters to protect areas containing information and assets."
+    description: "Purpose: Create physical barriers that prevent unauthorized physical access. Perimeters should be clearly defined, inspected regularly, and alarmed where appropriate. Data centres require stronger controls than general office areas."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["preventive", "physical-security"]
+
+  - group_code: "7"
+    code: "7.2"
+    title: "Physical entry"
+    summary: "Protect secure areas with appropriate entry controls to allow only authorized personnel."
+    description: "Purpose: Ensure that only authorized individuals can enter sensitive physical areas. Entry controls should log access events, enforce two-person rules for critical areas, and manage visitor access."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["preventive", "physical-security", "access-control"]
+
+  - group_code: "7"
+    code: "7.3"
+    title: "Securing offices, rooms and facilities"
+    summary: "Design and implement physical security for offices, rooms, and facilities."
+    description: "Purpose: Ensure that sensitive operations are conducted in physically secure environments. Controls address locked workstations, clear desk policies, restricted access to network equipment, and protection against eavesdropping."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["preventive", "physical-security"]
+
+  - group_code: "7"
+    code: "7.4"
+    title: "Physical security monitoring"
+    summary: "Continuously monitor premises for unauthorized physical access."
+    description: "Purpose: Detect physical security breaches in real time. Monitoring includes CCTV, access control system alerts, and motion sensors. Footage should be retained for post-incident investigation. New in ISO 27002:2022."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["detective", "physical-security", "new-2022"]
+
+  - group_code: "7"
+    code: "7.5"
+    title: "Protecting against physical and environmental threats"
+    summary: "Design and implement protection against physical and environmental threats."
+    description: "Purpose: Prevent damage to information processing facilities from natural disasters and environmental hazards. Controls include fire suppression, flood protection, environmental monitoring, and site selection criteria."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["preventive", "physical-security", "business-continuity"]
+
+  - group_code: "7"
+    code: "7.6"
+    title: "Working in secure areas"
+    summary: "Design and implement security measures for working in secure areas."
+    description: "Purpose: Prevent unauthorized knowledge of or interference with sensitive operations. Controls restrict who can enter, prohibit unattended work, restrict recording devices, and require supervision for visitors."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["preventive", "physical-security"]
+
+  - group_code: "7"
+    code: "7.7"
+    title: "Clear desk and clear screen"
+    summary: "Define and enforce clear desk rules for papers and media, and clear screen rules for devices."
+    description: "Purpose: Prevent casual or deliberate observation of sensitive information left unattended. Clear desk applies to physical documents and portable media; clear screen requires automatic locking after inactivity."
+    security_function: "Physical"
+    asset_class: "Users"
+    tags: ["preventive", "physical-security", "hr-security"]
+
+  - group_code: "7"
+    code: "7.8"
+    title: "Equipment siting and protection"
+    summary: "Siting equipment securely and protect from physical and environmental threats and unauthorized access."
+    description: "Purpose: Reduce risks to equipment from environmental hazards and unauthorized physical access. Screens should face away from public areas; servers should be in locked racks in secured rooms."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["preventive", "physical-security", "asset-management"]
+
+  - group_code: "7"
+    code: "7.9"
+    title: "Security of assets off-premises"
+    summary: "Protect off-site assets proportional to the risk of working outside organizational premises."
+    description: "Purpose: Address the heightened risks of portable devices and equipment used outside the office. Controls include full-disk encryption, remote wipe capabilities, physical cable locks, and handling procedures."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["preventive", "physical-security", "asset-management", "remote-working"]
+
+  - group_code: "7"
+    code: "7.10"
+    title: "Storage media"
+    summary: "Manage storage media through acquisition, use, transportation, and disposal."
+    description: "Purpose: Prevent unauthorized access to information stored on portable media. Controls cover media labelling, secure storage, encrypted transport, and certified destruction procedures."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["preventive", "physical-security", "data-security", "asset-management"]
+
+  - group_code: "7"
+    code: "7.11"
+    title: "Supporting utilities"
+    summary: "Protect information processing facilities from failures in supporting utilities."
+    description: "Purpose: Ensure the availability of power, cooling, and communications to sustain information processing. Controls include UPS, generators, redundant feeds, HVAC monitoring, and regular testing."
+    security_function: "Physical"
+    asset_class: "Facilities"
+    tags: ["preventive", "physical-security", "business-continuity"]
+
+  - group_code: "7"
+    code: "7.12"
+    title: "Cabling security"
+    summary: "Protect cables carrying power, data, or information services from interception, interference, or damage."
+    description: "Purpose: Prevent unauthorized tapping, physical damage, and accidental disconnection of network and power cabling. Controls include cable conduits, locked patching areas, and separation of power and data cabling."
+    security_function: "Physical"
+    asset_class: "Networks"
+    tags: ["preventive", "physical-security"]
+
+  - group_code: "7"
+    code: "7.13"
+    title: "Equipment maintenance"
+    summary: "Maintain equipment correctly to ensure availability, integrity, and confidentiality."
+    description: "Purpose: Ensure equipment remains reliable and does not become a security risk due to neglect. Maintenance procedures should prevent exposure of data to third-party engineers through proper sanitization."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["preventive", "physical-security", "asset-management"]
+
+  - group_code: "7"
+    code: "7.14"
+    title: "Secure disposal or re-use of equipment"
+    summary: "Verify that sensitive data and licensed software is removed or overwritten before equipment disposal or re-use."
+    description: "Purpose: Prevent recovery of sensitive data from disposed or repurposed equipment. Apply NIST SP 800-88 or equivalent sanitization methods, obtain certificates of destruction for critical media."
+    security_function: "Physical"
+    asset_class: "Devices"
+    tags: ["preventive", "physical-security", "data-security", "asset-management"]
+
+  # ════════════════════════════════════════════════════════════════════════════
+  # THEME 8 — TECHNOLOGICAL CONTROLS (34)
+  # ════════════════════════════════════════════════════════════════════════════
+
+  - group_code: "8"
+    code: "8.1"
+    title: "User endpoint devices"
+    summary: "Protect information stored, processed, or accessible via user endpoint devices."
+    description: "Purpose: Reduce the risk of data loss and malware infection via endpoint devices. Controls include full-disk encryption, EDR/AV, MDM, screen lock, patch management, and restrictions on unapproved software."
+    security_function: "Technological"
+    asset_class: "Devices"
+    tags: ["preventive", "endpoint-security"]
+
+  - group_code: "8"
+    code: "8.2"
+    title: "Privileged access rights"
+    summary: "Restrict and manage the allocation and use of privileged access rights."
+    description: "Purpose: Minimize the risk of misuse or compromise of privileged accounts. Controls include just-in-time (JIT) access, privileged access workstations, session recording, and regular privileged account review."
+    security_function: "Technological"
+    asset_class: "Users"
+    tags: ["preventive", "access-control", "privileged-access"]
+
+  - group_code: "8"
+    code: "8.3"
+    title: "Information access restriction"
+    summary: "Restrict access to information and assets in accordance with the access control policy."
+    description: "Purpose: Enforce the principle of least privilege at a technical level. Controls include RBAC, ABAC, database-level access controls, and application-layer authorization."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["preventive", "access-control"]
+
+  - group_code: "8"
+    code: "8.4"
+    title: "Access to source code"
+    summary: "Manage read and write access to source code, development tools, and software libraries."
+    description: "Purpose: Protect intellectual property and prevent unauthorized modification of software. Controls include code repository access controls, branch protection rules, and audit logs of source code access."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["preventive", "access-control", "secure-development"]
+
+  - group_code: "8"
+    code: "8.5"
+    title: "Secure authentication"
+    summary: "Implement secure authentication technologies and procedures based on access restrictions."
+    description: "Purpose: Verify identity reliably before granting access. Controls include MFA, phishing-resistant authenticators (FIDO2), session timeouts, and account lockout after failed attempts."
+    security_function: "Technological"
+    asset_class: "Users"
+    tags: ["preventive", "access-control", "authentication"]
+
+  - group_code: "8"
+    code: "8.6"
+    title: "Capacity management"
+    summary: "Monitor and adjust resource use and project future capacity requirements."
+    description: "Purpose: Ensure that systems have sufficient resources to meet current and projected demands, preventing availability failures. Covers compute, storage, bandwidth, and database capacity."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "operations", "availability"]
+
+  - group_code: "8"
+    code: "8.7"
+    title: "Protection against malware"
+    summary: "Implement protection against malware, supported by appropriate user awareness."
+    description: "Purpose: Detect and prevent malware that could compromise confidentiality, integrity, or availability. Controls include endpoint protection, email filtering, web filtering, and malware detection in CI/CD pipelines."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "detective", "malware-protection", "endpoint-security"]
+
+  - group_code: "8"
+    code: "8.8"
+    title: "Management of technical vulnerabilities"
+    summary: "Obtain timely information about vulnerabilities, assess exposure, and take appropriate action."
+    description: "Purpose: Reduce the attack surface by identifying and remediating vulnerabilities before they are exploited. Includes vulnerability scanning, patch management, and risk-based prioritization of remediation."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "corrective", "vulnerability-management"]
+
+  - group_code: "8"
+    code: "8.9"
+    title: "Configuration management"
+    summary: "Establish, document, implement, monitor, and review configurations including security configurations."
+    description: "Purpose: Ensure that systems are deployed and maintained with secure baselines, and that unauthorized or insecure changes are detected. New in ISO 27002:2022."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "detective", "configuration-management", "new-2022"]
+
+  - group_code: "8"
+    code: "8.10"
+    title: "Information deletion"
+    summary: "Delete information stored on systems, devices, or media when no longer required."
+    description: "Purpose: Reduce the risk of unauthorized access to data past its retention period. Covers automated deletion policies, cloud data deletion, backup purging, and end-user deletion capabilities. New in ISO 27002:2022."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["preventive", "data-security", "new-2022"]
+
+  - group_code: "8"
+    code: "8.11"
+    title: "Data masking"
+    summary: "Use data masking in accordance with access control policy and business requirements."
+    description: "Purpose: Protect sensitive data — particularly in non-production environments — while retaining realistic characteristics for development and testing. Techniques include tokenization, pseudonymization, and anonymization. New in ISO 27002:2022."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["preventive", "data-security", "privacy", "new-2022"]
+
+  - group_code: "8"
+    code: "8.12"
+    title: "Data leakage prevention"
+    summary: "Apply DLP measures to systems, networks, and devices processing, storing, or transmitting sensitive information."
+    description: "Purpose: Prevent unauthorized exfiltration of sensitive data via email, web, cloud services, or removable media. DLP policies should be informed by data classification. New in ISO 27002:2022."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["preventive", "detective", "data-security", "new-2022"]
+
+  - group_code: "8"
+    code: "8.13"
+    title: "Information backup"
+    summary: "Maintain and regularly test backup copies of information, software, and systems."
+    description: "Purpose: Enable recovery from data loss, corruption, or ransomware attack. Backups should be encrypted, stored offsite or offline, regularly tested for restorability, and aligned with defined RTO/RPO."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["corrective", "backup", "business-continuity"]
+
+  - group_code: "8"
+    code: "8.14"
+    title: "Redundancy of information processing facilities"
+    summary: "Implement redundancy in information processing facilities to meet availability requirements."
+    description: "Purpose: Ensure high availability of critical systems by eliminating single points of failure. Controls include active-active and active-passive clustering, redundant network paths, and geographic redundancy."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "availability", "business-continuity"]
+
+  - group_code: "8"
+    code: "8.15"
+    title: "Logging"
+    summary: "Produce, store, protect, and analyse logs recording activities, exceptions, faults, and events."
+    description: "Purpose: Provide the audit trail necessary for incident detection, investigation, and compliance. Logs should be tamper-evident, retained appropriately, and centralized for analysis."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["detective", "logging", "monitoring"]
+
+  - group_code: "8"
+    code: "8.16"
+    title: "Monitoring activities"
+    summary: "Monitor networks, systems, and applications for anomalous behaviour and act on potential incidents."
+    description: "Purpose: Enable real-time detection of security events through automated monitoring. Controls include SIEM, IDS/IPS, UEBA, and continuous compliance monitoring. New in ISO 27002:2022."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["detective", "monitoring", "new-2022"]
+
+  - group_code: "8"
+    code: "8.17"
+    title: "Clock synchronisation"
+    summary: "Synchronise clocks of information processing systems to approved time sources."
+    description: "Purpose: Ensure that log timestamps are accurate and consistent across systems — critical for log correlation during incident investigations. Use authenticated NTP servers."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "operations", "logging"]
+
+  - group_code: "8"
+    code: "8.18"
+    title: "Use of privileged utility programs"
+    summary: "Restrict and tightly control the use of utility programs that could override system controls."
+    description: "Purpose: Prevent misuse of powerful diagnostic and system utilities that could bypass security controls. Access should require approval, be logged, and be limited to authorized administrators."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "access-control", "privileged-access", "operations"]
+
+  - group_code: "8"
+    code: "8.19"
+    title: "Installation of software on operational systems"
+    summary: "Implement procedures to securely manage software installation on operational systems."
+    description: "Purpose: Prevent unauthorized, untested, or vulnerable software from being deployed to production. Controls include change management, application allowlisting, and MDM/EMM software management."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["preventive", "configuration-management", "operations"]
+
+  - group_code: "8"
+    code: "8.20"
+    title: "Networks security"
+    summary: "Secure, manage, and control networks and network devices to protect systems and applications."
+    description: "Purpose: Reduce the risk of network-based attacks. Controls include secure device configurations, network segmentation, encrypted management channels, and regular network security reviews."
+    security_function: "Technological"
+    asset_class: "Networks"
+    tags: ["preventive", "network-security"]
+
+  - group_code: "8"
+    code: "8.21"
+    title: "Security of network services"
+    summary: "Identify, implement, and monitor security mechanisms and service requirements for network services."
+    description: "Purpose: Ensure that both internally provided and externally sourced network services meet security requirements. Security terms should be included in SLAs with service providers."
+    security_function: "Technological"
+    asset_class: "Networks"
+    tags: ["preventive", "network-security", "supplier-security"]
+
+  - group_code: "8"
+    code: "8.22"
+    title: "Segregation of networks"
+    summary: "Segregate groups of information services, users, and systems within networks."
+    description: "Purpose: Limit lateral movement by attackers and contain the impact of a breach. Controls include VLANs, DMZs, micro-segmentation, and firewall rules enforcing zone-to-zone communication policies."
+    security_function: "Technological"
+    asset_class: "Networks"
+    tags: ["preventive", "network-security"]
+
+  - group_code: "8"
+    code: "8.23"
+    title: "Web filtering"
+    summary: "Manage access to external websites to reduce exposure to malicious content."
+    description: "Purpose: Block access to malicious, inappropriate, or unauthorized web content. Protects against drive-by downloads, phishing sites, C2 infrastructure, and data exfiltration via web channels. New in ISO 27002:2022."
+    security_function: "Technological"
+    asset_class: "Networks"
+    tags: ["preventive", "network-security", "malware-protection", "new-2022"]
+
+  - group_code: "8"
+    code: "8.24"
+    title: "Use of cryptography"
+    summary: "Define and implement rules for effective use of cryptography and key management."
+    description: "Purpose: Ensure that cryptography is used consistently and correctly to protect information. A cryptography policy should specify approved algorithms, key lengths, key lifecycle procedures, and prohibited algorithms."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["preventive", "cryptography", "data-security"]
+
+  - group_code: "8"
+    code: "8.25"
+    title: "Secure development life cycle"
+    summary: "Establish and apply rules for secure development of software and systems."
+    description: "Purpose: Prevent vulnerabilities from being introduced during development. A secure SDLC integrates security at all phases: requirements, design, coding, testing, deployment, and maintenance."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["preventive", "secure-development"]
+
+  - group_code: "8"
+    code: "8.26"
+    title: "Application security requirements"
+    summary: "Identify, specify, and approve information security requirements when developing or acquiring applications."
+    description: "Purpose: Ensure security is designed in from the start rather than bolted on. Requirements should cover authentication, authorization, input validation, cryptography, logging, and error handling."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["preventive", "secure-development"]
+
+  - group_code: "8"
+    code: "8.27"
+    title: "Secure system architecture and engineering principles"
+    summary: "Establish, document, maintain, and apply secure engineering principles to system development."
+    description: "Purpose: Guide architectural decisions using security design principles. Key principles include defence in depth, least privilege, secure defaults, fail-safe, zero trust, and minimize attack surface."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "secure-development", "architecture"]
+
+  - group_code: "8"
+    code: "8.28"
+    title: "Secure coding"
+    summary: "Apply secure coding principles to software development to prevent common vulnerabilities."
+    description: "Purpose: Prevent introducing exploitable vulnerabilities through insecure coding practices. Controls include developer training, SAST/DAST tools, secure coding standards, and security-focused code review. New in ISO 27002:2022."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["preventive", "secure-development", "new-2022"]
+
+  - group_code: "8"
+    code: "8.29"
+    title: "Security testing in development and acceptance"
+    summary: "Define and implement security testing processes in the development lifecycle."
+    description: "Purpose: Verify that security requirements have been correctly implemented before deployment. Testing types include SAST, DAST, SCA, penetration testing, and security acceptance criteria in CI/CD pipelines."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["detective", "secure-development", "testing"]
+
+  - group_code: "8"
+    code: "8.30"
+    title: "Outsourced development"
+    summary: "Direct, monitor, and review activities related to outsourced system development."
+    description: "Purpose: Ensure that externally developed software meets the organization's security standards. Controls include contractual security requirements, code reviews, and security testing of deliverables."
+    security_function: "Technological"
+    asset_class: "Software"
+    tags: ["preventive", "secure-development", "supplier-security"]
+
+  - group_code: "8"
+    code: "8.31"
+    title: "Separation of development, test and production environments"
+    summary: "Separate and secure development, testing, and production environments."
+    description: "Purpose: Prevent unauthorized access to production systems and data, reduce the risk of accidental changes to live environments, and avoid test activities affecting production availability."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "secure-development", "operations"]
+
+  - group_code: "8"
+    code: "8.32"
+    title: "Change management"
+    summary: "Subject changes to information processing facilities and systems to change management procedures."
+    description: "Purpose: Ensure that all changes are assessed for risk, tested, approved, documented, and reversible. Emergency change procedures should be defined for urgent security patches."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["preventive", "change-management", "operations"]
+
+  - group_code: "8"
+    code: "8.33"
+    title: "Test information"
+    summary: "Select, protect, and manage test information appropriately."
+    description: "Purpose: Prevent exposure of sensitive production data in test environments. Use synthetic or anonymized data for testing; if production data must be used, apply strict access controls."
+    security_function: "Technological"
+    asset_class: "Data"
+    tags: ["preventive", "secure-development", "data-security", "privacy"]
+
+  - group_code: "8"
+    code: "8.34"
+    title: "Protection of information systems during audit testing"
+    summary: "Plan and agree audit and assurance tests involving operational systems with management."
+    description: "Purpose: Prevent audit activities from disrupting production systems or exposing sensitive data. Audit tools should be isolated, access controlled, and activities carefully scoped and scheduled."
+    security_function: "Technological"
+    asset_class: "Systems"
+    tags: ["detective", "audit", "testing"]

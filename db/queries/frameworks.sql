@@ -29,13 +29,15 @@ INSERT INTO framework_groups (
   code,
   title,
   summary,
-  description
+  description,
+  sort_order
 ) VALUES (
   $1,
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
 RETURNING *;
 
@@ -45,18 +47,21 @@ INSERT INTO framework_groups (
   code,
   title,
   summary,
-  description
+  description,
+  sort_order
 ) VALUES (
   $1,
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
 ON CONFLICT (framework_id, code) DO UPDATE
   SET title       = EXCLUDED.title,
       summary     = EXCLUDED.summary,
       description = EXCLUDED.description,
+      sort_order  = EXCLUDED.sort_order,
       is_active   = TRUE
 RETURNING *;
 
@@ -68,6 +73,7 @@ INSERT INTO framework_items (
   title,
   summary,
   description,
+  sort_order,
   asset_class,
   security_function,
   tags
@@ -80,7 +86,8 @@ INSERT INTO framework_items (
   $6,
   $7,
   $8,
-  $9
+  $9,
+  $10
 )
 RETURNING *;
 
@@ -92,6 +99,7 @@ INSERT INTO framework_items (
   title,
   summary,
   description,
+  sort_order,
   asset_class,
   security_function,
   tags
@@ -104,18 +112,26 @@ INSERT INTO framework_items (
   $6,
   $7,
   $8,
-  $9
+  $9,
+  $10
 )
 ON CONFLICT (framework_id, code) DO UPDATE
   SET framework_group_id  = EXCLUDED.framework_group_id,
       title               = EXCLUDED.title,
       summary             = EXCLUDED.summary,
       description         = EXCLUDED.description,
+      sort_order          = EXCLUDED.sort_order,
       asset_class         = EXCLUDED.asset_class,
       security_function   = EXCLUDED.security_function,
       tags                = EXCLUDED.tags,
       is_active           = TRUE
 RETURNING *;
+
+-- name: GetFrameworkItemByCode :one
+SELECT *
+FROM framework_items
+WHERE framework_id = $1
+  AND code = $2;
 
 -- name: DeactivateMissingFrameworkGroups :exec
 UPDATE framework_groups
@@ -155,7 +171,4 @@ LEFT JOIN framework_items fi ON fi.framework_group_id = fg.id
 WHERE fg.framework_id = $1
   AND fg.is_active
 GROUP BY fg.id
-ORDER BY
-  CASE WHEN fg.code ~ '^[0-9]+$' THEN 0 ELSE 1 END,
-  CASE WHEN fg.code ~ '^[0-9]+$' THEN fg.code::int END NULLS LAST,
-  fg.code;
+ORDER BY fg.sort_order;

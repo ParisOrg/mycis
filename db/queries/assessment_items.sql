@@ -19,6 +19,7 @@ SELECT
   ai.updated_at,
   fg.code AS group_code,
   fg.title AS group_title,
+  fg.sort_order AS group_sort_order,
   fi.code AS item_code,
   fi.title AS item_title,
   fi.summary AS item_summary,
@@ -43,15 +44,40 @@ WHERE ai.assessment_id = $1
     AND ai.due_date < CURRENT_DATE
     AND ai.status NOT IN ('validated', 'not_applicable')
   ))
-ORDER BY
-  CASE WHEN fi.code ~ '^[0-9]+(\.[0-9]+)?$' THEN 0 ELSE 1 END,
-  CASE
-    WHEN fi.code ~ '^[0-9]+(\.[0-9]+)?$' THEN split_part(fi.code, '.', 1)::int
-  END NULLS LAST,
-  CASE
-    WHEN fi.code ~ '^[0-9]+(\.[0-9]+)?$' AND position('.' IN fi.code) > 0 THEN split_part(fi.code, '.', 2)::numeric
-  END NULLS LAST,
-  fi.code;
+ORDER BY fi.sort_order, fi.code;
+
+-- name: RebindFrameworkItemReferences :exec
+WITH eligible_assessments AS (
+  SELECT DISTINCT ai.assessment_id
+  FROM assessment_items ai
+  WHERE ai.framework_item_id = sqlc.arg(old_framework_item_id)::uuid
+    AND NOT EXISTS (
+      SELECT 1
+      FROM assessment_items existing
+      WHERE existing.assessment_id = ai.assessment_id
+        AND existing.framework_item_id = sqlc.arg(new_framework_item_id)::uuid
+    )
+    AND NOT EXISTS (
+      SELECT 1
+      FROM control_records existing
+      WHERE existing.assessment_id = ai.assessment_id
+        AND existing.framework_item_id = sqlc.arg(new_framework_item_id)::uuid
+    )
+),
+rebound_control_records AS (
+  UPDATE control_records cr
+  SET framework_item_id = sqlc.arg(new_framework_item_id)::uuid,
+      updated_at = NOW()
+  FROM eligible_assessments ea
+  WHERE cr.framework_item_id = sqlc.arg(old_framework_item_id)::uuid
+    AND cr.assessment_id = ea.assessment_id
+)
+UPDATE assessment_items ai
+SET framework_item_id = sqlc.arg(new_framework_item_id)::uuid,
+    updated_at = NOW()
+FROM eligible_assessments ea
+WHERE ai.framework_item_id = sqlc.arg(old_framework_item_id)::uuid
+  AND ai.assessment_id = ea.assessment_id;
 
 -- name: GetAssessmentItemDetail :one
 SELECT

@@ -36,6 +36,7 @@ type Querier interface {
 	GetDashboardOverview(ctx context.Context, assessmentID uuid.UUID) (GetDashboardOverviewRow, error)
 	GetFrameworkByID(ctx context.Context, id uuid.UUID) (Framework, error)
 	GetFrameworkBySlugVersion(ctx context.Context, arg GetFrameworkBySlugVersionParams) (Framework, error)
+	GetFrameworkItemByCode(ctx context.Context, arg GetFrameworkItemByCodeParams) (FrameworkItem, error)
 	GetUserByEmail(ctx context.Context, lower string) (User, error)
 	GetUserByID(ctx context.Context, id uuid.UUID) (User, error)
 	ListAssessmentItems(ctx context.Context, arg ListAssessmentItemsParams) ([]ListAssessmentItemsRow, error)
@@ -51,6 +52,7 @@ type Querier interface {
 	ListFrameworkGroupsByFramework(ctx context.Context, frameworkID uuid.UUID) ([]ListFrameworkGroupsByFrameworkRow, error)
 	ListFrameworksWithCounts(ctx context.Context) ([]ListFrameworksWithCountsRow, error)
 	ListUsers(ctx context.Context) ([]User, error)
+	RebindFrameworkItemReferences(ctx context.Context, arg RebindFrameworkItemReferencesParams) error
 	UpdateAssessmentItem(ctx context.Context, arg UpdateAssessmentItemParams) (AssessmentItem, error)
 	UpdateControlRecordNotes(ctx context.Context, arg UpdateControlRecordNotesParams) error
 	UpdateControlRecordOwner(ctx context.Context, arg UpdateControlRecordOwnerParams) error

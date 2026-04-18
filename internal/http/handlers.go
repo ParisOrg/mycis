@@ -239,15 +239,8 @@ func (s *Server) assessmentDetailPage(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	groupMap := map[string]string{}
-	for _, item := range allItems {
-		groupMap[item.GroupCode] = item.GroupTitle
-	}
-	groups := make([]GroupOption, 0, len(groupMap))
-	for code, title := range groupMap {
-		groups = append(groups, GroupOption{Code: code, Title: title})
-	}
-	sort.Slice(groups, func(i, j int) bool { return groups[i].Code < groups[j].Code })
+	groups := buildGroupOptions(allItems)
+	tags := buildTagOptions(allItems)
 
 	return s.render(c, "assessment_show", AssessmentDetailPageData{
 		BaseData:   s.baseData(c, assessment.Name, "assessments"),
@@ -255,8 +248,60 @@ func (s *Server) assessmentDetailPage(c *echo.Context) error {
 		Items:      items,
 		Users:      users,
 		Groups:     groups,
+		Tags:       tags,
 		Filters:    filters,
 	})
+}
+
+func buildGroupOptions(items []db.ListAssessmentItemsRow) []GroupOption {
+	type groupOptionWithSort struct {
+		GroupOption
+		SortOrder int32
+	}
+
+	seen := make(map[string]struct{}, len(items))
+	groups := make([]groupOptionWithSort, 0, len(items))
+	for _, item := range items {
+		if _, ok := seen[item.GroupCode]; ok {
+			continue
+		}
+		seen[item.GroupCode] = struct{}{}
+		groups = append(groups, groupOptionWithSort{
+			GroupOption: GroupOption{
+				Code:  item.GroupCode,
+				Title: item.GroupTitle,
+			},
+			SortOrder: item.GroupSortOrder,
+		})
+	}
+
+	sort.SliceStable(groups, func(i, j int) bool {
+		if groups[i].SortOrder == groups[j].SortOrder {
+			return groups[i].Code < groups[j].Code
+		}
+		return groups[i].SortOrder < groups[j].SortOrder
+	})
+
+	options := make([]GroupOption, 0, len(groups))
+	for _, group := range groups {
+		options = append(options, group.GroupOption)
+	}
+	return options
+}
+
+func buildTagOptions(items []db.ListAssessmentItemsRow) []string {
+	seen := make(map[string]struct{})
+	tags := make([]string, 0)
+	for _, item := range items {
+		for _, tag := range item.Tags {
+			if _, ok := seen[tag]; ok {
+				continue
+			}
+			seen[tag] = struct{}{}
+			tags = append(tags, tag)
+		}
+	}
+	return tags
 }
 
 func (s *Server) assessmentBulkPost(c *echo.Context) error {

@@ -60,15 +60,17 @@ INSERT INTO framework_groups (
   code,
   title,
   summary,
-  description
+  description,
+  sort_order
 ) VALUES (
   $1,
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
-RETURNING id, framework_id, code, title, summary, description, is_active
+RETURNING id, framework_id, code, title, summary, description, is_active, sort_order
 `
 
 type CreateFrameworkGroupParams struct {
@@ -77,6 +79,7 @@ type CreateFrameworkGroupParams struct {
 	Title       string    `json:"title"`
 	Summary     string    `json:"summary"`
 	Description string    `json:"description"`
+	SortOrder   int32     `json:"sort_order"`
 }
 
 func (q *Queries) CreateFrameworkGroup(ctx context.Context, arg CreateFrameworkGroupParams) (FrameworkGroup, error) {
@@ -86,6 +89,7 @@ func (q *Queries) CreateFrameworkGroup(ctx context.Context, arg CreateFrameworkG
 		arg.Title,
 		arg.Summary,
 		arg.Description,
+		arg.SortOrder,
 	)
 	var i FrameworkGroup
 	err := row.Scan(
@@ -96,6 +100,7 @@ func (q *Queries) CreateFrameworkGroup(ctx context.Context, arg CreateFrameworkG
 		&i.Summary,
 		&i.Description,
 		&i.IsActive,
+		&i.SortOrder,
 	)
 	return i, err
 }
@@ -108,6 +113,7 @@ INSERT INTO framework_items (
   title,
   summary,
   description,
+  sort_order,
   asset_class,
   security_function,
   tags
@@ -120,9 +126,10 @@ INSERT INTO framework_items (
   $6,
   $7,
   $8,
-  $9
+  $9,
+  $10
 )
-RETURNING id, framework_id, framework_group_id, code, title, summary, asset_class, security_function, tags, description, is_active
+RETURNING id, framework_id, framework_group_id, code, title, summary, asset_class, security_function, tags, description, is_active, sort_order
 `
 
 type CreateFrameworkItemParams struct {
@@ -132,6 +139,7 @@ type CreateFrameworkItemParams struct {
 	Title            string    `json:"title"`
 	Summary          string    `json:"summary"`
 	Description      string    `json:"description"`
+	SortOrder        int32     `json:"sort_order"`
 	AssetClass       string    `json:"asset_class"`
 	SecurityFunction string    `json:"security_function"`
 	Tags             []string  `json:"tags"`
@@ -145,6 +153,7 @@ func (q *Queries) CreateFrameworkItem(ctx context.Context, arg CreateFrameworkIt
 		arg.Title,
 		arg.Summary,
 		arg.Description,
+		arg.SortOrder,
 		arg.AssetClass,
 		arg.SecurityFunction,
 		arg.Tags,
@@ -162,6 +171,7 @@ func (q *Queries) CreateFrameworkItem(ctx context.Context, arg CreateFrameworkIt
 		&i.Tags,
 		&i.Description,
 		&i.IsActive,
+		&i.SortOrder,
 	)
 	return i, err
 }
@@ -257,9 +267,41 @@ func (q *Queries) GetFrameworkBySlugVersion(ctx context.Context, arg GetFramewor
 	return i, err
 }
 
+const getFrameworkItemByCode = `-- name: GetFrameworkItemByCode :one
+SELECT id, framework_id, framework_group_id, code, title, summary, asset_class, security_function, tags, description, is_active, sort_order
+FROM framework_items
+WHERE framework_id = $1
+  AND code = $2
+`
+
+type GetFrameworkItemByCodeParams struct {
+	FrameworkID uuid.UUID `json:"framework_id"`
+	Code        string    `json:"code"`
+}
+
+func (q *Queries) GetFrameworkItemByCode(ctx context.Context, arg GetFrameworkItemByCodeParams) (FrameworkItem, error) {
+	row := q.db.QueryRow(ctx, getFrameworkItemByCode, arg.FrameworkID, arg.Code)
+	var i FrameworkItem
+	err := row.Scan(
+		&i.ID,
+		&i.FrameworkID,
+		&i.FrameworkGroupID,
+		&i.Code,
+		&i.Title,
+		&i.Summary,
+		&i.AssetClass,
+		&i.SecurityFunction,
+		&i.Tags,
+		&i.Description,
+		&i.IsActive,
+		&i.SortOrder,
+	)
+	return i, err
+}
+
 const listFrameworkGroupsByFramework = `-- name: ListFrameworkGroupsByFramework :many
 SELECT
-  fg.id, fg.framework_id, fg.code, fg.title, fg.summary, fg.description, fg.is_active,
+  fg.id, fg.framework_id, fg.code, fg.title, fg.summary, fg.description, fg.is_active, fg.sort_order,
   COUNT(fi.id)::int AS item_count
 FROM framework_groups fg
 LEFT JOIN framework_items fi ON fi.framework_group_id = fg.id
@@ -267,10 +309,7 @@ LEFT JOIN framework_items fi ON fi.framework_group_id = fg.id
 WHERE fg.framework_id = $1
   AND fg.is_active
 GROUP BY fg.id
-ORDER BY
-  CASE WHEN fg.code ~ '^[0-9]+$' THEN 0 ELSE 1 END,
-  CASE WHEN fg.code ~ '^[0-9]+$' THEN fg.code::int END NULLS LAST,
-  fg.code
+ORDER BY fg.sort_order
 `
 
 type ListFrameworkGroupsByFrameworkRow struct {
@@ -281,6 +320,7 @@ type ListFrameworkGroupsByFrameworkRow struct {
 	Summary     string    `json:"summary"`
 	Description string    `json:"description"`
 	IsActive    bool      `json:"is_active"`
+	SortOrder   int32     `json:"sort_order"`
 	ItemCount   int32     `json:"item_count"`
 }
 
@@ -301,6 +341,7 @@ func (q *Queries) ListFrameworkGroupsByFramework(ctx context.Context, frameworkI
 			&i.Summary,
 			&i.Description,
 			&i.IsActive,
+			&i.SortOrder,
 			&i.ItemCount,
 		); err != nil {
 			return nil, err
@@ -375,20 +416,23 @@ INSERT INTO framework_groups (
   code,
   title,
   summary,
-  description
+  description,
+  sort_order
 ) VALUES (
   $1,
   $2,
   $3,
   $4,
-  $5
+  $5,
+  $6
 )
 ON CONFLICT (framework_id, code) DO UPDATE
   SET title       = EXCLUDED.title,
       summary     = EXCLUDED.summary,
       description = EXCLUDED.description,
+      sort_order  = EXCLUDED.sort_order,
       is_active   = TRUE
-RETURNING id, framework_id, code, title, summary, description, is_active
+RETURNING id, framework_id, code, title, summary, description, is_active, sort_order
 `
 
 type UpsertFrameworkGroupParams struct {
@@ -397,6 +441,7 @@ type UpsertFrameworkGroupParams struct {
 	Title       string    `json:"title"`
 	Summary     string    `json:"summary"`
 	Description string    `json:"description"`
+	SortOrder   int32     `json:"sort_order"`
 }
 
 func (q *Queries) UpsertFrameworkGroup(ctx context.Context, arg UpsertFrameworkGroupParams) (FrameworkGroup, error) {
@@ -406,6 +451,7 @@ func (q *Queries) UpsertFrameworkGroup(ctx context.Context, arg UpsertFrameworkG
 		arg.Title,
 		arg.Summary,
 		arg.Description,
+		arg.SortOrder,
 	)
 	var i FrameworkGroup
 	err := row.Scan(
@@ -416,6 +462,7 @@ func (q *Queries) UpsertFrameworkGroup(ctx context.Context, arg UpsertFrameworkG
 		&i.Summary,
 		&i.Description,
 		&i.IsActive,
+		&i.SortOrder,
 	)
 	return i, err
 }
@@ -428,6 +475,7 @@ INSERT INTO framework_items (
   title,
   summary,
   description,
+  sort_order,
   asset_class,
   security_function,
   tags
@@ -440,18 +488,20 @@ INSERT INTO framework_items (
   $6,
   $7,
   $8,
-  $9
+  $9,
+  $10
 )
 ON CONFLICT (framework_id, code) DO UPDATE
   SET framework_group_id  = EXCLUDED.framework_group_id,
       title               = EXCLUDED.title,
       summary             = EXCLUDED.summary,
       description         = EXCLUDED.description,
+      sort_order          = EXCLUDED.sort_order,
       asset_class         = EXCLUDED.asset_class,
       security_function   = EXCLUDED.security_function,
       tags                = EXCLUDED.tags,
       is_active           = TRUE
-RETURNING id, framework_id, framework_group_id, code, title, summary, asset_class, security_function, tags, description, is_active
+RETURNING id, framework_id, framework_group_id, code, title, summary, asset_class, security_function, tags, description, is_active, sort_order
 `
 
 type UpsertFrameworkItemParams struct {
@@ -461,6 +511,7 @@ type UpsertFrameworkItemParams struct {
 	Title            string    `json:"title"`
 	Summary          string    `json:"summary"`
 	Description      string    `json:"description"`
+	SortOrder        int32     `json:"sort_order"`
 	AssetClass       string    `json:"asset_class"`
 	SecurityFunction string    `json:"security_function"`
 	Tags             []string  `json:"tags"`
@@ -474,6 +525,7 @@ func (q *Queries) UpsertFrameworkItem(ctx context.Context, arg UpsertFrameworkIt
 		arg.Title,
 		arg.Summary,
 		arg.Description,
+		arg.SortOrder,
 		arg.AssetClass,
 		arg.SecurityFunction,
 		arg.Tags,
@@ -491,6 +543,7 @@ func (q *Queries) UpsertFrameworkItem(ctx context.Context, arg UpsertFrameworkIt
 		&i.Tags,
 		&i.Description,
 		&i.IsActive,
+		&i.SortOrder,
 	)
 	return i, err
 }

@@ -1,0 +1,635 @@
+framework:
+  slug: "soc2-2017"
+  label: "SOC 2 (Trust Service Criteria)"
+  version: "2017"
+
+groups:
+  - code: "CC1"
+    title: "Control Environment"
+    summary: "The foundation for internal control — integrity, ethical values, board oversight, organizational structure, and accountability for personnel performing internal control responsibilities."
+    description: "CC1 reflects COSO Principles 1–5. It establishes the tone at the top and the governance structures that shape how the entity manages risk and controls across all Trust Service Categories."
+
+  - code: "CC2"
+    title: "Communication and Information"
+    summary: "The entity obtains and uses relevant, quality information, and communicates internally and externally to support the functioning of internal control."
+    description: "CC2 reflects COSO Principles 13–15. Effective communication ensures that personnel understand their roles, that objectives are clearly stated, and that external parties receive information necessary to evaluate service commitments."
+
+  - code: "CC3"
+    title: "Risk Assessment"
+    summary: "The entity specifies objectives, identifies and analyzes risks, considers fraud, and identifies changes that could impact internal control."
+    description: "CC3 reflects COSO Principles 6–9. Risk assessment is the process the entity uses to identify, analyze, and respond to risks that could prevent it from meeting its service commitments and system requirements."
+
+  - code: "CC4"
+    title: "Monitoring Activities"
+    summary: "The entity selects, develops, and performs evaluations to ascertain whether internal control components are present and functioning, and communicates deficiencies."
+    description: "CC4 reflects COSO Principles 16–17. Monitoring activities provide the feedback loop that confirms controls are operating effectively and that deficiencies are escalated and corrected."
+
+  - code: "CC5"
+    title: "Control Activities"
+    summary: "The entity selects and develops control activities that contribute to risk mitigation, including general technology controls, and deploys them through policies and procedures."
+    description: "CC5 reflects COSO Principles 10–12. Control activities are the specific actions — both manual and automated — that management has put in place to ensure risk responses are carried out effectively."
+
+  - code: "CC6"
+    title: "Logical and Physical Access Controls"
+    summary: "The entity implements logical access security, manages user registration and access rights, restricts physical access, and protects against external and internal threats."
+    description: "CC6 is the most heavily tested TSC category in SOC 2 audits. It covers the full access lifecycle: provisioning, modification, de-provisioning, and monitoring — for both logical and physical assets."
+
+  - code: "CC7"
+    title: "System Operations"
+    summary: "The entity monitors for configuration changes, anomalies, and security events, evaluates and responds to incidents, and recovers from security failures."
+    description: "CC7 addresses the operational vigilance required to detect, respond to, and recover from security incidents — covering detection, incident response, and recovery activities."
+
+  - code: "CC8"
+    title: "Change Management"
+    summary: "Changes to infrastructure, data, software, and procedures are authorized, designed, developed, configured, tested, approved, and implemented in a controlled manner."
+    description: "CC8 ensures that changes to the system are controlled to prevent unauthorized modifications that could introduce vulnerabilities or disrupt service availability."
+
+  - code: "CC9"
+    title: "Risk Mitigation"
+    summary: "The entity identifies and develops risk mitigation activities for business disruptions and assesses and manages risks from vendors and business partners."
+    description: "CC9 addresses residual risks that cannot be eliminated through direct controls — particularly those arising from operational disruptions and third-party relationships."
+
+  - code: "A1"
+    title: "Availability"
+    summary: "The system is available for operation and use as committed or agreed, covering capacity management, environmental protections, backup, and recovery testing."
+    description: "The Availability TSC applies to systems where uptime commitments are made to users. It requires demonstrated capacity planning, infrastructure redundancy, tested backups, and documented RTO/RPO targets."
+
+  - code: "C1"
+    title: "Confidentiality"
+    summary: "Information designated as confidential is protected as committed or agreed, from collection through disposal."
+    description: "The Confidentiality TSC applies when the entity handles information designated as confidential by customers or business partners. Controls address identification, access restriction, and secure disposal."
+
+  - code: "PI1"
+    title: "Processing Integrity"
+    summary: "System processing is complete, valid, accurate, timely, and authorized to meet the entity's objectives."
+    description: "The Processing Integrity TSC applies to systems that process transactions on behalf of customers. Controls address input validation, processing completeness and accuracy, output delivery, and data storage integrity."
+
+  - code: "P"
+    title: "Privacy"
+    summary: "Personal information is collected, used, retained, disclosed, and disposed of in conformity with the entity's privacy notice and with criteria set forth in the AICPA's generally accepted privacy principles."
+    description: "The Privacy TSC applies when the entity collects, stores, uses, retains, discloses, or disposes of personal information. It covers the full privacy lifecycle from notice and consent through access, disclosure, quality, and enforcement."
+
+
+items:
+
+  # ── CC1: Control Environment ─────────────────────────────────────────────
+  - group_code: "CC1"
+    code: "CC1.1"
+    title: "The entity demonstrates a commitment to integrity and ethical values"
+    summary: "The entity demonstrates a commitment to integrity and ethical values"
+    description: "Examples: code of conduct; ethics hotlines; tone-at-the-top communications; ethics training; disciplinary processes for violations of ethical standards."
+    security_function: "Control Environment"
+    asset_class: "Organization"
+    tags: ["governance", "coso-principle-1"]
+
+  - group_code: "CC1"
+    code: "CC1.2"
+    title: "The board of directors demonstrates independence from management and exercises oversight of the development and performance of internal control"
+    summary: "The board demonstrates independence and exercises oversight of internal control"
+    description: "Examples: independent board members; audit committee charter; board review of risk assessments; board approval of security policies; regular security briefings to the board."
+    security_function: "Control Environment"
+    asset_class: "Organization"
+    tags: ["governance", "coso-principle-2"]
+
+  - group_code: "CC1"
+    code: "CC1.3"
+    title: "Management establishes, with board oversight, structures, reporting lines, and appropriate authorities and responsibilities in the pursuit of objectives"
+    summary: "Management establishes structures, reporting lines, and authorities to pursue objectives"
+    description: "Examples: organizational charts; documented reporting lines; defined roles and responsibilities; RACI matrices; authority matrices for security decisions."
+    security_function: "Control Environment"
+    asset_class: "Organization"
+    tags: ["governance", "coso-principle-3"]
+
+  - group_code: "CC1"
+    code: "CC1.4"
+    title: "The entity demonstrates a commitment to attract, develop, and retain competent individuals in alignment with objectives"
+    summary: "The entity demonstrates a commitment to attract, develop, and retain competent individuals"
+    description: "Examples: job descriptions with security competency requirements; background checks; security training programs; performance management that includes security responsibilities."
+    security_function: "Control Environment"
+    asset_class: "Users"
+    tags: ["governance", "hr-security", "coso-principle-4"]
+
+  - group_code: "CC1"
+    code: "CC1.5"
+    title: "The entity holds individuals accountable for their internal control responsibilities in the pursuit of objectives"
+    summary: "The entity holds individuals accountable for their internal control responsibilities"
+    description: "Examples: performance metrics tied to control responsibilities; defined consequences for control failures; regular attestation by control owners; tracking of open control deficiencies."
+    security_function: "Control Environment"
+    asset_class: "Organization"
+    tags: ["governance", "coso-principle-5"]
+
+  # ── CC2: Communication and Information ───────────────────────────────────
+  - group_code: "CC2"
+    code: "CC2.1"
+    title: "The entity obtains or generates and uses relevant, quality information to support the functioning of internal control"
+    summary: "The entity obtains and uses relevant, quality information to support internal control"
+    description: "Examples: data quality processes; information feeds for risk monitoring; security dashboards; metrics on control effectiveness; data governance policies."
+    security_function: "Communication and Information"
+    asset_class: "Data"
+    tags: ["governance", "coso-principle-13"]
+
+  - group_code: "CC2"
+    code: "CC2.2"
+    title: "The entity internally communicates information, including objectives and responsibilities for internal control, necessary to support the functioning of internal control"
+    summary: "The entity internally communicates information necessary to support internal control"
+    description: "Examples: security policy communication; awareness training; internal newsletters on security topics; escalation paths for security issues; clear communication of control objectives to all staff."
+    security_function: "Communication and Information"
+    asset_class: "Organization"
+    tags: ["governance", "coso-principle-14"]
+
+  - group_code: "CC2"
+    code: "CC2.3"
+    title: "The entity communicates with external parties regarding matters affecting the functioning of internal control"
+    summary: "The entity communicates with external parties regarding internal control matters"
+    description: "Examples: customer-facing security pages; SLA and security terms in contracts; breach notification procedures; audit report distribution; communication with regulators."
+    security_function: "Communication and Information"
+    asset_class: "Organization"
+    tags: ["governance", "coso-principle-15"]
+
+  # ── CC3: Risk Assessment ──────────────────────────────────────────────────
+  - group_code: "CC3"
+    code: "CC3.1"
+    title: "The entity specifies objectives with sufficient clarity to enable the identification and assessment of risks relating to objectives"
+    summary: "The entity specifies objectives clearly enough to identify and assess related risks"
+    description: "Examples: documented system description; defined service commitments; clear availability, confidentiality, and integrity objectives; SLAs with measurable targets."
+    security_function: "Risk Assessment"
+    asset_class: "Organization"
+    tags: ["risk-management", "coso-principle-6"]
+
+  - group_code: "CC3"
+    code: "CC3.2"
+    title: "The entity identifies risks to the achievement of its objectives across the entity and analyzes risks as a basis for determining how the risks should be managed"
+    summary: "The entity identifies and analyzes risks across the entity as a basis for risk management"
+    description: "Examples: formal risk assessments; risk registers; threat modelling; likelihood and impact ratings; risk treatment decisions documented and tracked."
+    security_function: "Risk Assessment"
+    asset_class: "Organization"
+    tags: ["risk-management", "coso-principle-7"]
+
+  - group_code: "CC3"
+    code: "CC3.3"
+    title: "The entity considers the potential for fraud in assessing risks to the achievement of objectives"
+    summary: "The entity considers the potential for fraud in assessing risks"
+    description: "Examples: fraud risk assessments; controls over privileged access; segregation of duties; fraud awareness training; whistleblower mechanisms."
+    security_function: "Risk Assessment"
+    asset_class: "Organization"
+    tags: ["risk-management", "fraud", "coso-principle-8"]
+
+  - group_code: "CC3"
+    code: "CC3.4"
+    title: "The entity identifies and assesses changes that could significantly impact the system of internal control"
+    summary: "The entity identifies and assesses changes that could significantly impact internal control"
+    description: "Examples: change management processes that include risk assessment; environmental scanning for regulatory or technology changes; security impact assessments for major projects."
+    security_function: "Risk Assessment"
+    asset_class: "Organization"
+    tags: ["risk-management", "change-management", "coso-principle-9"]
+
+  # ── CC4: Monitoring Activities ────────────────────────────────────────────
+  - group_code: "CC4"
+    code: "CC4.1"
+    title: "The entity selects, develops, and performs ongoing and/or separate evaluations to ascertain whether the components of internal control are present and functioning"
+    summary: "The entity performs ongoing and separate evaluations to ascertain whether internal controls are functioning"
+    description: "Examples: continuous control monitoring; internal audits; vulnerability assessments; penetration testing; security control testing schedules; SOC 2 readiness assessments."
+    security_function: "Monitoring Activities"
+    asset_class: "Organization"
+    tags: ["monitoring", "audit", "coso-principle-16"]
+
+  - group_code: "CC4"
+    code: "CC4.2"
+    title: "The entity evaluates and communicates internal control deficiencies in a timely manner to those parties responsible for taking corrective action, including senior management and the board of directors, as appropriate"
+    summary: "The entity evaluates and communicates internal control deficiencies in a timely manner"
+    description: "Examples: deficiency tracking and remediation processes; escalation thresholds to senior management; board reporting on significant deficiencies; remediation deadline tracking."
+    security_function: "Monitoring Activities"
+    asset_class: "Organization"
+    tags: ["monitoring", "audit", "coso-principle-17"]
+
+  # ── CC5: Control Activities ───────────────────────────────────────────────
+  - group_code: "CC5"
+    code: "CC5.1"
+    title: "The entity selects and develops control activities that contribute to the mitigation of risks to the achievement of objectives to acceptable levels"
+    summary: "The entity selects and develops control activities to mitigate risks to acceptable levels"
+    description: "Examples: risk-based control selection; documented control objectives; preventive and detective controls balanced appropriately; controls mapped to identified risks."
+    security_function: "Control Activities"
+    asset_class: "Organization"
+    tags: ["risk-management", "coso-principle-10"]
+
+  - group_code: "CC5"
+    code: "CC5.2"
+    title: "The entity also selects and develops general control activities over technology to support the achievement of objectives"
+    summary: "The entity selects and develops general technology control activities"
+    description: "Examples: IT general controls (ITGCs); access management; change management; IT operations controls; infrastructure security controls; vendor management controls."
+    security_function: "Control Activities"
+    asset_class: "Systems"
+    tags: ["it-controls", "coso-principle-11"]
+
+  - group_code: "CC5"
+    code: "CC5.3"
+    title: "The entity deploys control activities through policies that establish what is expected and in procedures that put policies into action"
+    summary: "The entity deploys control activities through policies and procedures"
+    description: "Examples: documented security policies; operational procedures for each control area; policy review cycles; evidence of procedures being followed; policy exception processes."
+    security_function: "Control Activities"
+    asset_class: "Organization"
+    tags: ["governance", "policy", "coso-principle-12"]
+
+  # ── CC6: Logical and Physical Access Controls ─────────────────────────────
+  - group_code: "CC6"
+    code: "CC6.1"
+    title: "The entity implements logical access security software, infrastructure, and architectures over protected information assets to protect them from security events to meet the entity's objectives"
+    summary: "The entity implements logical access security over protected information assets"
+    description: "Examples: identity and access management (IAM) platforms; role-based access control; network access control; zero-trust architecture; encrypted storage and transmission."
+    security_function: "Logical and Physical Access"
+    asset_class: "Systems"
+    tags: ["access-control"]
+
+  - group_code: "CC6"
+    code: "CC6.2"
+    title: "Prior to issuing system credentials and granting system access, the entity registers and authorizes new internal and external users whose access is administered by the entity"
+    summary: "New users are registered and authorized before credentials are issued"
+    description: "Examples: user provisioning workflows; approval processes for new access; identity verification; onboarding checklists; joiner-mover-leaver (JML) processes."
+    security_function: "Logical and Physical Access"
+    asset_class: "Users"
+    tags: ["access-control", "identity-management"]
+
+  - group_code: "CC6"
+    code: "CC6.3"
+    title: "The entity authorizes, modifies, or removes access to data, software, functions, and other protected information assets based on roles, responsibilities, or the system design and changes, giving consideration to the concepts of least privilege and segregation of duties"
+    summary: "Access is authorized, modified, or removed based on roles, applying least privilege and segregation of duties"
+    description: "Examples: RBAC; periodic access reviews; automated de-provisioning on role change or departure; privileged access management (PAM); access recertification campaigns."
+    security_function: "Logical and Physical Access"
+    asset_class: "Users"
+    tags: ["access-control", "least-privilege"]
+
+  - group_code: "CC6"
+    code: "CC6.4"
+    title: "The entity restricts physical access to facilities and protected information assets to authorized personnel to meet the entity's objectives"
+    summary: "Physical access to facilities and protected assets is restricted to authorized personnel"
+    description: "Examples: badge access systems; biometric controls for data centres; visitor logs; physical access reviews; security guards; CCTV for sensitive areas."
+    security_function: "Logical and Physical Access"
+    asset_class: "Facilities"
+    tags: ["physical-security", "access-control"]
+
+  - group_code: "CC6"
+    code: "CC6.5"
+    title: "The entity discontinues logical and physical protections over physical assets only after the ability to read or recover data and software from those assets has been diminished and is consistent with the entity's objectives"
+    summary: "Protections over physical assets are discontinued only after data recovery capability is eliminated"
+    description: "Examples: data destruction certificates; disk wiping procedures (NIST 800-88); decommissioning checklists; physical destruction logs for storage media."
+    security_function: "Logical and Physical Access"
+    asset_class: "Devices"
+    tags: ["physical-security", "data-security", "asset-management"]
+
+  - group_code: "CC6"
+    code: "CC6.6"
+    title: "The entity implements logical access security measures to protect against threats from sources outside its system boundaries"
+    summary: "Logical access security measures protect against external threats"
+    description: "Examples: firewalls; intrusion detection/prevention systems (IDS/IPS); DDoS mitigation; email security gateways; web application firewalls (WAF); vulnerability management for internet-facing assets."
+    security_function: "Logical and Physical Access"
+    asset_class: "Networks"
+    tags: ["network-security", "perimeter-security"]
+
+  - group_code: "CC6"
+    code: "CC6.7"
+    title: "The entity restricts the transmission, movement, and removal of information to authorized internal and external users and processes, and protects it during transmission, movement, or removal to meet the entity's objectives"
+    summary: "Transmission, movement, and removal of information is restricted to authorized parties and protected"
+    description: "Examples: data loss prevention (DLP); encryption in transit (TLS); secure file transfer protocols; removable media controls; CASB for cloud data movement; data classification-based transfer controls."
+    security_function: "Logical and Physical Access"
+    asset_class: "Data"
+    tags: ["data-security", "access-control"]
+
+  - group_code: "CC6"
+    code: "CC6.8"
+    title: "The entity implements controls to prevent or detect and act upon the introduction of unauthorized or malicious software to meet the entity's objectives"
+    summary: "Controls prevent or detect unauthorized or malicious software"
+    description: "Examples: endpoint protection platforms (AV/EDR); application allowlisting; email and web content filtering; software composition analysis; container image scanning; secure software deployment pipelines."
+    security_function: "Logical and Physical Access"
+    asset_class: "Systems"
+    tags: ["malware-protection", "endpoint-security"]
+
+  # ── CC7: System Operations ────────────────────────────────────────────────
+  - group_code: "CC7"
+    code: "CC7.1"
+    title: "To meet its objectives, the entity uses detection and monitoring procedures to identify changes to configurations or new vulnerabilities, and to identify malicious or unauthorized activities"
+    summary: "Detection and monitoring procedures identify configuration changes, vulnerabilities, and malicious activities"
+    description: "Examples: vulnerability scanning; file integrity monitoring (FIM); configuration drift detection; SIEM; network traffic analysis; user behaviour analytics (UEBA)."
+    security_function: "System Operations"
+    asset_class: "Systems"
+    tags: ["monitoring", "vulnerability-management"]
+
+  - group_code: "CC7"
+    code: "CC7.2"
+    title: "The entity monitors system components and the operation of those components for anomalies that are indicative of malicious acts, natural disasters, and errors affecting the entity's ability to meet its objectives"
+    summary: "System components are monitored for anomalies indicative of malicious acts or errors"
+    description: "Examples: SIEM alert rules; anomaly detection; infrastructure monitoring (uptime, performance); log management; continuous monitoring dashboards; on-call incident alerting."
+    security_function: "System Operations"
+    asset_class: "Systems"
+    tags: ["monitoring", "detection"]
+
+  - group_code: "CC7"
+    code: "CC7.3"
+    title: "The entity evaluates security events to determine whether they could or have resulted in a failure of the entity to meet its objectives and, if so, takes actions to prevent or address such failures"
+    summary: "Security events are evaluated to determine whether they represent failures to meet objectives"
+    description: "Examples: security event triage procedures; incident classification criteria; SOC analyst runbooks; event escalation thresholds; post-event impact assessments."
+    security_function: "System Operations"
+    asset_class: "Systems"
+    tags: ["incident-management", "detection"]
+
+  - group_code: "CC7"
+    code: "CC7.4"
+    title: "The entity responds to identified security incidents by executing a defined incident response program to understand, contain, remediate, and communicate security incidents, as appropriate"
+    summary: "Identified security incidents are responded to through a defined incident response program"
+    description: "Examples: documented incident response plan (IRP); defined incident response roles and responsibilities; containment and eradication playbooks; post-incident communications; regulatory notification processes."
+    security_function: "System Operations"
+    asset_class: "Systems"
+    tags: ["incident-management", "response"]
+
+  - group_code: "CC7"
+    code: "CC7.5"
+    title: "The entity identifies, develops, and implements activities to recover from identified security incidents and communicate information about the incident as appropriate"
+    summary: "The entity implements activities to recover from security incidents and communicates appropriately"
+    description: "Examples: recovery runbooks; tested backup restoration procedures; post-incident reviews and lessons learned; communication templates for customers and regulators; after-action reports."
+    security_function: "System Operations"
+    asset_class: "Systems"
+    tags: ["incident-management", "recovery"]
+
+  # ── CC8: Change Management ────────────────────────────────────────────────
+  - group_code: "CC8"
+    code: "CC8.1"
+    title: "The entity authorizes, designs, develops or acquires, configures, documents, tests, approves, and implements changes to infrastructure, data, software, and procedures to meet its change management commitments and system requirements"
+    summary: "Changes to infrastructure, data, software, and procedures are fully controlled through a change management process"
+    description: "Examples: change advisory board (CAB); change request workflows; testing requirements before deployment; rollback plans; change documentation; emergency change procedures; separation of dev/test/prod environments."
+    security_function: "Change Management"
+    asset_class: "Systems"
+    tags: ["change-management"]
+
+  # ── CC9: Risk Mitigation ──────────────────────────────────────────────────
+  - group_code: "CC9"
+    code: "CC9.1"
+    title: "The entity identifies, selects, and develops risk mitigation activities for risks arising from potential business disruptions"
+    summary: "Risk mitigation activities are identified and developed for potential business disruptions"
+    description: "Examples: business continuity plans; disaster recovery plans; business impact analysis (BIA); tested recovery procedures; redundant infrastructure; alternative processing sites."
+    security_function: "Risk Mitigation"
+    asset_class: "Organization"
+    tags: ["business-continuity", "risk-management"]
+
+  - group_code: "CC9"
+    code: "CC9.2"
+    title: "The entity assesses and manages risks associated with vendors and business partners"
+    summary: "Risks associated with vendors and business partners are assessed and managed"
+    description: "Examples: vendor risk assessments; supplier security questionnaires; contractual security requirements; ongoing monitoring of vendor security posture; SOC 2 reports from critical vendors."
+    security_function: "Risk Mitigation"
+    asset_class: "Organization"
+    tags: ["vendor-management", "supply-chain", "risk-management"]
+
+  # ── A1: Availability ──────────────────────────────────────────────────────
+  - group_code: "A1"
+    code: "A1.1"
+    title: "The entity maintains, monitors, and evaluates current processing capacity and use of system components (infrastructure, data, and software) to manage capacity demand and to enable the implementation of additional capacity to help meet its objectives"
+    summary: "Processing capacity is maintained, monitored, and evaluated to manage demand"
+    description: "Examples: capacity planning; auto-scaling policies; performance monitoring dashboards; resource utilization alerts; load testing; capacity review processes."
+    security_function: "Availability"
+    asset_class: "Systems"
+    tags: ["availability", "capacity-management"]
+
+  - group_code: "A1"
+    code: "A1.2"
+    title: "The entity authorizes, designs, develops or acquires, implements, operates, approves, maintains, and monitors environmental protections, software, data back-up processes, and recovery infrastructure to meet its availability commitments and system requirements"
+    summary: "Environmental protections, backups, and recovery infrastructure are implemented and monitored"
+    description: "Examples: redundant infrastructure; UPS and generator; environmental monitoring; encrypted offsite backups; tested backup procedures; documented RTO/RPO; cloud disaster recovery."
+    security_function: "Availability"
+    asset_class: "Systems"
+    tags: ["availability", "backup", "business-continuity"]
+
+  - group_code: "A1"
+    code: "A1.3"
+    title: "The entity tests recovery plan procedures supporting system recovery to meet its availability commitments and system requirements to help meet its objectives"
+    summary: "Recovery plan procedures are tested to validate availability commitments"
+    description: "Examples: annual DR tests; tabletop exercises; documented test results; failover testing; backup restoration tests; recovery time validation against RTO/RPO objectives."
+    security_function: "Availability"
+    asset_class: "Systems"
+    tags: ["availability", "business-continuity", "testing"]
+
+  # ── C1: Confidentiality ───────────────────────────────────────────────────
+  - group_code: "C1"
+    code: "C1.1"
+    title: "The entity identifies and maintains confidential information to meet the entity's objectives related to confidentiality"
+    summary: "Confidential information is identified and maintained throughout its lifecycle"
+    description: "Examples: data classification scheme; confidential data inventory; encryption of confidential data at rest and in transit; access controls aligned with classification; DLP policies for confidential data."
+    security_function: "Confidentiality"
+    asset_class: "Data"
+    tags: ["data-security", "confidentiality"]
+
+  - group_code: "C1"
+    code: "C1.2"
+    title: "The entity disposes of confidential information to meet the entity's objectives related to confidentiality"
+    summary: "Confidential information is disposed of in accordance with confidentiality objectives"
+    description: "Examples: data retention and disposal policies; certified data destruction; media sanitization (NIST 800-88); contractual data return/deletion requirements; disposal logs."
+    security_function: "Confidentiality"
+    asset_class: "Data"
+    tags: ["data-security", "confidentiality", "asset-management"]
+
+  # ── PI1: Processing Integrity ─────────────────────────────────────────────
+  - group_code: "PI1"
+    code: "PI1.1"
+    title: "The entity obtains or generates, uses, and communicates relevant, quality information to support the functioning of internal control to meet the entity's objectives"
+    summary: "Relevant, quality information is obtained, used, and communicated to support processing integrity"
+    description: "Examples: data quality checks; input validation; data reconciliation processes; exception reporting; data lineage documentation."
+    security_function: "Processing Integrity"
+    asset_class: "Data"
+    tags: ["processing-integrity", "data-quality"]
+
+  - group_code: "PI1"
+    code: "PI1.2"
+    title: "The entity implements policies and procedures over system inputs, including controls over completeness and accuracy, to result in products, services, and reporting to meet the entity's objectives"
+    summary: "Controls over system inputs ensure completeness and accuracy"
+    description: "Examples: input validation rules; duplicate detection; format checks; mandatory field controls; source data reconciliation; error handling and rejection workflows."
+    security_function: "Processing Integrity"
+    asset_class: "Data"
+    tags: ["processing-integrity"]
+
+  - group_code: "PI1"
+    code: "PI1.3"
+    title: "The entity implements policies and procedures over system processing to result in products, services, and reporting to meet the entity's objectives"
+    summary: "Controls over system processing ensure completeness and accuracy"
+    description: "Examples: processing controls (hash totals, record counts); batch job monitoring; exception reports; reconciliation between processing stages; processing error alerts."
+    security_function: "Processing Integrity"
+    asset_class: "Systems"
+    tags: ["processing-integrity"]
+
+  - group_code: "PI1"
+    code: "PI1.4"
+    title: "The entity implements policies and procedures to make available or deliver output completely, accurately, and timely in accordance with specifications to meet the entity's objectives"
+    summary: "Output is delivered completely, accurately, and timely"
+    description: "Examples: output completeness checks; delivery confirmation mechanisms; SLA monitoring for output delivery; output validation against expected formats; failed delivery alerting."
+    security_function: "Processing Integrity"
+    asset_class: "Data"
+    tags: ["processing-integrity", "availability"]
+
+  - group_code: "PI1"
+    code: "PI1.5"
+    title: "The entity implements policies and procedures to store inputs, items in processing, and outputs completely, accurately, and timely in accordance with system specifications to meet the entity's objectives"
+    summary: "Inputs, in-process items, and outputs are stored completely, accurately, and timely"
+    description: "Examples: storage integrity checks; checksums; database constraints; backup of in-progress work; transaction logging; data retention aligned with processing requirements."
+    security_function: "Processing Integrity"
+    asset_class: "Data"
+    tags: ["processing-integrity", "data-security"]
+
+  # ── P: Privacy ────────────────────────────────────────────────────────────
+  - group_code: "P"
+    code: "P1.1"
+    title: "The entity provides notice to data subjects about its privacy practices to meet the entity's objectives related to privacy"
+    summary: "Notice of privacy practices is provided to data subjects"
+    description: "Examples: privacy notice/policy on website; in-app privacy disclosures; layered privacy notices; timely updates when practices change; privacy notice in multiple languages where applicable."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "transparency"]
+
+  - group_code: "P"
+    code: "P2.1"
+    title: "The entity communicates choices available regarding the collection, use, retention, disclosure, and disposal of personal information to the data subjects and allows data subjects to make and change choices"
+    summary: "Data subjects are informed of their choices and allowed to make and change them"
+    description: "Examples: consent management platforms; opt-in/opt-out mechanisms; preference centres; cookie consent banners; ability to withdraw consent; marketing preference management."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "consent"]
+
+  - group_code: "P"
+    code: "P3.1"
+    title: "Personal information is collected consistent with the entity's objectives related to privacy"
+    summary: "Personal information is collected consistent with stated privacy objectives"
+    description: "Examples: data minimization practices; collection limited to what's stated in privacy notice; purpose limitation; legal basis documented for each data category collected."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "data-minimization"]
+
+  - group_code: "P"
+    code: "P3.2"
+    title: "For information requiring explicit consent, the entity communicates the need for such consent, as well as the consequences of a failure to provide consent, and obtains the consent prior to the collection of the information to meet the entity's objectives related to privacy"
+    summary: "Explicit consent is obtained before collecting information requiring it, with clear communication of consequences"
+    description: "Examples: granular consent flows; documented consent records with timestamps; clear explanation of what happens without consent; separate consent for different purposes."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "consent"]
+
+  - group_code: "P"
+    code: "P4.1"
+    title: "The entity limits the use of personal information to the purposes identified in the entity's objectives related to privacy"
+    summary: "Use of personal information is limited to identified purposes"
+    description: "Examples: purpose limitation controls; data use governance processes; prohibition on secondary use without additional consent; privacy review for new product features."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "purpose-limitation"]
+
+  - group_code: "P"
+    code: "P4.2"
+    title: "The entity retains personal information consistent with the entity's objectives related to privacy"
+    summary: "Personal information is retained consistent with privacy objectives"
+    description: "Examples: data retention schedules; automated deletion after retention period; retention documented by data category; legal hold processes that suspend automated deletion."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "data-retention"]
+
+  - group_code: "P"
+    code: "P4.3"
+    title: "The entity disposes of personal information consistent with the entity's objectives related to privacy"
+    summary: "Personal information is disposed of consistent with privacy objectives"
+    description: "Examples: certified data deletion upon request or after retention period; anonymization as an alternative to deletion; vendor deletion obligations; disposal records and certificates."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "data-deletion"]
+
+  - group_code: "P"
+    code: "P5.1"
+    title: "The entity grants identified and authenticated data subjects the ability to access their stored personal information for review and, upon request, provides physical or electronic copies of that information to data subjects"
+    summary: "Data subjects can access their stored personal information upon request"
+    description: "Examples: subject access request (SAR) process; identity verification for access requests; data portability mechanisms; response within regulatory timelines (e.g., 30 days under GDPR)."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "data-subject-rights"]
+
+  - group_code: "P"
+    code: "P5.2"
+    title: "The entity corrects, amends, or appends personal information based on information provided by data subjects and communicates such information to third parties, as committed or agreed"
+    summary: "Personal information is corrected or amended based on data subject requests"
+    description: "Examples: data correction request process; propagation of corrections to downstream systems and processors; notification to third parties of corrections; tracking of correction requests."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "data-subject-rights"]
+
+  - group_code: "P"
+    code: "P6.1"
+    title: "The entity discloses personal information to third parties with the explicit consent of data subjects, and such disclosures are consistent with the entity's objectives related to privacy"
+    summary: "Personal information is disclosed to third parties only with explicit consent and consistent with privacy objectives"
+    description: "Examples: third-party disclosure consent; data sharing agreements; disclosure logs; prohibition on selling personal data without explicit consent."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "third-party-disclosure"]
+
+  - group_code: "P"
+    code: "P6.2"
+    title: "The entity creates and retains a complete, accurate, and timely record of authorized disclosures of personal information"
+    summary: "Complete and accurate records of authorized personal information disclosures are maintained"
+    description: "Examples: disclosure logs; audit trails for data sharing events; records of consent supporting disclosures; retention of disclosure records for legal purposes."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "audit-trail"]
+
+  - group_code: "P"
+    code: "P6.3"
+    title: "The entity creates and retains a complete, accurate, and timely record of detected or reported unauthorized disclosures of personal information"
+    summary: "Records of detected or reported unauthorized personal information disclosures are maintained"
+    description: "Examples: breach incident log; unauthorized disclosure register; records supporting regulatory notifications; forensic evidence preservation for unauthorized disclosures."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "incident-management"]
+
+  - group_code: "P"
+    code: "P6.4"
+    title: "The entity obtains privacy commitments from vendors and other third parties who have access to personal information consistent with the entity's objectives related to privacy, and assesses those parties' compliance on a periodic basis"
+    summary: "Privacy commitments are obtained from vendors with access to personal information and periodically assessed"
+    description: "Examples: DPA (Data Processing Agreements); vendor privacy questionnaires; SOC 2 or ISO 27001 certifications from processors; annual privacy compliance reviews of key vendors."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "vendor-management"]
+
+  - group_code: "P"
+    code: "P6.5"
+    title: "The entity obtains commitments from vendors and other third parties with access to personal information to notify the entity in the event of actual or suspected unauthorized disclosures of personal information"
+    summary: "Vendors commit to notifying the entity of actual or suspected unauthorized disclosures"
+    description: "Examples: breach notification clauses in DPAs; defined notification timelines in vendor contracts; incident response coordination procedures with processors."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "vendor-management", "incident-management"]
+
+  - group_code: "P"
+    code: "P6.6"
+    title: "The entity provides notification of breaches and incidents to affected data subjects, regulators, and others consistent with the entity's objectives related to privacy"
+    summary: "Breach notifications are provided to data subjects, regulators, and others as required"
+    description: "Examples: breach notification policy; regulatory notification timelines; notification templates for data subjects; legal counsel in notification process; documentation of notification activities."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "breach-notification"]
+
+  - group_code: "P"
+    code: "P6.7"
+    title: "The entity provides data subjects with an accounting of the personal information held and disclosure of such information upon their request"
+    summary: "Data subjects can obtain an accounting of their personal information held and disclosed"
+    description: "Examples: data inventory accessible to support SAR responses; systems of record documented; ability to report on all disclosures made for a specific data subject."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "data-subject-rights"]
+
+  - group_code: "P"
+    code: "P7.1"
+    title: "The entity collects and maintains accurate, up-to-date, complete, and relevant personal information to meet the entity's objectives related to privacy"
+    summary: "Personal information is collected and maintained to be accurate, up-to-date, complete, and relevant"
+    description: "Examples: data quality controls; periodic data refresh; data subject update mechanisms; duplicate detection; data accuracy validation at point of collection."
+    security_function: "Privacy"
+    asset_class: "Data"
+    tags: ["privacy", "data-quality"]
+
+  - group_code: "P"
+    code: "P8.1"
+    title: "The entity implements a process for receiving, addressing, resolving, and communicating the resolution of inquiries, complaints, and disputes from data subjects and others and periodically monitors compliance with the entity's privacy commitments and system requirements"
+    summary: "The entity receives, addresses, and resolves privacy inquiries and complaints, and monitors compliance"
+    description: "Examples: privacy complaint intake process; SLA for complaint resolution; escalation to DPO or legal; annual privacy compliance reviews; privacy audit programs; response to regulatory inquiries."
+    security_function: "Privacy"
+    asset_class: "Organization"
+    tags: ["privacy", "compliance", "monitoring"]
