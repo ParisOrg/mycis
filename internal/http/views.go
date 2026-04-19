@@ -13,13 +13,14 @@ type Flash struct {
 }
 
 type BaseData struct {
-	Title       string
-	AppName     string
-	ActiveNav   string
-	CurrentUser *db.User
-	CSRFToken   string
-	Flashes     []Flash
-	Query       url.Values
+	Title           string
+	AppName         string
+	ActiveNav       string
+	CurrentUser     *db.User
+	CSRFToken       string
+	Flashes         []Flash
+	Query           url.Values
+	HideHeaderTitle bool
 }
 
 type LoginPageData struct {

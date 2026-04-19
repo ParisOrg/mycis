@@ -2,6 +2,7 @@ package httpui
 
 import (
 	"net/http"
+	"sort"
 
 	"github.com/labstack/echo/v5"
 )
@@ -16,6 +17,9 @@ func (s *Server) dashboardPage(c *echo.Context) error {
 		BaseData:    s.baseData(c, "Dashboard", "dashboard"),
 		Assessments: assessments,
 	}
+	// The dashboard renders its own title block with assessment identity;
+	// the layout's duplicate header title would just compete with it.
+	data.BaseData.HideHeaderTitle = true
 
 	if len(assessments) == 0 {
 		return s.render(c, "dashboard", data)
@@ -27,6 +31,21 @@ func (s *Server) dashboardPage(c *echo.Context) error {
 	if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
+
+	// Sort groups worst-first so the dashboard answers "where is this assessment bleeding"
+	// at a glance. Groups with equal completion fall back to total items descending, then code.
+	sort.SliceStable(dashboard.ByGroup, func(i, j int) bool {
+		a, b := dashboard.ByGroup[i], dashboard.ByGroup[j]
+		ap := percentage(a.CompletedItems, a.TotalItems)
+		bp := percentage(b.CompletedItems, b.TotalItems)
+		if ap != bp {
+			return ap < bp
+		}
+		if a.TotalItems != b.TotalItems {
+			return a.TotalItems > b.TotalItems
+		}
+		return a.GroupCode < b.GroupCode
+	})
 
 	data.SelectedAssessment = selected
 	data.Dashboard = &dashboard
