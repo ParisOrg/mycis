@@ -17,6 +17,7 @@ type BaseData struct {
 	AppName     string
 	ActiveNav   string
 	CurrentUser *db.User
+	CSRFToken   string
 	Flashes     []Flash
 	Query       url.Values
 }

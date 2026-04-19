@@ -1,0 +1,5 @@
+{{ define "csrf_field" }}
+  {{ if .CSRFToken }}
+    <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}" />
+  {{ end }}
+{{ end }}

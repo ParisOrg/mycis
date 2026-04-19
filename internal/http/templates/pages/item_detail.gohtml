@@ -15,6 +15,7 @@
     </div>
 
     <form action="/items/{{ .Detail.Item.ID }}" method="post">
+      {{ template "csrf_field" . }}
       <div class="rounded-lg border border-border">
         <div class="p-5">
           <div class="grid gap-4 md:grid-cols-2">
@@ -126,6 +127,7 @@
           <p class="text-sm text-muted-foreground py-1">No evidence links yet.</p>
         {{ end }}
         <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/evidence" method="post">
+          {{ template "csrf_field" . }}
           <input class="input w-full" name="label" type="text" placeholder="Label" />
           <input class="input w-full" name="url" type="url" placeholder="https://…" />
           <button class="btn btn-secondary btn-sm" type="submit">Add evidence</button>
@@ -148,6 +150,7 @@
           <p class="text-sm text-muted-foreground py-1">No comments yet.</p>
         {{ end }}
         <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/comments" method="post">
+          {{ template "csrf_field" . }}
           <textarea class="textarea min-h-16 w-full" name="body" placeholder="Add context or review notes"></textarea>
           <button class="btn btn-secondary btn-sm" type="submit">Add comment</button>
         </form>

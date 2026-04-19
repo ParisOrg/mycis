@@ -51,6 +51,7 @@
                   <a role="menuitem" href="/change-password">Change password</a>
                   <hr role="separator" />
                   <form action="/logout" method="post">
+                    {{ template "csrf_field" . }}
                     <button role="menuitem" class="w-full text-left" type="submit">Sign out</button>
                   </form>
                 </div>
