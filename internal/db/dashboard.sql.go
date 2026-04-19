@@ -16,16 +16,21 @@ import (
 const getDashboardOverview = `-- name: GetDashboardOverview :one
 SELECT
   COUNT(*)::int AS total_items,
-  COUNT(*) FILTER (WHERE status IN ('validated', 'not_applicable'))::int AS completed_items,
-  COUNT(*) FILTER (WHERE status = 'ready_for_review')::int AS ready_for_review_items,
-  COUNT(*) FILTER (WHERE status = 'blocked')::int AS blocked_items,
+  COUNT(*) FILTER (WHERE ai.status IN ('validated', 'not_applicable'))::int AS completed_items,
+  COUNT(*) FILTER (WHERE ai.status = 'ready_for_review')::int AS ready_for_review_items,
+  COUNT(*) FILTER (WHERE ai.status = 'blocked')::int AS blocked_items,
   COUNT(*) FILTER (
-    WHERE due_date < CURRENT_DATE
-      AND status NOT IN ('validated', 'not_applicable')
+    WHERE ai.due_date < CURRENT_DATE
+      AND ai.status NOT IN ('validated', 'not_applicable')
   )::int AS overdue_items,
+  COUNT(*) FILTER (
+    WHERE cr.owner_user_id IS NULL
+      AND ai.status NOT IN ('validated', 'not_applicable')
+  )::int AS unassigned_items,
   COALESCE(ROUND(AVG(score)::numeric, 1), 0)::numeric AS average_score
-FROM assessment_items
-WHERE assessment_id = $1
+FROM assessment_items ai
+JOIN control_records cr ON cr.id = ai.control_record_id
+WHERE ai.assessment_id = $1
 `
 
 type GetDashboardOverviewRow struct {
@@ -34,6 +39,7 @@ type GetDashboardOverviewRow struct {
 	ReadyForReviewItems int32          `json:"ready_for_review_items"`
 	BlockedItems        int32          `json:"blocked_items"`
 	OverdueItems        int32          `json:"overdue_items"`
+	UnassignedItems     int32          `json:"unassigned_items"`
 	AverageScore        pgtype.Numeric `json:"average_score"`
 }
 
@@ -46,6 +52,7 @@ func (q *Queries) GetDashboardOverview(ctx context.Context, assessmentID uuid.UU
 		&i.ReadyForReviewItems,
 		&i.BlockedItems,
 		&i.OverdueItems,
+		&i.UnassignedItems,
 		&i.AverageScore,
 	)
 	return i, err

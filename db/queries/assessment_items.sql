@@ -39,6 +39,11 @@ WHERE ai.assessment_id = $1
   AND (sqlc.narg(status)::text IS NULL OR ai.status::text = sqlc.narg(status)::text)
   AND (sqlc.narg(owner_user_id)::text IS NULL OR cr.owner_user_id::text = sqlc.narg(owner_user_id)::text)
   AND (sqlc.narg(reviewer_user_id)::text IS NULL OR cr.reviewer_user_id::text = sqlc.narg(reviewer_user_id)::text)
+  AND (sqlc.narg(unassigned)::boolean IS NULL OR (
+    sqlc.narg(unassigned)::boolean = TRUE
+    AND cr.owner_user_id IS NULL
+    AND ai.status NOT IN ('validated', 'not_applicable')
+  ))
   AND (sqlc.narg(overdue)::boolean IS NULL OR (
     sqlc.narg(overdue)::boolean = TRUE
     AND ai.due_date < CURRENT_DATE

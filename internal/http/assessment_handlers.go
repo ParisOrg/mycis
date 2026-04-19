@@ -1,6 +1,7 @@
 package httpui
 
 import (
+	"fmt"
 	"net/http"
 	"sort"
 	"strings"
@@ -93,15 +94,24 @@ func (s *Server) assessmentDetailPage(c *echo.Context) error {
 
 	groups := buildGroupOptions(allItems)
 	tags := buildTagOptions(allItems)
+	workspaceStats := buildAssessmentWorkspaceStats(allItems, items)
+	queueRows := buildAssessmentQueueRows(items)
+	hasActiveFilters := hasFilters(filters)
 
 	return s.render(c, "assessment_show", AssessmentDetailPageData{
-		BaseData:   s.baseData(c, assessment.Name, "assessments"),
-		Assessment: assessment,
-		Items:      items,
-		Users:      users,
-		Groups:     groups,
-		Tags:       tags,
-		Filters:    filters,
+		BaseData:            s.baseData(c, assessment.Name, "assessments"),
+		Assessment:          assessment,
+		Items:               items,
+		Users:               users,
+		Groups:              groups,
+		Tags:                tags,
+		Filters:             filters,
+		QueueRows:           queueRows,
+		WorkspaceStats:      workspaceStats,
+		WorkspaceFocus:      buildAssessmentWorkspaceFocus(workspaceStats, hasActiveFilters),
+		FilterChips:         buildAssessmentFilterChips(filters, users, groups),
+		HasActiveFilters:    hasActiveFilters,
+		HasSecondaryFilters: filters.Tag != nil || filters.OwnerUserID != nil || filters.ReviewerUserID != nil || filters.Unassigned != nil,
 	})
 }
 
@@ -154,6 +164,139 @@ func buildTagOptions(items []db.ListAssessmentItemsRow) []string {
 		}
 	}
 	return tags
+}
+
+func buildAssessmentQueueRows(items []db.ListAssessmentItemsRow) []AssessmentQueueRow {
+	rows := make([]AssessmentQueueRow, 0, len(items))
+	var previousGroup string
+	for _, item := range items {
+		showGroup := item.GroupCode != previousGroup
+		rows = append(rows, AssessmentQueueRow{
+			Item:      item,
+			ShowGroup: showGroup,
+		})
+		previousGroup = item.GroupCode
+	}
+	return rows
+}
+
+func buildAssessmentWorkspaceStats(allItems, visibleItems []db.ListAssessmentItemsRow) AssessmentWorkspaceStats {
+	stats := AssessmentWorkspaceStats{
+		TotalItems:   len(allItems),
+		VisibleItems: len(visibleItems),
+	}
+
+	for _, item := range visibleItems {
+		if item.Status == db.AssessmentItemStatusReadyForReview {
+			stats.ReadyForReviewItems++
+		}
+		if item.Status == db.AssessmentItemStatusBlocked {
+			stats.BlockedItems++
+		}
+		if item.Status == db.AssessmentItemStatusValidated {
+			stats.ValidatedItems++
+		}
+		if boolValue(item.IsOverdue) {
+			stats.OverdueItems++
+		}
+		if item.OwnerName == nil || strings.TrimSpace(*item.OwnerName) == "" {
+			stats.UnassignedItems++
+		}
+		if item.Priority == db.ItemPriorityHigh || item.Priority == db.ItemPriorityCritical {
+			stats.HighPriorityItems++
+		}
+	}
+
+	return stats
+}
+
+func buildAssessmentWorkspaceFocus(stats AssessmentWorkspaceStats, hasActiveFilters bool) AssessmentWorkspaceFocus {
+	switch {
+	case stats.VisibleItems == 0:
+		return AssessmentWorkspaceFocus{
+			Kicker: "Reset the queue",
+			Title:  "No controls match this view.",
+			Body:   "Clear one or more filters to get back to live work, then narrow the list again once you know what you need to move.",
+		}
+	case stats.OverdueItems > 0:
+		return AssessmentWorkspaceFocus{
+			Kicker: "Contain drift",
+			Title:  fmt.Sprintf("%d overdue controls need attention in this view.", stats.OverdueItems),
+			Body:   "Clear the backlog before you open fresh work. Reassign ownership, adjust dates deliberately, and move blocked controls out of the path.",
+		}
+	case stats.UnassignedItems > 0:
+		return AssessmentWorkspaceFocus{
+			Kicker: "Create ownership",
+			Title:  fmt.Sprintf("%d controls still need an owner.", stats.UnassignedItems),
+			Body:   "Assignment is the fastest way to turn this list into an operating queue. Select the controls you want to move, then assign owners in one pass.",
+		}
+	case stats.ReadyForReviewItems > 0:
+		return AssessmentWorkspaceFocus{
+			Kicker: "Pull review forward",
+			Title:  fmt.Sprintf("%d controls are ready for review.", stats.ReadyForReviewItems),
+			Body:   "Use this moment to validate finished work, close loops with reviewers, and keep evidence from stalling in the queue.",
+		}
+	case stats.BlockedItems > 0:
+		return AssessmentWorkspaceFocus{
+			Kicker: "Remove blockers",
+			Title:  fmt.Sprintf("%d controls are stalled right now.", stats.BlockedItems),
+			Body:   "Unblock these first so the cycle can move again. Tighten the reason, reset ownership if needed, and only then push new controls forward.",
+		}
+	case hasActiveFilters:
+		return AssessmentWorkspaceFocus{
+			Kicker: "Use the narrow view",
+			Title:  fmt.Sprintf("%d controls match the current filters.", stats.VisibleItems),
+			Body:   "This slice is small enough to act on quickly. Make the decision now, then clear the filters when you want the full cycle back on screen.",
+		}
+	default:
+		return AssessmentWorkspaceFocus{
+			Kicker: "Open the cycle",
+			Title:  "Turn this list into active work.",
+			Body:   "Start with one control group, assign clear ownership, and only add dates or priority where they sharpen the decision instead of adding noise.",
+		}
+	}
+}
+
+func buildAssessmentFilterChips(filters service.AssessmentItemFilters, users []db.User, groups []GroupOption) []string {
+	chips := make([]string, 0, 6)
+	if filters.GroupCode != nil {
+		label := *filters.GroupCode
+		for _, group := range groups {
+			if group.Code == *filters.GroupCode {
+				label = group.Code + " · " + group.Title
+				break
+			}
+		}
+		chips = append(chips, "Group: "+label)
+	}
+	if filters.Status != nil {
+		chips = append(chips, "Workflow: "+statusLabel(*filters.Status))
+	}
+	if filters.Tag != nil {
+		chips = append(chips, "Implementation group: "+tagLabel(*filters.Tag))
+	}
+	if filters.OwnerUserID != nil {
+		chips = append(chips, "Owner: "+lookupUserLabel(users, *filters.OwnerUserID))
+	}
+	if filters.ReviewerUserID != nil {
+		chips = append(chips, "Reviewer: "+lookupUserLabel(users, *filters.ReviewerUserID))
+	}
+	if filters.Unassigned != nil && *filters.Unassigned {
+		chips = append(chips, "Unassigned open work")
+	}
+	if filters.Overdue != nil && *filters.Overdue {
+		chips = append(chips, "Overdue only")
+	}
+	return chips
+}
+
+func lookupUserLabel(users []db.User, id string) string {
+	for _, user := range users {
+		if user.ID.String() == id {
+			return user.Name
+		}
+	}
+	return id
 }
 
 func (s *Server) assessmentBulkPost(c *echo.Context) error {

@@ -1,74 +1,173 @@
 {{ define "content" }}
-<section class="space-y-8 max-w-7xl">
-  <div>
-    <p class="text-xs text-muted-foreground">{{ .Assessment.FrameworkLabel }} {{ .Assessment.FrameworkVersion }}</p>
-    <h2 class="mt-1 text-xl font-semibold tracking-tight">{{ .Assessment.Name }}</h2>
-    <p class="mt-1 text-sm text-muted-foreground">{{ .Assessment.Scope }} · Due {{ formatDate .Assessment.DueDate }}</p>
-    {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
-      <a class="btn btn-secondary btn-sm mt-3" href="/assessments/{{ .Assessment.ID }}/cycle">New cycle</a>
-    {{ end }}
-  </div>
+<section class="assessment-workspace">
+  <header class="assessment-header">
+    <div class="assessment-header-main">
+      <p class="assessment-eyebrow">Assessment</p>
+      <h2 class="assessment-header-title">{{ .Assessment.Name }}</h2>
+      <p class="assessment-header-meta">
+        <span>{{ .Assessment.FrameworkLabel }} {{ .Assessment.FrameworkVersion }}</span>
+        <span class="assessment-header-separator">·</span>
+        <span>{{ .Assessment.Scope }}</span>
+        <span class="assessment-header-separator">·</span>
+        <span>Due {{ formatDate .Assessment.DueDate }}</span>
+      </p>
+    </div>
+    <div class="assessment-header-actions">
+      <span class="assessment-header-status">{{ assessmentStatus .Assessment.Status }}</span>
+      {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
+        <a class="btn btn-secondary btn-sm" href="/assessments/{{ .Assessment.ID }}/cycle">Start new cycle</a>
+      {{ end }}
+    </div>
+  </header>
 
-  <form action="/assessments/{{ .Assessment.ID }}" method="get">
-    <div class="rounded-lg border border-border bg-muted/30 p-4">
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 [&>*]:min-w-0">
-        <select class="select h-8 w-full text-sm" name="group">
-          <option value="">All groups</option>
-          {{ range .Groups }}
-            <option value="{{ .Code }}" {{ if ptrEquals $.Filters.GroupCode .Code }}selected{{ end }}>{{ .Code }} · {{ .Title }}</option>
+  <section class="assessment-focus-band">
+    <div class="assessment-focus-copy">
+      <p class="assessment-eyebrow">Queue focus</p>
+      <p class="assessment-focus-kicker">{{ .WorkspaceFocus.Kicker }}</p>
+      <h3 class="assessment-focus-title">{{ .WorkspaceFocus.Title }}</h3>
+      <p class="assessment-focus-body">{{ .WorkspaceFocus.Body }}</p>
+      {{ if .FilterChips }}
+        <div class="assessment-filter-chip-row">
+          {{ range .FilterChips }}
+            <span class="assessment-filter-chip">{{ . }}</span>
           {{ end }}
-        </select>
-        <select class="select h-8 w-full text-sm" name="tag">
-          <option value="">All tags</option>
+        </div>
+      {{ else }}
+        <p class="assessment-focus-note">Full cycle view. Use group or workflow filters when you need a tighter working slice.</p>
+      {{ end }}
+    </div>
+
+    <dl class="assessment-metric-grid">
+      <div class="assessment-metric">
+        <dt class="assessment-metric-label">Visible now</dt>
+        <dd class="assessment-metric-value">{{ .WorkspaceStats.VisibleItems }}</dd>
+        <div class="assessment-metric-note">
+            {{ if .HasActiveFilters }}
+              of {{ .WorkspaceStats.TotalItems }} controls in the cycle
+            {{ else }}
+              controls in this cycle
+            {{ end }}
+        </div>
+      </div>
+      <div class="assessment-metric">
+        <dt class="assessment-metric-label">Ready for review</dt>
+        <dd class="assessment-metric-value">{{ .WorkspaceStats.ReadyForReviewItems }}</dd>
+        <div class="assessment-metric-note">waiting on reviewer confirmation</div>
+      </div>
+      <div class="assessment-metric">
+        <dt class="assessment-metric-label">Overdue</dt>
+        <dd class="assessment-metric-value">{{ .WorkspaceStats.OverdueItems }}</dd>
+        <div class="assessment-metric-note">past the planned due date</div>
+      </div>
+      <div class="assessment-metric">
+        <dt class="assessment-metric-label">Unassigned</dt>
+        <dd class="assessment-metric-value">{{ .WorkspaceStats.UnassignedItems }}</dd>
+        <div class="assessment-metric-note">still missing a named owner</div>
+      </div>
+    </dl>
+  </section>
+
+  <form class="assessment-filter-shell" action="/assessments/{{ .Assessment.ID }}" method="get">
+    <div class="assessment-toolbar-head">
+      <div>
+        <p class="assessment-eyebrow">Queue filters</p>
+        <h3 class="assessment-toolbar-title">Keep the working view tight.</h3>
+        <p class="assessment-toolbar-copy">Lead with group and workflow. Open assignment filters only when you need to hand work off or audit coverage.</p>
+      </div>
+      <div class="assessment-toolbar-count">
+        <strong>{{ .WorkspaceStats.VisibleItems }}</strong>
+        <span>{{ if .HasActiveFilters }}controls in view{{ else }}controls in view{{ end }}</span>
+      </div>
+    </div>
+
+    <div class="assessment-filter-primary">
+      <select class="select h-10 w-full text-sm" name="group">
+        <option value="">Control group</option>
+        {{ range .Groups }}
+          <option value="{{ .Code }}" {{ if ptrEquals $.Filters.GroupCode .Code }}selected{{ end }}>{{ .Code }} · {{ .Title }}</option>
+        {{ end }}
+      </select>
+
+      <select class="select h-10 w-full text-sm" name="status">
+        <option value="">Workflow state</option>
+        <option value="not_started" {{ if ptrEquals .Filters.Status "not_started" }}selected{{ end }}>Not started</option>
+        <option value="in_progress" {{ if ptrEquals .Filters.Status "in_progress" }}selected{{ end }}>In progress</option>
+        <option value="ready_for_review" {{ if ptrEquals .Filters.Status "ready_for_review" }}selected{{ end }}>Ready for review</option>
+        <option value="validated" {{ if ptrEquals .Filters.Status "validated" }}selected{{ end }}>Validated</option>
+        <option value="not_applicable" {{ if ptrEquals .Filters.Status "not_applicable" }}selected{{ end }}>Not applicable</option>
+        <option value="blocked" {{ if ptrEquals .Filters.Status "blocked" }}selected{{ end }}>Blocked</option>
+      </select>
+
+      <label class="assessment-overdue-toggle">
+        <input class="input" type="checkbox" name="overdue" value="1" {{ if .Filters.Overdue }}checked{{ end }} />
+        <span>Show only overdue work</span>
+      </label>
+
+      <div class="assessment-filter-actions">
+        <a class="btn btn-ghost btn-sm" href="/assessments/{{ .Assessment.ID }}">Reset</a>
+        <button class="btn btn-primary btn-sm" type="submit">Apply view</button>
+      </div>
+    </div>
+
+    <details class="assessment-filter-advanced" {{ if .HasSecondaryFilters }}open{{ end }}>
+      <summary>
+        {{ if .HasSecondaryFilters }}
+          Secondary filters active
+        {{ else }}
+          More filters
+        {{ end }}
+      </summary>
+      <div class="assessment-filter-secondary">
+        <select class="select h-10 w-full text-sm" name="tag">
+          <option value="">Implementation group</option>
           {{ range .Tags }}
             <option value="{{ . }}" {{ if ptrEquals $.Filters.Tag . }}selected{{ end }}>{{ tagLabel . }}</option>
           {{ end }}
         </select>
-        <select class="select h-8 w-full text-sm" name="status">
-          <option value="">All statuses</option>
-          <option value="not_started" {{ if ptrEquals .Filters.Status "not_started" }}selected{{ end }}>Not started</option>
-          <option value="in_progress" {{ if ptrEquals .Filters.Status "in_progress" }}selected{{ end }}>In progress</option>
-          <option value="ready_for_review" {{ if ptrEquals .Filters.Status "ready_for_review" }}selected{{ end }}>Ready for review</option>
-          <option value="validated" {{ if ptrEquals .Filters.Status "validated" }}selected{{ end }}>Validated</option>
-          <option value="not_applicable" {{ if ptrEquals .Filters.Status "not_applicable" }}selected{{ end }}>Not applicable</option>
-          <option value="blocked" {{ if ptrEquals .Filters.Status "blocked" }}selected{{ end }}>Blocked</option>
-        </select>
-        <select class="select h-8 w-full text-sm" name="owner">
-          <option value="">All owners</option>
+
+        <select class="select h-10 w-full text-sm" name="owner">
+          <option value="">Owner</option>
           {{ range .Users }}
             <option value="{{ .ID }}" {{ if ptrEquals $.Filters.OwnerUserID .ID.String }}selected{{ end }}>{{ .Name }}</option>
           {{ end }}
         </select>
-        <select class="select h-8 w-full text-sm" name="reviewer">
-          <option value="">All reviewers</option>
+
+        <select class="select h-10 w-full text-sm" name="reviewer">
+          <option value="">Reviewer</option>
           {{ range .Users }}
             <option value="{{ .ID }}" {{ if ptrEquals $.Filters.ReviewerUserID .ID.String }}selected{{ end }}>{{ .Name }}</option>
           {{ end }}
         </select>
-        <label class="flex h-8 items-center gap-2 text-sm">
-          <input class="input" type="checkbox" name="overdue" value="1" {{ if .Filters.Overdue }}checked{{ end }} />
-          <span>Overdue only</span>
+
+        <label class="assessment-overdue-toggle">
+          <input class="input" type="checkbox" name="unassigned" value="1" {{ if .Filters.Unassigned }}checked{{ end }} />
+          <span>Show only unassigned open work</span>
         </label>
       </div>
-      <div class="mt-3 flex items-center justify-between">
-        <span class="text-xs text-muted-foreground">{{ len .Items }} items</span>
-        <div class="flex items-center gap-2">
-          <a class="btn btn-ghost btn-sm" href="/assessments/{{ .Assessment.ID }}">Reset</a>
-          <button class="btn btn-secondary btn-sm" type="submit">Apply</button>
-        </div>
-      </div>
-    </div>
+    </details>
   </form>
+
+  <div class="assessment-queue-head">
+    <div>
+      <p class="assessment-eyebrow">Queue</p>
+      <h3 class="assessment-queue-title">Controls to move next</h3>
+    </div>
+    <p class="assessment-queue-copy">Workflow, ownership, due date, and score stay in one scan line on desktop. Bulk changes appear only after you select controls.</p>
+  </div>
 
   <form data-bulk-form action="/assessments/{{ .Assessment.ID }}/bulk" method="post">
     {{ template "csrf_field" . }}
+
     <div data-bulk-bar class="bulk-bar">
-      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 py-3">
-        <span class="text-sm font-medium" data-selected-count>0 selected</span>
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-6 py-3">
+        <div class="space-y-0.5">
+          <span class="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Bulk changes</span>
+          <span class="text-sm font-medium" data-selected-count>0 selected</span>
+        </div>
         {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
           <div class="flex flex-wrap items-center gap-2">
             <select class="select h-8 text-sm" data-bulk-action="assign_owner" data-bulk-field="user_id">
-              <option value="">Owner…</option>
+              <option value="">Assign owner</option>
               {{ range .Users }}
                 {{ if .CanBeAssignedItems }}
                   <option value="{{ .ID }}">{{ .Name }}</option>
@@ -76,23 +175,23 @@
               {{ end }}
             </select>
             <select class="select h-8 text-sm" data-bulk-action="assign_reviewer" data-bulk-field="user_id">
-              <option value="">Reviewer…</option>
+              <option value="">Assign reviewer</option>
               {{ range .Users }}
                 {{ if .CanBeAssignedItems }}
                   <option value="{{ .ID }}">{{ .Name }}</option>
                 {{ end }}
               {{ end }}
             </select>
-            <input class="input h-8 w-32" type="text" data-flatpickr data-bulk-action="set_due_date" data-bulk-field="due_date" />
+            <input class="input h-8 w-36" type="text" placeholder="Due date" data-flatpickr data-bulk-action="set_due_date" data-bulk-field="due_date" />
             <select class="select h-8 text-sm" data-bulk-action="set_priority" data-bulk-field="priority">
-              <option value="">Priority…</option>
+              <option value="">Set priority</option>
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
               <option value="critical">Critical</option>
             </select>
-            <button class="btn btn-primary btn-sm" type="submit">Apply</button>
-            <button class="btn btn-ghost btn-sm" type="button" data-bulk-clear aria-label="Clear selection">✕</button>
+            <button class="btn btn-primary btn-sm" type="submit">Apply change</button>
+            <button class="btn btn-ghost btn-sm" type="button" data-bulk-clear aria-label="Clear selection">Clear</button>
             <input type="hidden" name="action" />
             <input type="hidden" name="user_id" />
             <input type="hidden" name="due_date" />
@@ -102,46 +201,139 @@
       </div>
     </div>
 
-    <div class="overflow-x-auto rounded-lg border border-border">
-      <table class="items-table table w-full text-sm">
+    <div class="assessment-bulk-inline">
+      <span class="assessment-bulk-inline-dot"></span>
+      <p>Select controls to change owner, reviewer, due date, or priority in one pass.</p>
+    </div>
+
+    <div class="assessment-table-wrap hidden lg:block overflow-x-auto">
+      <table class="assessment-table table w-full text-sm">
         <thead>
           <tr>
             {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
               <th class="w-10"><input class="input" data-select-all type="checkbox" /></th>
             {{ end }}
-            <th class="w-16">Code</th>
-            <th class="items-table-title">Title</th>
-            <th class="w-28">Status</th>
-            <th class="w-28">Owner</th>
-            <th class="w-28">Reviewer</th>
-            <th class="w-16 text-right">Score</th>
-            <th class="w-32">Due</th>
+            <th>Control</th>
+            <th class="hidden lg:table-cell">Workflow</th>
+            <th class="hidden xl:table-cell">Assignments</th>
+            <th class="hidden lg:table-cell">Due date</th>
+            <th class="hidden 2xl:table-cell text-right">Score</th>
           </tr>
         </thead>
         <tbody>
-          {{ range .Items }}
-            <tr class="{{ if boolValue .IsOverdue }}bg-amber-50/40 dark:bg-amber-950/10{{ end }}">
+          {{ range .QueueRows }}
+            {{ if .ShowGroup }}
+              <tr class="assessment-group-row hidden lg:table-row">
+                <td colspan="{{ if and $.CurrentUser $.CurrentUser.CanManageAssessments }}6{{ else }}5{{ end }}">
+                  Group {{ .Item.GroupCode }} · {{ .Item.GroupTitle }}
+                </td>
+              </tr>
+            {{ end }}
+            <tr class="{{ if boolValue .Item.IsOverdue }}bg-amber-50/40 dark:bg-amber-950/10{{ end }}">
               {{ if and $.CurrentUser $.CurrentUser.CanManageAssessments }}
-                <td><input class="input" type="checkbox" name="item_ids" value="{{ .ID }}" /></td>
+                <td><input class="input" type="checkbox" name="item_ids" value="{{ .Item.ID }}" /></td>
               {{ end }}
-              <td class="font-mono text-xs text-muted-foreground whitespace-nowrap">{{ .ItemCode }}</td>
-              <td class="items-table-title-cell">
-                <a class="font-medium hover:underline" href="/items/{{ .ID }}">{{ .ItemTitle }}</a>
-                <p class="item-summary">{{ .ItemSummary }}</p>
+              <td class="assessment-control-col">
+                <div class="assessment-control-cell">
+                  <div class="assessment-control-code-row">
+                    <span class="assessment-control-code">{{ .Item.ItemCode }}</span>
+                    <span class="assessment-control-group lg:hidden">Group {{ .Item.GroupCode }}</span>
+                  </div>
+                  <a class="assessment-control-link" href="/items/{{ .Item.ID }}">{{ .Item.ItemTitle }}</a>
+                  <p class="assessment-control-summary">{{ .Item.ItemSummary }}</p>
+                  <div class="assessment-control-mobile-meta lg:hidden">
+                    <span class="{{ statusClass .Item.Status }}">{{ statusLabel .Item.Status }}</span>
+                    <span>{{ itemPriority .Item.Priority }} priority</span>
+                    <span>Due {{ formatDate .Item.DueDate }}</span>
+                    <span>
+                      {{ if .Item.OwnerName }}
+                        Owner {{ .Item.OwnerName }}
+                      {{ else }}
+                        Unassigned owner
+                      {{ end }}
+                    </span>
+                  </div>
+                </div>
               </td>
-              <td class="whitespace-nowrap"><span class="{{ statusClass .Status }}">{{ statusLabel .Status }}</span></td>
-              <td class="text-muted-foreground truncate">{{ if .OwnerName }}{{ .OwnerName }}{{ else }}<span class="text-muted-foreground/40">–</span>{{ end }}</td>
-              <td class="text-muted-foreground truncate">{{ if .ReviewerName }}{{ .ReviewerName }}{{ else }}<span class="text-muted-foreground/40">–</span>{{ end }}</td>
-              <td class="tabular-nums text-muted-foreground text-right whitespace-nowrap">{{ scoreValue .Score }}</td>
-              <td class="tabular-nums whitespace-nowrap {{ if boolValue .IsOverdue }}text-amber-600 dark:text-amber-400{{ else }}text-muted-foreground{{ end }}">{{ formatDate .DueDate }}</td>
+              <td class="hidden lg:table-cell">
+                <div class="assessment-workflow-cell">
+                  <span class="{{ statusClass .Item.Status }}">{{ statusLabel .Item.Status }}</span>
+                  <span class="assessment-cell-note">{{ itemPriority .Item.Priority }} priority</span>
+                  {{ if .Item.BlockedReason }}
+                    <span class="assessment-cell-note">{{ trimPointerText .Item.BlockedReason }}</span>
+                  {{ end }}
+                </div>
+              </td>
+              <td class="hidden xl:table-cell">
+                <div class="assessment-assignment-cell">
+                  <div>
+                    <span class="assessment-mini-label">Owner</span>
+                    <span>{{ if .Item.OwnerName }}{{ .Item.OwnerName }}{{ else }}Unassigned{{ end }}</span>
+                  </div>
+                  <div>
+                    <span class="assessment-mini-label">Reviewer</span>
+                    <span>{{ if .Item.ReviewerName }}{{ .Item.ReviewerName }}{{ else }}Open{{ end }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="hidden lg:table-cell">
+                <div class="assessment-date-cell {{ if boolValue .Item.IsOverdue }}assessment-date-cell--overdue{{ end }}">
+                  <span>{{ formatDate .Item.DueDate }}</span>
+                  {{ if boolValue .Item.IsOverdue }}
+                    <span class="assessment-cell-note">{{ daysOverdue .Item.DueDate }} days late</span>
+                  {{ else }}
+                    <span class="assessment-cell-note">planned due date</span>
+                  {{ end }}
+                </div>
+              </td>
+              <td class="hidden 2xl:table-cell text-right tabular-nums text-muted-foreground">{{ scoreValue .Item.Score }}</td>
             </tr>
           {{ else }}
             <tr>
-              <td colspan="{{ if and .CurrentUser .CurrentUser.CanManageAssessments }}8{{ else }}7{{ end }}" class="py-12 text-center text-sm text-muted-foreground">No items match the current filters.</td>
+              <td colspan="{{ if and .CurrentUser .CurrentUser.CanManageAssessments }}6{{ else }}5{{ end }}" class="py-12 text-center text-sm text-muted-foreground">No controls match this view. Reset the filters and re-open the queue.</td>
             </tr>
           {{ end }}
         </tbody>
       </table>
+    </div>
+
+    <div class="assessment-mobile-queue lg:hidden">
+      {{ range .QueueRows }}
+        {{ if .ShowGroup }}
+          <p class="assessment-mobile-group">Group {{ .Item.GroupCode }} · {{ .Item.GroupTitle }}</p>
+        {{ end }}
+        <article class="assessment-mobile-item">
+          <div class="assessment-mobile-item-row">
+            {{ if and $.CurrentUser $.CurrentUser.CanManageAssessments }}
+              <input class="input assessment-mobile-checkbox" type="checkbox" name="item_ids" value="{{ .Item.ID }}" />
+            {{ end }}
+            <div class="assessment-mobile-item-main">
+              <div class="assessment-control-code-row">
+                <span class="assessment-control-code">{{ .Item.ItemCode }}</span>
+                <span class="assessment-control-group">Group {{ .Item.GroupCode }}</span>
+              </div>
+              <a class="assessment-control-link" href="/items/{{ .Item.ID }}">{{ .Item.ItemTitle }}</a>
+              <p class="assessment-control-summary">{{ .Item.ItemSummary }}</p>
+              <div class="assessment-control-mobile-meta">
+                <span class="{{ statusClass .Item.Status }}">{{ statusLabel .Item.Status }}</span>
+                <span>{{ itemPriority .Item.Priority }} priority</span>
+                <span>
+                  {{ if .Item.OwnerName }}
+                    Owner {{ .Item.OwnerName }}
+                  {{ else }}
+                    Unassigned owner
+                  {{ end }}
+                </span>
+                <span class="{{ if boolValue .Item.IsOverdue }}assessment-mobile-overdue{{ end }}">
+                  Due {{ formatDate .Item.DueDate }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </article>
+      {{ else }}
+        <div class="assessment-mobile-empty">No controls match this view. Reset the filters and re-open the queue.</div>
+      {{ end }}
     </div>
   </form>
 </section>

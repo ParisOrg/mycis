@@ -122,6 +122,16 @@ function countSelected(checkboxes) {
   return checkboxes.filter((checkbox) => checkbox.checked).length;
 }
 
+function isVisibleCheckbox(checkbox) {
+  return checkbox.getClientRects().length > 0;
+}
+
+function syncBulkCheckboxAvailability(checkboxes) {
+  checkboxes.forEach((checkbox) => {
+    checkbox.disabled = !isVisibleCheckbox(checkbox);
+  });
+}
+
 function syncBulkState(checkboxes, toggle, countNode, bar) {
   const selected = countSelected(checkboxes);
 
@@ -138,32 +148,39 @@ function syncBulkState(checkboxes, toggle, countNode, bar) {
 }
 
 function bindBulkSelection(form, checkboxes, toggle, countNode, bar) {
+  const activeCheckboxes = () => checkboxes.filter((checkbox) => !checkbox.disabled);
+  const refreshBulkState = () => {
+    syncBulkCheckboxAvailability(checkboxes);
+    syncBulkState(activeCheckboxes(), toggle, countNode, bar);
+  };
+
   if (toggle) {
     toggle.addEventListener("change", () => {
-      checkboxes.forEach((checkbox) => {
+      activeCheckboxes().forEach((checkbox) => {
         checkbox.checked = toggle.checked;
       });
-      syncBulkState(checkboxes, toggle, countNode, bar);
+      refreshBulkState();
     });
   }
 
   checkboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
-      syncBulkState(checkboxes, toggle, countNode, bar);
+      refreshBulkState();
     });
   });
 
   const clearButton = form.querySelector("[data-bulk-clear]");
-  if (!clearButton) {
-    return;
+  if (clearButton) {
+    clearButton.addEventListener("click", () => {
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      refreshBulkState();
+    });
   }
 
-  clearButton.addEventListener("click", () => {
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = false;
-    });
-    syncBulkState(checkboxes, toggle, countNode, bar);
-  });
+  window.addEventListener("resize", refreshBulkState);
+  refreshBulkState();
 }
 
 function bindBulkSubmit(form) {
@@ -199,7 +216,6 @@ function bindBulkForms() {
     const countNode = form.querySelector("[data-selected-count]");
 
     bindBulkSelection(form, checkboxes, toggle, countNode, bar);
-    syncBulkState(checkboxes, toggle, countNode, bar);
     bindBulkSubmit(form);
   });
 }

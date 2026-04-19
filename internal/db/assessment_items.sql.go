@@ -238,6 +238,11 @@ WHERE ai.assessment_id = $1
   AND ($6::text IS NULL OR cr.reviewer_user_id::text = $6::text)
   AND ($7::boolean IS NULL OR (
     $7::boolean = TRUE
+    AND cr.owner_user_id IS NULL
+    AND ai.status NOT IN ('validated', 'not_applicable')
+  ))
+  AND ($8::boolean IS NULL OR (
+    $8::boolean = TRUE
     AND ai.due_date < CURRENT_DATE
     AND ai.status NOT IN ('validated', 'not_applicable')
   ))
@@ -251,6 +256,7 @@ type ListAssessmentItemsParams struct {
 	Status         *string   `json:"status"`
 	OwnerUserID    *string   `json:"owner_user_id"`
 	ReviewerUserID *string   `json:"reviewer_user_id"`
+	Unassigned     *bool     `json:"unassigned"`
 	Overdue        *bool     `json:"overdue"`
 }
 
@@ -292,6 +298,7 @@ func (q *Queries) ListAssessmentItems(ctx context.Context, arg ListAssessmentIte
 		arg.Status,
 		arg.OwnerUserID,
 		arg.ReviewerUserID,
+		arg.Unassigned,
 		arg.Overdue,
 	)
 	if err != nil {
