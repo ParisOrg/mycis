@@ -13,7 +13,7 @@ import (
 )
 
 func (s *Server) assessmentNewPage(c *echo.Context) error {
-	if !s.requireAdmin(c) {
+	if !s.requireAssessmentManager(c) {
 		return nil
 	}
 
@@ -29,7 +29,7 @@ func (s *Server) assessmentNewPage(c *echo.Context) error {
 }
 
 func (s *Server) assessmentCreatePost(c *echo.Context) error {
-	if !s.requireAdmin(c) {
+	if !s.requireAssessmentManager(c) {
 		return nil
 	}
 
@@ -157,7 +157,7 @@ func buildTagOptions(items []db.ListAssessmentItemsRow) []string {
 }
 
 func (s *Server) assessmentBulkPost(c *echo.Context) error {
-	if !s.requireAdmin(c) {
+	if !s.requireAssessmentManager(c) {
 		return nil
 	}
 
@@ -206,7 +206,7 @@ func (s *Server) assessmentBulkPost(c *echo.Context) error {
 }
 
 func (s *Server) assessmentCyclePage(c *echo.Context) error {
-	if !s.requireAdmin(c) {
+	if !s.requireAssessmentManager(c) {
 		return nil
 	}
 
@@ -222,7 +222,7 @@ func (s *Server) assessmentCyclePage(c *echo.Context) error {
 }
 
 func (s *Server) assessmentCyclePost(c *echo.Context) error {
-	if !s.requireAdmin(c) {
+	if !s.requireAssessmentManager(c) {
 		return nil
 	}
 

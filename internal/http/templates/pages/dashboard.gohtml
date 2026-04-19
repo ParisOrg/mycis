@@ -17,7 +17,7 @@
   {{ if not .Assessments }}
     <div class="py-20 text-center">
       <p class="text-sm text-muted-foreground">No assessments yet. Seed a framework, then create an assessment.</p>
-      {{ if and .CurrentUser .CurrentUser.IsAdmin }}
+      {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
         <a class="btn btn-primary mt-6" href="/assessments/new">Create assessment</a>
       {{ end }}
     </div>

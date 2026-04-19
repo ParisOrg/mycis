@@ -62,13 +62,13 @@ func (s *AuthService) ListUsers(ctx context.Context) ([]db.User, error) {
 	return s.queries.ListUsers(ctx)
 }
 
-func (s *AuthService) CreateUser(ctx context.Context, name, email string, isAdmin bool) (db.User, string, error) {
+func (s *AuthService) CreateUser(ctx context.Context, name, email string, role db.UserRole) (db.User, string, error) {
 	password, err := auth.GeneratePassword(20)
 	if err != nil {
 		return db.User{}, "", fmt.Errorf("generate password: %w", err)
 	}
 
-	user, err := s.CreateUserWithPassword(ctx, name, email, password, isAdmin, true)
+	user, err := s.CreateUserWithPassword(ctx, name, email, password, role, true)
 	if err != nil {
 		return db.User{}, "", err
 	}
@@ -76,7 +76,7 @@ func (s *AuthService) CreateUser(ctx context.Context, name, email string, isAdmi
 	return user, password, nil
 }
 
-func (s *AuthService) CreateUserWithPassword(ctx context.Context, name, email, password string, isAdmin, mustChange bool) (db.User, error) {
+func (s *AuthService) CreateUserWithPassword(ctx context.Context, name, email, password string, role db.UserRole, mustChange bool) (db.User, error) {
 	name = strings.TrimSpace(name)
 
 	emailNorm, err := ValidateEmailForStorage(email)
@@ -90,6 +90,9 @@ func (s *AuthService) CreateUserWithPassword(ctx context.Context, name, email, p
 
 	if err := errIfTooLong(name, maxUserNameBytes, "name"); err != nil {
 		return db.User{}, err
+	}
+	if !role.Valid() {
+		return db.User{}, fmt.Errorf("%w: valid role is required", ErrInvalidInput)
 	}
 	password, err = normalizePassword(password)
 	if err != nil {
@@ -105,7 +108,7 @@ func (s *AuthService) CreateUserWithPassword(ctx context.Context, name, email, p
 		Name:               name,
 		Lower:              emailNorm,
 		PasswordHash:       hash,
-		IsAdmin:            isAdmin,
+		Role:               role,
 		MustChangePassword: mustChange,
 	})
 	if err != nil {

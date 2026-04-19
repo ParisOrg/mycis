@@ -34,9 +34,18 @@ func (s *Server) requireAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func (s *Server) requireAdmin(c *echo.Context) bool {
+func (s *Server) requireAssessmentManager(c *echo.Context) bool {
 	user := s.currentUser(c)
-	if user == nil || !user.IsAdmin {
+	if user == nil || !user.CanManageAssessments() {
+		_ = s.redirectWithFlash(c, "/dashboard", "error", "Admin or assessment manager access is required.")
+		return false
+	}
+	return true
+}
+
+func (s *Server) requireUserManager(c *echo.Context) bool {
+	user := s.currentUser(c)
+	if user == nil || !user.CanManageUsers() {
 		_ = s.redirectWithFlash(c, "/dashboard", "error", "Admin access is required.")
 		return false
 	}

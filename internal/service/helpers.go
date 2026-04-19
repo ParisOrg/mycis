@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -71,8 +72,11 @@ func auditPayload(payload map[string]any) []byte {
 }
 
 func isCollaborator(user db.User, detail db.GetAssessmentItemDetailRow) bool {
-	if user.IsAdmin {
+	if user.CanManageAssessments() {
 		return true
+	}
+	if !user.CanEditAssignedItems() {
+		return false
 	}
 
 	if owner := ptrUUIDFromPG(detail.OwnerUserID); owner != nil && *owner == user.ID {
@@ -82,4 +86,23 @@ func isCollaborator(user db.User, detail db.GetAssessmentItemDetailRow) bool {
 		return true
 	}
 	return false
+}
+
+func validateAssignableUser(ctx context.Context, q *db.Queries, userID *uuid.UUID, label string) error {
+	if userID == nil {
+		return nil
+	}
+
+	user, err := q.GetUserByID(ctx, *userID)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return fmt.Errorf("%w: %s not found", ErrInvalidInput, label)
+		}
+		return fmt.Errorf("get %s: %w", label, err)
+	}
+	if !user.CanBeAssignedItems() {
+		return fmt.Errorf("%w: %s must be an admin, assessment manager, or editor", ErrInvalidInput, label)
+	}
+
+	return nil
 }

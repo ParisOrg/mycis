@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
+	"mycis/internal/db"
+
 	"github.com/labstack/echo/v5"
 )
 
 func (s *Server) usersPage(c *echo.Context) error {
-	if !s.requireAdmin(c) {
+	if !s.requireUserManager(c) {
 		return nil
 	}
 
@@ -19,11 +21,12 @@ func (s *Server) usersPage(c *echo.Context) error {
 	return s.render(c, "users", UsersPageData{
 		BaseData: s.baseData(c, "Users", "users"),
 		Users:    users,
+		Roles:    db.AllUserRoles(),
 	})
 }
 
 func (s *Server) userCreatePost(c *echo.Context) error {
-	if !s.requireAdmin(c) {
+	if !s.requireUserManager(c) {
 		return nil
 	}
 
@@ -32,8 +35,12 @@ func (s *Server) userCreatePost(c *echo.Context) error {
 		return err
 	}
 
-	isAdmin := form.Get("is_admin") == "on"
-	user, password, err := s.services.Auth.CreateUser(c.Request().Context(), form.Get("name"), form.Get("email"), isAdmin)
+	role, err := db.ParseUserRole(form.Get("role"))
+	if err != nil {
+		return s.redirectWithFlash(c, "/admin/users", "error", err.Error())
+	}
+
+	user, password, err := s.services.Auth.CreateUser(c.Request().Context(), form.Get("name"), form.Get("email"), role)
 	if err != nil {
 		return s.redirectWithFlash(c, "/admin/users", "error", err.Error())
 	}

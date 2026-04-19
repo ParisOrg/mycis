@@ -94,6 +94,14 @@ func (s *AssessmentItemService) Update(ctx context.Context, actor db.User, input
 		if err != nil {
 			return struct{}{}, err
 		}
+		if actor.CanManageAssessments() {
+			if err := validateAssignableUser(ctx, q, input.OwnerUserID, "owner"); err != nil {
+				return struct{}{}, err
+			}
+			if err := validateAssignableUser(ctx, q, input.ReviewerUserID, "reviewer"); err != nil {
+				return struct{}{}, err
+			}
+		}
 
 		if err := validateUpdateItemState(input); err != nil {
 			return struct{}{}, err
@@ -137,8 +145,11 @@ func validateUpdateItemInput(input UpdateItemInput) error {
 }
 
 func restrictUpdateItemForActor(actor db.User, current db.GetAssessmentItemDetailRow, input UpdateItemInput) (UpdateItemInput, error) {
-	if actor.IsAdmin {
+	if actor.CanManageAssessments() {
 		return input, nil
+	}
+	if !actor.CanEditAssignedItems() {
+		return UpdateItemInput{}, ErrForbidden
 	}
 
 	owner := ptrUUIDFromPG(current.OwnerUserID)
@@ -226,7 +237,7 @@ func updateAssessmentItemRecord(ctx context.Context, q *db.Queries, actorID uuid
 func syncControlRecordFields(ctx context.Context, q *db.Queries, actor db.User, current db.GetAssessmentItemDetailRow, input UpdateItemInput) error {
 	controlRecordID := current.ControlRecordID
 
-	if actor.IsAdmin {
+	if actor.CanManageAssessments() {
 		if err := updateControlRecordAssignments(ctx, q, controlRecordID, input.OwnerUserID, input.ReviewerUserID); err != nil {
 			return err
 		}

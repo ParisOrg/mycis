@@ -3,7 +3,7 @@ INSERT INTO users (
   name,
   email,
   password_hash,
-  is_admin,
+  role,
   must_change_password
 ) VALUES (
   $1,
@@ -27,7 +27,13 @@ WHERE id = $1;
 -- name: ListUsers :many
 SELECT *
 FROM users
-ORDER BY is_admin DESC, name ASC;
+ORDER BY CASE role
+  WHEN 'admin' THEN 0
+  WHEN 'assessment_manager' THEN 1
+  WHEN 'editor' THEN 2
+  ELSE 3
+END,
+name ASC;
 
 -- name: UpdateUserPassword :exec
 UPDATE users

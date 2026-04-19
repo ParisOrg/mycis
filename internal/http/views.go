@@ -72,8 +72,10 @@ type AssessmentDetailPageData struct {
 
 type ItemDetailPageData struct {
 	BaseData
-	Detail service.ItemDetail
-	Users  []db.User
+	Detail               service.ItemDetail
+	Users                []db.User
+	CanEditItem          bool
+	CanManageAssessments bool
 }
 
 type AssessmentCyclePageData struct {
@@ -84,4 +86,5 @@ type AssessmentCyclePageData struct {
 type UsersPageData struct {
 	BaseData
 	Users []db.User
+	Roles []db.UserRole
 }

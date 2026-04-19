@@ -88,7 +88,7 @@ func (s *AssessmentService) GetAssessment(ctx context.Context, assessmentID stri
 }
 
 func (s *AssessmentService) CreateAssessment(ctx context.Context, actor db.User, input CreateAssessmentInput) (db.Assessment, error) {
-	if !actor.IsAdmin {
+	if !actor.CanManageAssessments() {
 		return db.Assessment{}, ErrForbidden
 	}
 	recordInput := assessmentRecordInput{
@@ -125,7 +125,7 @@ func (s *AssessmentService) ListAssessmentItems(ctx context.Context, assessmentI
 }
 
 func (s *AssessmentService) BulkUpdateItems(ctx context.Context, actor db.User, input BulkUpdateInput) error {
-	if !actor.IsAdmin {
+	if !actor.CanManageAssessments() {
 		return ErrForbidden
 	}
 	if err := validateBulkUpdateInput(input); err != nil {
@@ -153,7 +153,7 @@ type CreateCycleInput struct {
 }
 
 func (s *AssessmentService) CreateCycleFromPrevious(ctx context.Context, actor db.User, input CreateCycleInput) (db.Assessment, error) {
-	if !actor.IsAdmin {
+	if !actor.CanManageAssessments() {
 		return db.Assessment{}, ErrForbidden
 	}
 	recordInput := assessmentRecordInput{
@@ -286,8 +286,14 @@ func validateBulkUpdateInput(input BulkUpdateInput) error {
 func applyBulkUpdateAction(ctx context.Context, q *db.Queries, actor db.User, input BulkUpdateInput) error {
 	switch input.Action {
 	case bulkActionAssignOwner:
+		if err := validateAssignableUser(ctx, q, input.UserID, "owner"); err != nil {
+			return err
+		}
 		return applyBulkAssignOwner(ctx, q, input)
 	case bulkActionAssignReviewer:
+		if err := validateAssignableUser(ctx, q, input.UserID, "reviewer"); err != nil {
+			return err
+		}
 		return applyBulkAssignReviewer(ctx, q, input)
 	case bulkActionSetDueDate:
 		return applyBulkSetDueDate(ctx, q, actor.ID, input)

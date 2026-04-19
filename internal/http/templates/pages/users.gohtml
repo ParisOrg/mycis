@@ -2,7 +2,7 @@
 <section class="grid gap-8 lg:grid-cols-[360px_1fr] max-w-5xl">
   <div>
     <h2 class="section-heading">Create user</h2>
-    <p class="mt-1 text-sm text-muted-foreground">Add an owner or reviewer account.</p>
+    <p class="mt-1 text-sm text-muted-foreground">Add a user and choose the access level they need.</p>
     <form class="mt-5 space-y-4" action="/admin/users" method="post">
       {{ template "csrf_field" . }}
       <div class="field">
@@ -13,10 +13,14 @@
         <label class="label" for="email">Email</label>
         <input class="input mt-1.5 w-full" id="email" name="email" type="email" required />
       </div>
-      <label class="flex items-center gap-2 text-sm">
-        <input class="input" type="checkbox" name="is_admin" />
-        <span>Admin access</span>
-      </label>
+      <div class="field">
+        <label class="label" for="role">Role</label>
+        <select class="select mt-1.5 w-full text-sm" id="role" name="role">
+          {{ range .Roles }}
+            <option value="{{ . }}" {{ if eq . "editor" }}selected{{ end }}>{{ .Label }}</option>
+          {{ end }}
+        </select>
+      </div>
       <button class="btn btn-primary btn-sm" type="submit">Create user</button>
     </form>
   </div>
@@ -38,7 +42,7 @@
             <tr>
               <td class="font-medium">{{ .Name }}</td>
               <td class="text-muted-foreground">{{ .Email }}</td>
-              <td><span class="{{ if .IsAdmin }}badge-outline{{ else }}badge{{ end }} text-xs">{{ if .IsAdmin }}Admin{{ else }}Standard{{ end }}</span></td>
+              <td><span class="{{ if .CanManageUsers }}badge-outline{{ else }}badge{{ end }} text-xs">{{ .Role.Label }}</span></td>
               <td>{{ if .MustChangePassword }}<span class="text-amber-600 dark:text-amber-400 text-xs">Must change</span>{{ else }}<span class="text-muted-foreground text-xs">Set</span>{{ end }}</td>
             </tr>
           {{ end }}
