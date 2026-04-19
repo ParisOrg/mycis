@@ -170,6 +170,9 @@ If you previously ran an earlier local version of migration `000003_control_reco
 Seed one or more frameworks (YAML under `seed/frameworks/`):
 
 ```bash
+just seed
+
+# or seed individual frameworks:
 go run ./cmd/app seed-framework -slug cis-v8-1
 go run ./cmd/app seed-framework -slug nist-csf-2-0
 go run ./cmd/app seed-framework -slug iso-27001-2022
@@ -180,6 +183,8 @@ go run ./cmd/app seed-framework -slug dora-2025
 go run ./cmd/app seed-framework -slug gdpr-2018
 go run ./cmd/app seed-framework -slug eu-ai-act-2024
 ```
+
+Use `just seed-force` to refresh all shipped frameworks in place.
 
 Create an admin user:
 
