@@ -49,6 +49,7 @@ func TestBuildTagOptionsDedupesInFirstSeenItemOrder(t *testing.T) {
 }
 
 func TestReadItemUpdateInputAdminRequiresValidDueDate(t *testing.T) {
+	srv := &Server{}
 	itemID := uuid.New()
 	form := url.Values{
 		"status":   {"in_progress"},
@@ -56,7 +57,7 @@ func TestReadItemUpdateInputAdminRequiresValidDueDate(t *testing.T) {
 		"due_date": {""},
 	}
 
-	_, err := readItemUpdateInput(form, itemID, true)
+	_, err := srv.readItemUpdateInput(form, itemID, true)
 	if err == nil {
 		t.Fatal("expected error")
 	}
@@ -66,6 +67,7 @@ func TestReadItemUpdateInputAdminRequiresValidDueDate(t *testing.T) {
 }
 
 func TestReadItemUpdateInputAdminParsesDueDate(t *testing.T) {
+	srv := &Server{}
 	itemID := uuid.New()
 	form := url.Values{
 		"status":           {"validated"},
@@ -77,7 +79,7 @@ func TestReadItemUpdateInputAdminParsesDueDate(t *testing.T) {
 		"notes":            {"  documented  "},
 	}
 
-	input, err := readItemUpdateInput(form, itemID, true)
+	input, err := srv.readItemUpdateInput(form, itemID, true)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -103,6 +105,7 @@ func TestReadItemUpdateInputAdminParsesDueDate(t *testing.T) {
 }
 
 func TestReadItemUpdateInputNonAdminIgnoresDueDate(t *testing.T) {
+	srv := &Server{}
 	itemID := uuid.New()
 	form := url.Values{
 		"status":   {"in_progress"},
@@ -110,7 +113,7 @@ func TestReadItemUpdateInputNonAdminIgnoresDueDate(t *testing.T) {
 		"due_date": {""},
 	}
 
-	input, err := readItemUpdateInput(form, itemID, false)
+	input, err := srv.readItemUpdateInput(form, itemID, false)
 	if err != nil {
 		t.Fatal(err)
 	}

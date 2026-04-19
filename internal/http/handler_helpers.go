@@ -44,7 +44,9 @@ func (s *Server) readFlashes(c *echo.Context) []Flash {
 	}
 
 	raw := session.Flashes()
-	_ = session.Save(c.Request(), c.Response())
+	if len(raw) > 0 {
+		_ = session.Save(c.Request(), c.Response())
+	}
 
 	flashes := make([]Flash, 0, len(raw))
 	for _, item := range raw {

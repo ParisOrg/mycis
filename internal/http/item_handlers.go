@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/google/uuid"
@@ -45,7 +44,7 @@ func (s *Server) itemUpdatePost(c *echo.Context) error {
 	}
 
 	user := s.currentUser(c)
-	input, err := readItemUpdateInput(form, id, user != nil && user.IsAdmin)
+	input, err := s.readItemUpdateInput(form, id, user != nil && user.IsAdmin)
 	if err != nil {
 		return s.redirectWithFlash(c, "/items/"+itemID, "error", err.Error())
 	}
@@ -81,7 +80,7 @@ func (s *Server) itemEvidencePost(c *echo.Context) error {
 	return s.redirectWithFlash(c, "/items/"+itemID, "success", "Evidence link added.")
 }
 
-func readItemUpdateInput(form url.Values, itemID uuid.UUID, isAdmin bool) (service.UpdateItemInput, error) {
+func (s *Server) readItemUpdateInput(form url.Values, itemID uuid.UUID, isAdmin bool) (service.UpdateItemInput, error) {
 	status, err := service.ParseAssessmentItemStatus(form.Get("status"))
 	if err != nil {
 		return service.UpdateItemInput{}, err
@@ -96,9 +95,9 @@ func readItemUpdateInput(form url.Values, itemID uuid.UUID, isAdmin bool) (servi
 		ID:             itemID,
 		Status:         status,
 		Priority:       priority,
-		OwnerUserID:    parseOptionalUUID(form.Get("owner_user_id")),
-		ReviewerUserID: parseOptionalUUID(form.Get("reviewer_user_id")),
-		Score:          parseOptionalInt32(form.Get("score")),
+		OwnerUserID:    s.optionalUUID(form.Get("owner_user_id")),
+		ReviewerUserID: s.optionalUUID(form.Get("reviewer_user_id")),
+		Score:          s.optionalInt32(form.Get("score")),
 		Notes:          textutil.TrimPtr(form.Get("notes")),
 		BlockedReason:  textutil.TrimPtr(form.Get("blocked_reason")),
 	}
@@ -113,28 +112,4 @@ func readItemUpdateInput(form url.Values, itemID uuid.UUID, isAdmin bool) (servi
 	}
 	input.DueDate = dueDate
 	return input, nil
-}
-
-func parseOptionalUUID(raw string) *uuid.UUID {
-	if raw == "" {
-		return nil
-	}
-	parsed, err := uuid.Parse(raw)
-	if err != nil {
-		return nil
-	}
-	return &parsed
-}
-
-func parseOptionalInt32(raw string) *int32 {
-	raw = strings.TrimSpace(raw)
-	if raw == "" {
-		return nil
-	}
-	parsed, err := strconv.ParseInt(raw, 10, 32)
-	if err != nil {
-		return nil
-	}
-	value := int32(parsed)
-	return &value
 }
