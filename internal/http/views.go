@@ -84,4 +84,5 @@ type AssessmentCyclePageData struct {
 type UsersPageData struct {
 	BaseData
 	Users []db.User
+	Roles []db.UserRole
 }

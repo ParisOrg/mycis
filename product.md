@@ -22,7 +22,7 @@ The main purpose of the application is to provide a collaborative, centralized p
 3. **Authentication & Authorization**:
    - Secure web-based sign-in using email and passwords.
    - Session-based authentication using HTTP-only cookies (via `gorilla/sessions`).
-   - Role-based separation: regular users can manage and review controls, while admin users can create overall assessments and manage user accounts.
+   - Role-based separation with `admin`, `assessment_manager`, `editor`, and `viewer` access levels, while item ownership and review stay assignment-based.
    - Enforced password changes for newly created or temporary user accounts.
 4. **Command-Line Interface (CLI)**:
    - Includes built-in CLI commands in the main binary to run database migrations out-of-the-box (`migrate`), bootstrap the initial administrator user (`create-admin`), and seed standard framework YAML files into the Postgres database (`seed-framework`).

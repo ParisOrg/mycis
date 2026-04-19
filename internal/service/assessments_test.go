@@ -243,7 +243,7 @@ func TestValidateBulkUpdateInput(t *testing.T) {
 func TestCreateAssessmentWithFrameworkTxCreatesFreshControlRecords(t *testing.T) {
 	t.Parallel()
 
-	actor := db.User{ID: uuid.New(), IsAdmin: true}
+	actor := db.User{ID: uuid.New(), Role: db.UserRoleAdmin}
 	input := assessmentRecordInput{
 		FrameworkID: uuid.New(),
 		Name:        "Q2",
@@ -283,7 +283,7 @@ func TestCreateAssessmentWithFrameworkTxCreatesFreshControlRecords(t *testing.T)
 func TestCreateAssessmentWithFrameworkTxCopiesCycleAssignments(t *testing.T) {
 	t.Parallel()
 
-	actor := db.User{ID: uuid.New(), IsAdmin: true}
+	actor := db.User{ID: uuid.New(), Role: db.UserRoleAdmin}
 	previousAssessmentID := uuid.New()
 	input := assessmentRecordInput{
 		FrameworkID: uuid.New(),

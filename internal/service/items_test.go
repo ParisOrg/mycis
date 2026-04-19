@@ -181,7 +181,7 @@ func TestRestrictUpdateItemForActor(t *testing.T) {
 
 	ownerID := uuid.New()
 	reviewerID := uuid.New()
-	actor := db.User{ID: ownerID}
+	actor := db.User{ID: ownerID, Role: db.UserRoleEditor}
 	current := db.GetAssessmentItemDetailRow{
 		OwnerUserID:    pgtype.UUID{Bytes: ownerID, Valid: true},
 		ReviewerUserID: pgtype.UUID{Bytes: reviewerID, Valid: true},

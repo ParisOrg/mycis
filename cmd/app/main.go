@@ -15,6 +15,7 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"mycis/internal/config"
+	"mycis/internal/db"
 	httpui "mycis/internal/http"
 	"mycis/internal/service"
 )
@@ -119,7 +120,7 @@ func runCreateAdmin(cfg config.Config, args []string) error {
 
 	services := service.New(pool)
 	if *password == "" {
-		user, tempPassword, err := services.Auth.CreateUser(ctx, *name, *email, true)
+		user, tempPassword, err := services.Auth.CreateUser(ctx, *name, *email, db.UserRoleAdmin)
 		if err != nil {
 			return err
 		}
@@ -127,7 +128,7 @@ func runCreateAdmin(cfg config.Config, args []string) error {
 		return nil
 	}
 
-	user, err := services.Auth.CreateUserWithPassword(ctx, *name, *email, *password, true, true)
+	user, err := services.Auth.CreateUserWithPassword(ctx, *name, *email, *password, db.UserRoleAdmin, true)
 	if err != nil {
 		return err
 	}

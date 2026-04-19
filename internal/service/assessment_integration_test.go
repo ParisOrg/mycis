@@ -17,8 +17,8 @@ func TestAssessmentControlRecordsRemainIsolatedAcrossAssessmentsAndCycles(t *tes
 	}
 
 	admin := h.createAdmin(t)
-	owner := h.createUser(t, "Owner", "owner@example.com", false)
-	reviewer := h.createUser(t, "Reviewer", "reviewer@example.com", false)
+	owner := h.createUser(t, "Owner", "owner@example.com", db.UserRoleEditor)
+	reviewer := h.createUser(t, "Reviewer", "reviewer@example.com", db.UserRoleEditor)
 	framework := h.onlyFramework(t)
 
 	startDate := time.Date(2026, time.April, 1, 0, 0, 0, 0, time.UTC)

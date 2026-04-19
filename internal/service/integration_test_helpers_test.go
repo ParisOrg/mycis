@@ -56,10 +56,10 @@ func newIntegrationHarness(t *testing.T) *integrationHarness {
 	}
 }
 
-func (h *integrationHarness) createUser(t *testing.T, name, email string, isAdmin bool) db.User {
+func (h *integrationHarness) createUser(t *testing.T, name, email string, role db.UserRole) db.User {
 	t.Helper()
 
-	user, err := h.services.Auth.CreateUserWithPassword(h.ctx, name, email, "password-12345", isAdmin, false)
+	user, err := h.services.Auth.CreateUserWithPassword(h.ctx, name, email, "password-12345", role, false)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -69,7 +69,7 @@ func (h *integrationHarness) createUser(t *testing.T, name, email string, isAdmi
 func (h *integrationHarness) createAdmin(t *testing.T) db.User {
 	t.Helper()
 
-	return h.createUser(t, "Admin", "admin@example.com", true)
+	return h.createUser(t, "Admin", "admin@example.com", db.UserRoleAdmin)
 }
 
 func (h *integrationHarness) onlyFramework(t *testing.T) db.ListFrameworksWithCountsRow {

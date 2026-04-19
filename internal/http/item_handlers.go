@@ -44,7 +44,7 @@ func (s *Server) itemUpdatePost(c *echo.Context) error {
 	}
 
 	user := s.currentUser(c)
-	input, err := s.readItemUpdateInput(form, id, user != nil && user.IsAdmin)
+	input, err := s.readItemUpdateInput(form, id, user != nil && user.CanManageAssessments())
 	if err != nil {
 		return s.redirectWithFlash(c, "/items/"+itemID, "error", err.Error())
 	}
@@ -80,7 +80,7 @@ func (s *Server) itemEvidencePost(c *echo.Context) error {
 	return s.redirectWithFlash(c, "/items/"+itemID, "success", "Evidence link added.")
 }
 
-func (s *Server) readItemUpdateInput(form url.Values, itemID uuid.UUID, isAdmin bool) (service.UpdateItemInput, error) {
+func (s *Server) readItemUpdateInput(form url.Values, itemID uuid.UUID, canManageAssessments bool) (service.UpdateItemInput, error) {
 	status, err := service.ParseAssessmentItemStatus(form.Get("status"))
 	if err != nil {
 		return service.UpdateItemInput{}, err
@@ -102,7 +102,7 @@ func (s *Server) readItemUpdateInput(form url.Values, itemID uuid.UUID, isAdmin 
 		BlockedReason:  textutil.TrimPtr(form.Get("blocked_reason")),
 	}
 
-	if !isAdmin {
+	if !canManageAssessments {
 		return input, nil
 	}
 

@@ -1,4 +1,6 @@
 {{ define "content" }}
+{{ $canManageAssessments := and .CurrentUser .CurrentUser.CanManageAssessments }}
+{{ $canEditAssignedItems := and .CurrentUser .CurrentUser.CanEditAssignedItems }}
 <section class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] max-w-6xl">
   <div class="space-y-8">
     <div>
@@ -21,70 +23,108 @@
           <div class="grid gap-4 md:grid-cols-2">
             <div class="field">
               <label class="label" for="status">Status</label>
-              <select class="select mt-1.5 w-full text-sm" id="status" name="status">
-                <option value="not_started" {{ if eq .Detail.Item.Status "not_started" }}selected{{ end }}>Not started</option>
-                <option value="in_progress" {{ if eq .Detail.Item.Status "in_progress" }}selected{{ end }}>In progress</option>
-                <option value="ready_for_review" {{ if eq .Detail.Item.Status "ready_for_review" }}selected{{ end }}>Ready for review</option>
-                <option value="validated" {{ if eq .Detail.Item.Status "validated" }}selected{{ end }}>Validated</option>
-                <option value="not_applicable" {{ if eq .Detail.Item.Status "not_applicable" }}selected{{ end }}>Not applicable</option>
-                <option value="blocked" {{ if eq .Detail.Item.Status "blocked" }}selected{{ end }}>Blocked</option>
-              </select>
+              {{ if $canEditAssignedItems }}
+                <select class="select mt-1.5 w-full text-sm" id="status" name="status">
+                  <option value="not_started" {{ if eq .Detail.Item.Status "not_started" }}selected{{ end }}>Not started</option>
+                  <option value="in_progress" {{ if eq .Detail.Item.Status "in_progress" }}selected{{ end }}>In progress</option>
+                  <option value="ready_for_review" {{ if eq .Detail.Item.Status "ready_for_review" }}selected{{ end }}>Ready for review</option>
+                  <option value="validated" {{ if eq .Detail.Item.Status "validated" }}selected{{ end }}>Validated</option>
+                  <option value="not_applicable" {{ if eq .Detail.Item.Status "not_applicable" }}selected{{ end }}>Not applicable</option>
+                  <option value="blocked" {{ if eq .Detail.Item.Status "blocked" }}selected{{ end }}>Blocked</option>
+                </select>
+              {{ else }}
+                <div class="input mt-1.5 flex w-full items-center text-sm">{{ statusLabel .Detail.Item.Status }}</div>
+              {{ end }}
             </div>
             <div class="field">
               <label class="label" for="score">Score</label>
-              <select class="select mt-1.5 w-full text-sm" id="score" name="score">
-                <option value="">Not scored</option>
-                <option value="1" {{ if intPtrEquals .Detail.Item.Score 1 }}selected{{ end }}>1</option>
-                <option value="2" {{ if intPtrEquals .Detail.Item.Score 2 }}selected{{ end }}>2</option>
-                <option value="3" {{ if intPtrEquals .Detail.Item.Score 3 }}selected{{ end }}>3</option>
-                <option value="4" {{ if intPtrEquals .Detail.Item.Score 4 }}selected{{ end }}>4</option>
-                <option value="5" {{ if intPtrEquals .Detail.Item.Score 5 }}selected{{ end }}>5</option>
-              </select>
+              {{ if $canEditAssignedItems }}
+                <select class="select mt-1.5 w-full text-sm" id="score" name="score">
+                  <option value="">Not scored</option>
+                  <option value="1" {{ if intPtrEquals .Detail.Item.Score 1 }}selected{{ end }}>1</option>
+                  <option value="2" {{ if intPtrEquals .Detail.Item.Score 2 }}selected{{ end }}>2</option>
+                  <option value="3" {{ if intPtrEquals .Detail.Item.Score 3 }}selected{{ end }}>3</option>
+                  <option value="4" {{ if intPtrEquals .Detail.Item.Score 4 }}selected{{ end }}>4</option>
+                  <option value="5" {{ if intPtrEquals .Detail.Item.Score 5 }}selected{{ end }}>5</option>
+                </select>
+              {{ else }}
+                <div class="input mt-1.5 flex w-full items-center text-sm">{{ scoreValue .Detail.Item.Score }}</div>
+              {{ end }}
             </div>
             <div class="field">
               <label class="label" for="owner_user_id">Owner</label>
-              <select class="select mt-1.5 w-full text-sm" id="owner_user_id" name="owner_user_id">
-                <option value="">Unassigned</option>
-                {{ range .Users }}
-                  <option value="{{ .ID }}" {{ if eq $.Detail.Item.OwnerUserID.Bytes .ID }}selected{{ end }}>{{ .Name }}</option>
-                {{ end }}
-              </select>
+              {{ if $canManageAssessments }}
+                <select class="select mt-1.5 w-full text-sm" id="owner_user_id" name="owner_user_id">
+                  <option value="">Unassigned</option>
+                  {{ range .Users }}
+                    {{ if .CanBeAssignedItems }}
+                      <option value="{{ .ID }}" {{ if eq $.Detail.Item.OwnerUserID.Bytes .ID }}selected{{ end }}>{{ .Name }}</option>
+                    {{ end }}
+                  {{ end }}
+                </select>
+              {{ else }}
+                <div class="input mt-1.5 flex w-full items-center text-sm">{{ if .Detail.Item.OwnerName }}{{ .Detail.Item.OwnerName }}{{ else }}Unassigned{{ end }}</div>
+              {{ end }}
             </div>
             <div class="field">
               <label class="label" for="reviewer_user_id">Reviewer</label>
-              <select class="select mt-1.5 w-full text-sm" id="reviewer_user_id" name="reviewer_user_id">
-                <option value="">Unassigned</option>
-                {{ range .Users }}
-                  <option value="{{ .ID }}" {{ if eq $.Detail.Item.ReviewerUserID.Bytes .ID }}selected{{ end }}>{{ .Name }}</option>
-                {{ end }}
-              </select>
+              {{ if $canManageAssessments }}
+                <select class="select mt-1.5 w-full text-sm" id="reviewer_user_id" name="reviewer_user_id">
+                  <option value="">Unassigned</option>
+                  {{ range .Users }}
+                    {{ if .CanBeAssignedItems }}
+                      <option value="{{ .ID }}" {{ if eq $.Detail.Item.ReviewerUserID.Bytes .ID }}selected{{ end }}>{{ .Name }}</option>
+                    {{ end }}
+                  {{ end }}
+                </select>
+              {{ else }}
+                <div class="input mt-1.5 flex w-full items-center text-sm">{{ if .Detail.Item.ReviewerName }}{{ .Detail.Item.ReviewerName }}{{ else }}Unassigned{{ end }}</div>
+              {{ end }}
             </div>
             <div class="field">
               <label class="label" for="priority">Priority</label>
-              <select class="select mt-1.5 w-full text-sm" id="priority" name="priority">
-                <option value="low" {{ if eq .Detail.Item.Priority "low" }}selected{{ end }}>Low</option>
-                <option value="medium" {{ if eq .Detail.Item.Priority "medium" }}selected{{ end }}>Medium</option>
-                <option value="high" {{ if eq .Detail.Item.Priority "high" }}selected{{ end }}>High</option>
-                <option value="critical" {{ if eq .Detail.Item.Priority "critical" }}selected{{ end }}>Critical</option>
-              </select>
+              {{ if $canManageAssessments }}
+                <select class="select mt-1.5 w-full text-sm" id="priority" name="priority">
+                  <option value="low" {{ if eq .Detail.Item.Priority "low" }}selected{{ end }}>Low</option>
+                  <option value="medium" {{ if eq .Detail.Item.Priority "medium" }}selected{{ end }}>Medium</option>
+                  <option value="high" {{ if eq .Detail.Item.Priority "high" }}selected{{ end }}>High</option>
+                  <option value="critical" {{ if eq .Detail.Item.Priority "critical" }}selected{{ end }}>Critical</option>
+                </select>
+              {{ else }}
+                <div class="input mt-1.5 flex w-full items-center text-sm">{{ itemPriority .Detail.Item.Priority }}</div>
+              {{ end }}
             </div>
             <div class="field">
               <label class="label" for="due_date">Due date</label>
-              <input class="input mt-1.5 w-full" id="due_date" name="due_date" type="text" value="{{ formatDate .Detail.Item.DueDate }}" data-flatpickr />
+              {{ if $canManageAssessments }}
+                <input class="input mt-1.5 w-full" id="due_date" name="due_date" type="text" value="{{ formatDate .Detail.Item.DueDate }}" data-flatpickr />
+              {{ else }}
+                <div class="input mt-1.5 flex w-full items-center text-sm">{{ formatDate .Detail.Item.DueDate }}</div>
+              {{ end }}
             </div>
             <div class="field md:col-span-2">
               <label class="label" for="notes">Notes</label>
-              <textarea class="textarea mt-1.5 min-h-28 w-full" id="notes" name="notes">{{ .Detail.Item.Notes }}</textarea>
+              {{ if $canEditAssignedItems }}
+                <textarea class="textarea mt-1.5 min-h-28 w-full" id="notes" name="notes">{{ .Detail.Item.Notes }}</textarea>
+              {{ else }}
+                <div class="mt-1.5 min-h-28 whitespace-pre-wrap rounded-md border border-border bg-muted/30 px-3 py-2.5 text-sm">{{ if .Detail.Item.Notes }}{{ .Detail.Item.Notes }}{{ else }}None{{ end }}</div>
+              {{ end }}
             </div>
             <div class="field md:col-span-2">
               <label class="label" for="blocked_reason">Blocked reason</label>
-              <textarea class="textarea mt-1.5 min-h-16 w-full" id="blocked_reason" name="blocked_reason">{{ trimPointerText .Detail.Item.BlockedReason }}</textarea>
+              {{ if $canEditAssignedItems }}
+                <textarea class="textarea mt-1.5 min-h-16 w-full" id="blocked_reason" name="blocked_reason">{{ trimPointerText .Detail.Item.BlockedReason }}</textarea>
+              {{ else }}
+                <div class="mt-1.5 min-h-16 whitespace-pre-wrap rounded-md border border-border bg-muted/30 px-3 py-2.5 text-sm">{{ if .Detail.Item.BlockedReason }}{{ trimPointerText .Detail.Item.BlockedReason }}{{ else }}None{{ end }}</div>
+              {{ end }}
             </div>
           </div>
         </div>
         <div class="flex items-center justify-end gap-3 border-t border-border px-5 py-3">
           <a class="btn btn-ghost btn-sm" href="/assessments/{{ .Detail.Item.AssessmentID }}">Back</a>
-          <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+          {{ if $canEditAssignedItems }}
+            <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
+          {{ end }}
         </div>
       </div>
     </form>
@@ -126,12 +166,14 @@
         {{ else }}
           <p class="text-sm text-muted-foreground py-1">No evidence links yet.</p>
         {{ end }}
-        <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/evidence" method="post">
-          {{ template "csrf_field" . }}
-          <input class="input w-full" name="label" type="text" placeholder="Label" />
-          <input class="input w-full" name="url" type="url" placeholder="https://…" />
-          <button class="btn btn-secondary btn-sm" type="submit">Add evidence</button>
-        </form>
+        {{ if $canEditAssignedItems }}
+          <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/evidence" method="post">
+            {{ template "csrf_field" . }}
+            <input class="input w-full" name="label" type="text" placeholder="Label" />
+            <input class="input w-full" name="url" type="url" placeholder="https://…" />
+            <button class="btn btn-secondary btn-sm" type="submit">Add evidence</button>
+          </form>
+        {{ end }}
       </div>
     </div>
 
@@ -149,11 +191,13 @@
         {{ else }}
           <p class="text-sm text-muted-foreground py-1">No comments yet.</p>
         {{ end }}
-        <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/comments" method="post">
-          {{ template "csrf_field" . }}
-          <textarea class="textarea min-h-16 w-full" name="body" placeholder="Add context or review notes"></textarea>
-          <button class="btn btn-secondary btn-sm" type="submit">Add comment</button>
-        </form>
+        {{ if $canEditAssignedItems }}
+          <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/comments" method="post">
+            {{ template "csrf_field" . }}
+            <textarea class="textarea min-h-16 w-full" name="body" placeholder="Add context or review notes"></textarea>
+            <button class="btn btn-secondary btn-sm" type="submit">Add comment</button>
+          </form>
+        {{ end }}
       </div>
     </div>
 

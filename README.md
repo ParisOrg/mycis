@@ -278,9 +278,9 @@ To add another framework, add a new YAML file under `seed/frameworks/` and run `
 | GET | `/dashboard` | Yes | Home dashboard. |
 | GET | `/frameworks` | Yes | Framework browser. |
 | GET | `/assessments` | Yes | Assessment list. |
-| GET/POST | `/assessments/new` | Admin | New assessment form. |
+| GET/POST | `/assessments/new` | Admin or Assessment Manager | New assessment form. |
 | GET | `/assessments/{id}` | Yes | Assessment detail and items. |
-| POST | `/assessments/{id}/bulk` | Admin | Bulk update selected items. |
+| POST | `/assessments/{id}/bulk` | Admin or Assessment Manager | Bulk update selected items. |
 | GET | `/items/{id}` | Yes | Single control item detail. |
 | POST | `/items/{id}` | Yes | Update item fields. |
 | POST | `/items/{id}/comments` | Yes | Add comment. |
@@ -341,7 +341,7 @@ go test ./...
 - **`DATABASE_URL is required`** — Export it or add it to `.env`.
 - **`APP_SESSION_KEY must be at least 32 characters`** — Use a longer secret.
 - **Empty frameworks list** — Run `seed-framework` for your YAML slug.
-- **Cannot create assessment** — Only admin users can open `/assessments/new`; use `create-admin` or promote via database (not exposed in UI).
+- **Cannot create assessment** — Only admin and assessment manager users can open `/assessments/new`; use `create-admin` for the first admin, then create the rest from `/admin/users`.
 - **Port already in use** — Change `APP_ADDR` or stop the conflicting process.
 - **Docker Postgres port** — Check whether `docker-compose.override.yml` maps `55432` vs `5432` and match `DATABASE_URL` accordingly.
 

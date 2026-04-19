@@ -156,6 +156,7 @@ func buildTemplateCache() (map[string]*template.Template, error) {
 			"intPtrEquals":     intPtrEquals,
 			"trimPointerText":  trimPointerText,
 			"assessmentStatus": assessmentStatus,
+			"itemPriority":     itemPriority,
 			"numericFloat":     numericFloat,
 		}).ParseFiles(files...)
 		if err != nil {
@@ -276,6 +277,11 @@ func intPtrEquals(value *int32, expected int) bool {
 
 func assessmentStatus(status db.AssessmentStatus) string {
 	text := strings.ReplaceAll(string(status), "_", " ")
+	return cases.Title(language.Und).String(text)
+}
+
+func itemPriority(priority db.ItemPriority) string {
+	text := strings.ReplaceAll(string(priority), "_", " ")
 	return cases.Title(language.Und).String(text)
 }
 

@@ -4,7 +4,7 @@
     <p class="text-xs text-muted-foreground">{{ .Assessment.FrameworkLabel }} {{ .Assessment.FrameworkVersion }}</p>
     <h2 class="mt-1 text-xl font-semibold tracking-tight">{{ .Assessment.Name }}</h2>
     <p class="mt-1 text-sm text-muted-foreground">{{ .Assessment.Scope }} · Due {{ formatDate .Assessment.DueDate }}</p>
-    {{ if and .CurrentUser .CurrentUser.IsAdmin }}
+    {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
       <a class="btn btn-secondary btn-sm mt-3" href="/assessments/{{ .Assessment.ID }}/cycle">New cycle</a>
     {{ end }}
   </div>
@@ -65,18 +65,22 @@
     <div data-bulk-bar class="bulk-bar">
       <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6 py-3">
         <span class="text-sm font-medium" data-selected-count>0 selected</span>
-        {{ if and .CurrentUser .CurrentUser.IsAdmin }}
+        {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
           <div class="flex flex-wrap items-center gap-2">
             <select class="select h-8 text-sm" data-bulk-action="assign_owner" data-bulk-field="user_id">
               <option value="">Owner…</option>
               {{ range .Users }}
-                <option value="{{ .ID }}">{{ .Name }}</option>
+                {{ if .CanBeAssignedItems }}
+                  <option value="{{ .ID }}">{{ .Name }}</option>
+                {{ end }}
               {{ end }}
             </select>
             <select class="select h-8 text-sm" data-bulk-action="assign_reviewer" data-bulk-field="user_id">
               <option value="">Reviewer…</option>
               {{ range .Users }}
-                <option value="{{ .ID }}">{{ .Name }}</option>
+                {{ if .CanBeAssignedItems }}
+                  <option value="{{ .ID }}">{{ .Name }}</option>
+                {{ end }}
               {{ end }}
             </select>
             <input class="input h-8 w-32" type="text" data-flatpickr data-bulk-action="set_due_date" data-bulk-field="due_date" />
@@ -102,7 +106,7 @@
       <table class="items-table table w-full text-sm">
         <thead>
           <tr>
-            {{ if and .CurrentUser .CurrentUser.IsAdmin }}
+            {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
               <th class="w-10"><input class="input" data-select-all type="checkbox" /></th>
             {{ end }}
             <th class="w-16">Code</th>
@@ -117,7 +121,7 @@
         <tbody>
           {{ range .Items }}
             <tr class="{{ if boolValue .IsOverdue }}bg-amber-50/40 dark:bg-amber-950/10{{ end }}">
-              {{ if and $.CurrentUser $.CurrentUser.IsAdmin }}
+              {{ if and $.CurrentUser $.CurrentUser.CanManageAssessments }}
                 <td><input class="input" type="checkbox" name="item_ids" value="{{ .ID }}" /></td>
               {{ end }}
               <td class="font-mono text-xs text-muted-foreground whitespace-nowrap">{{ .ItemCode }}</td>
@@ -133,7 +137,7 @@
             </tr>
           {{ else }}
             <tr>
-              <td colspan="{{ if and .CurrentUser .CurrentUser.IsAdmin }}8{{ else }}7{{ end }}" class="py-12 text-center text-sm text-muted-foreground">No items match the current filters.</td>
+              <td colspan="{{ if and .CurrentUser .CurrentUser.CanManageAssessments }}8{{ else }}7{{ end }}" class="py-12 text-center text-sm text-muted-foreground">No items match the current filters.</td>
             </tr>
           {{ end }}
         </tbody>

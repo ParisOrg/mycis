@@ -16,7 +16,7 @@ INSERT INTO users (
   name,
   email,
   password_hash,
-  is_admin,
+  role,
   must_change_password
 ) VALUES (
   $1,
@@ -25,15 +25,15 @@ INSERT INTO users (
   $4,
   $5
 )
-RETURNING id, name, email, password_hash, is_admin, must_change_password, created_at, updated_at
+RETURNING id, name, email, password_hash, must_change_password, created_at, updated_at, role
 `
 
 type CreateUserParams struct {
-	Name               string `json:"name"`
-	Lower              string `json:"lower"`
-	PasswordHash       string `json:"password_hash"`
-	IsAdmin            bool   `json:"is_admin"`
-	MustChangePassword bool   `json:"must_change_password"`
+	Name               string   `json:"name"`
+	Lower              string   `json:"lower"`
+	PasswordHash       string   `json:"password_hash"`
+	Role               UserRole `json:"role"`
+	MustChangePassword bool     `json:"must_change_password"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
@@ -41,7 +41,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		arg.Name,
 		arg.Lower,
 		arg.PasswordHash,
-		arg.IsAdmin,
+		arg.Role,
 		arg.MustChangePassword,
 	)
 	var i User
@@ -50,16 +50,16 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.Name,
 		&i.Email,
 		&i.PasswordHash,
-		&i.IsAdmin,
 		&i.MustChangePassword,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Role,
 	)
 	return i, err
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, name, email, password_hash, is_admin, must_change_password, created_at, updated_at
+SELECT id, name, email, password_hash, must_change_password, created_at, updated_at, role
 FROM users
 WHERE email = lower($1)
 `
@@ -72,16 +72,16 @@ func (q *Queries) GetUserByEmail(ctx context.Context, lower string) (User, error
 		&i.Name,
 		&i.Email,
 		&i.PasswordHash,
-		&i.IsAdmin,
 		&i.MustChangePassword,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Role,
 	)
 	return i, err
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, name, email, password_hash, is_admin, must_change_password, created_at, updated_at
+SELECT id, name, email, password_hash, must_change_password, created_at, updated_at, role
 FROM users
 WHERE id = $1
 `
@@ -94,18 +94,24 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.Name,
 		&i.Email,
 		&i.PasswordHash,
-		&i.IsAdmin,
 		&i.MustChangePassword,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.Role,
 	)
 	return i, err
 }
 
 const listUsers = `-- name: ListUsers :many
-SELECT id, name, email, password_hash, is_admin, must_change_password, created_at, updated_at
+SELECT id, name, email, password_hash, must_change_password, created_at, updated_at, role
 FROM users
-ORDER BY is_admin DESC, name ASC
+ORDER BY CASE role
+  WHEN 'admin' THEN 0
+  WHEN 'assessment_manager' THEN 1
+  WHEN 'editor' THEN 2
+  ELSE 3
+END,
+name ASC
 `
 
 func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
@@ -122,10 +128,10 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 			&i.Name,
 			&i.Email,
 			&i.PasswordHash,
-			&i.IsAdmin,
 			&i.MustChangePassword,
 			&i.CreatedAt,
 			&i.UpdatedAt,
+			&i.Role,
 		); err != nil {
 			return nil, err
 		}
