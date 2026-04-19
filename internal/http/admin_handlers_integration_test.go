@@ -55,7 +55,7 @@ func TestUserUpdatePostInvalidPasswordKeepsEditDialogState(t *testing.T) {
 		`id="edit-user-dialog" data-dialog-auto-open="true"`,
 		`value="Updated User"`,
 		`value="original@example.com"`,
-		`password must be at least 12 characters`,
+		`password must be at least 10 characters`,
 	} {
 		if !strings.Contains(body, want) {
 			t.Fatalf("expected response body to contain %q", want)
