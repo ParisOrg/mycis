@@ -199,7 +199,9 @@ func buildAssessmentWorkspaceStats(allItems, visibleItems []db.ListAssessmentIte
 		if boolValue(item.IsOverdue) {
 			stats.OverdueItems++
 		}
-		if item.OwnerName == nil || strings.TrimSpace(*item.OwnerName) == "" {
+		if !item.OwnerUserID.Valid &&
+			item.Status != db.AssessmentItemStatusValidated &&
+			item.Status != db.AssessmentItemStatusNotApplicable {
 			stats.UnassignedItems++
 		}
 		if item.Priority == db.ItemPriorityHigh || item.Priority == db.ItemPriorityCritical {

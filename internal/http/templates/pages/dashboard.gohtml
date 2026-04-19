@@ -16,7 +16,7 @@
 {{ else if .Dashboard }}
   {{ $overview := .Dashboard.Overview }}
   {{ $completion := percentage $overview.CompletedItems $overview.TotalItems }}
-  {{ $assessmentPath := printf "/assessments/%s" .SelectedAssessment.ID }}
+  {{ $assessmentPath := printf "/assessments/%v" .SelectedAssessment.ID }}
 
   <section class="dashboard-workspace">
     <header class="dashboard-header">

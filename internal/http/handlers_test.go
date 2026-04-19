@@ -49,6 +49,38 @@ func TestBuildTagOptionsDedupesInFirstSeenItemOrder(t *testing.T) {
 	}
 }
 
+func TestBuildAssessmentWorkspaceStatsCountsOnlyOpenOwnerlessItems(t *testing.T) {
+	t.Parallel()
+
+	blankOwnerName := ""
+	allItems := make([]db.ListAssessmentItemsRow, 5)
+	visibleItems := []db.ListAssessmentItemsRow{
+		{
+			Status:      db.AssessmentItemStatusInProgress,
+			OwnerUserID: uuidToPG(uuid.New()),
+			OwnerName:   &blankOwnerName,
+		},
+		{
+			Status: db.AssessmentItemStatusValidated,
+		},
+		{
+			Status: db.AssessmentItemStatusBlocked,
+		},
+	}
+
+	stats := buildAssessmentWorkspaceStats(allItems, visibleItems)
+
+	if got, want := stats.TotalItems, len(allItems); got != want {
+		t.Fatalf("unexpected total items: got %d want %d", got, want)
+	}
+	if got, want := stats.VisibleItems, len(visibleItems); got != want {
+		t.Fatalf("unexpected visible items: got %d want %d", got, want)
+	}
+	if got, want := stats.UnassignedItems, 1; got != want {
+		t.Fatalf("unexpected unassigned item count: got %d want %d", got, want)
+	}
+}
+
 func TestReadItemUpdateInputAdminRequiresValidDueDate(t *testing.T) {
 	srv := &Server{}
 	itemID := uuid.New()

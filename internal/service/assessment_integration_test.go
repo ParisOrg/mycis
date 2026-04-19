@@ -536,3 +536,105 @@ func TestUpdateClearsNotesAndNotApplicableFlag(t *testing.T) {
 		t.Fatalf("expected notes to be cleared, got %q", detail.Item.Notes)
 	}
 }
+
+func TestListAssessmentItemsUnassignedFilterReturnsOnlyOpenOwnerlessItems(t *testing.T) {
+	h := newIntegrationHarness(t)
+
+	slug := fmt.Sprintf("assessment-unassigned-%d", time.Now().UnixNano())
+	h.writeFrameworkSeed(t, slug, testOrderedFrameworkSeedYAML(slug))
+	if err := h.services.Frameworks.SeedFramework(h.ctx, slug, false); err != nil {
+		t.Fatal(err)
+	}
+
+	admin := h.createAdmin(t)
+	owner := h.createUser(t, "Owner", "owner@example.com", db.UserRoleEditor)
+	framework := h.onlyFramework(t)
+
+	assessment, err := h.services.Assessments.CreateAssessment(h.ctx, admin, CreateAssessmentInput{
+		FrameworkID: framework.ID,
+		Name:        "Assessment Filters",
+		Scope:       "Production",
+		StartDate:   time.Date(2026, time.April, 1, 0, 0, 0, 0, time.UTC),
+		DueDate:     time.Date(2026, time.April, 30, 0, 0, 0, 0, time.UTC),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	items, err := h.services.Assessments.ListAssessmentItems(h.ctx, assessment.ID.String(), AssessmentItemFilters{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	unassignedInProgress := findAssessmentItemByCode(t, items, "ZZ-two")
+	if err := h.services.Items.Update(h.ctx, admin, UpdateItemInput{
+		ID:       unassignedInProgress.ID,
+		Status:   db.AssessmentItemStatusInProgress,
+		Priority: unassignedInProgress.Priority,
+		DueDate:  unassignedInProgress.DueDate,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	blockedReason := "Waiting on evidence"
+	assignedBlocked := findAssessmentItemByCode(t, items, "AA-one")
+	if err := h.services.Items.Update(h.ctx, admin, UpdateItemInput{
+		ID:            assignedBlocked.ID,
+		OwnerUserID:   &owner.ID,
+		Status:        db.AssessmentItemStatusBlocked,
+		Priority:      assignedBlocked.Priority,
+		DueDate:       assignedBlocked.DueDate,
+		BlockedReason: &blockedReason,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	completedUnassigned := findAssessmentItemByCode(t, items, "MM-three")
+	score := int32(4)
+	if err := h.services.Items.Update(h.ctx, admin, UpdateItemInput{
+		ID:       completedUnassigned.ID,
+		Status:   db.AssessmentItemStatusValidated,
+		Score:    &score,
+		Priority: completedUnassigned.Priority,
+		DueDate:  completedUnassigned.DueDate,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	secondBlockedReason := "Waiting on vendor response"
+	unassignedBlocked := findAssessmentItemByCode(t, items, "AA-nine")
+	if err := h.services.Items.Update(h.ctx, admin, UpdateItemInput{
+		ID:            unassignedBlocked.ID,
+		Status:        db.AssessmentItemStatusBlocked,
+		Priority:      unassignedBlocked.Priority,
+		DueDate:       unassignedBlocked.DueDate,
+		BlockedReason: &secondBlockedReason,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	unassigned := true
+	unassignedItems, err := h.services.Assessments.ListAssessmentItems(h.ctx, assessment.ID.String(), AssessmentItemFilters{
+		Unassigned: &unassigned,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := assessmentItemCodes(unassignedItems), []string{"ZZ-two", "AA-nine"}; !slices.Equal(got, want) {
+		t.Fatalf("unexpected unassigned item codes: got %v want %v", got, want)
+	}
+
+	groupCode := "AA"
+	status := string(db.AssessmentItemStatusBlocked)
+	composedItems, err := h.services.Assessments.ListAssessmentItems(h.ctx, assessment.ID.String(), AssessmentItemFilters{
+		GroupCode:  &groupCode,
+		Status:     &status,
+		Unassigned: &unassigned,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := assessmentItemCodes(composedItems), []string{"AA-nine"}; !slices.Equal(got, want) {
+		t.Fatalf("unexpected composed filter item codes: got %v want %v", got, want)
+	}
+}
