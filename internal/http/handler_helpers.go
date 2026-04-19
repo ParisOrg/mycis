@@ -75,6 +75,10 @@ func readItemFilters(c *echo.Context) service.AssessmentItemFilters {
 		OwnerUserID:    textutil.TrimPtr(query.Get("owner")),
 		ReviewerUserID: textutil.TrimPtr(query.Get("reviewer")),
 	}
+	if query.Get("unassigned") == "1" {
+		value := true
+		filters.Unassigned = &value
+	}
 	if query.Get("overdue") == "1" {
 		value := true
 		filters.Overdue = &value
@@ -88,6 +92,7 @@ func hasFilters(filters service.AssessmentItemFilters) bool {
 		filters.Status != nil ||
 		filters.OwnerUserID != nil ||
 		filters.ReviewerUserID != nil ||
+		filters.Unassigned != nil ||
 		filters.Overdue != nil
 }
 

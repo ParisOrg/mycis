@@ -185,6 +185,135 @@
     @apply inline-block h-1.5 w-1.5 rounded-full;
   }
 
+  .dashboard-workspace {
+    @apply space-y-8 lg:space-y-10;
+  }
+
+  .dashboard-header {
+    @apply flex flex-col gap-6 border-b border-border pb-6 xl:flex-row xl:items-end xl:justify-between;
+  }
+
+  .dashboard-header-main {
+    @apply min-w-0 space-y-2;
+  }
+
+  .dashboard-header-meta {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .dashboard-header-stats {
+    @apply grid gap-x-6 gap-y-5 sm:grid-cols-3 xl:min-w-[28rem];
+  }
+
+  .dashboard-header-stat {
+    @apply min-w-0;
+  }
+
+  .dashboard-header-stat-value {
+    @apply mt-1 block text-3xl font-semibold tracking-tight text-foreground tabular-nums;
+    letter-spacing: -0.04em;
+  }
+
+  .dashboard-focus-band {
+    @apply grid gap-8 border-b border-border pb-8;
+  }
+
+  .dashboard-focus-copy {
+    @apply min-w-0;
+  }
+
+  .dashboard-focus-kicker {
+    @apply mt-3 text-xs font-semibold uppercase text-primary;
+    letter-spacing: 0.14em;
+  }
+
+  .dashboard-focus-title {
+    @apply mt-2 max-w-[26ch] text-2xl font-semibold tracking-tight text-foreground lg:text-[2rem];
+    letter-spacing: -0.04em;
+  }
+
+  .dashboard-focus-body {
+    @apply mt-3 max-w-[60ch] text-sm leading-6 text-muted-foreground;
+  }
+
+  .dashboard-focus-actions {
+    @apply mt-5 flex flex-wrap gap-3;
+  }
+
+  .dashboard-signal-grid {
+    @apply grid gap-x-6 gap-y-5 sm:grid-cols-2;
+  }
+
+  .dashboard-signal {
+    @apply block border-t border-border pt-3 no-underline transition-colors duration-150 hover:text-foreground;
+  }
+
+  .dashboard-signal--alert {
+    border-top-color: color-mix(in oklab, var(--primary) 48%, var(--border) 52%);
+  }
+
+  .dashboard-signal--active {
+    border-top-color: color-mix(in oklab, var(--foreground) 30%, var(--border) 70%);
+  }
+
+  .dashboard-signal-label {
+    @apply block text-[11px] font-semibold uppercase text-muted-foreground;
+    letter-spacing: 0.16em;
+  }
+
+  .dashboard-signal-value {
+    @apply mt-2 block text-3xl font-semibold tracking-tight text-foreground tabular-nums;
+    letter-spacing: -0.04em;
+  }
+
+  .dashboard-signal-note {
+    @apply mt-1 block text-xs leading-5 text-muted-foreground;
+  }
+
+  .dashboard-main-grid {
+    @apply grid gap-10 xl:grid-cols-[minmax(0,1.15fr)_minmax(22rem,0.85fr)];
+  }
+
+  .dashboard-panel {
+    @apply border-t border-border pt-5;
+  }
+
+  .dashboard-panel-head {
+    @apply flex items-start justify-between gap-4;
+  }
+
+  .dashboard-panel-copy {
+    @apply mt-1 text-sm leading-6 text-muted-foreground;
+  }
+
+  .dashboard-panel-link {
+    @apply shrink-0 text-xs text-muted-foreground transition-colors hover:text-foreground;
+  }
+
+  .dashboard-owner-link,
+  .dashboard-group-link {
+    @apply block border-b border-border py-3 no-underline transition-colors duration-150 last:border-b-0 hover:bg-accent/20;
+  }
+
+  .dashboard-owner-top,
+  .dashboard-group-top {
+    @apply flex items-baseline justify-between gap-4;
+  }
+
+  .dashboard-owner-meta {
+    @apply mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground;
+  }
+
+  .dashboard-owner-meter,
+  .dashboard-group-meter {
+    @apply mt-2 h-1.5 w-full overflow-hidden rounded-full bg-primary/10;
+  }
+
+  .dashboard-owner-meter-fill,
+  .dashboard-group-meter-fill {
+    @apply h-full bg-primary;
+  }
+
   /* Assessment switcher: chevron-triggered menu anchored to the page title. */
   .dashboard-switcher > summary::-webkit-details-marker {
     display: none;
@@ -200,6 +329,13 @@
 
   .dashboard-switcher-item.is-active {
     @apply bg-accent/60 font-medium;
+  }
+
+  @media (min-width: 80rem) {
+    .dashboard-focus-band {
+      grid-template-columns: minmax(0, 1.1fr) minmax(24rem, 0.9fr);
+      align-items: start;
+    }
   }
 
   /* Assessment items table – fixed layout to prevent overflow */
@@ -252,6 +388,339 @@
 
   .bulk-bar--visible {
     transform: translateY(0);
+  }
+
+  .assessment-workspace {
+    @apply mx-auto max-w-7xl space-y-6 lg:space-y-8;
+  }
+
+  .assessment-header {
+    @apply flex flex-col gap-4 border-b border-border pb-6 lg:flex-row lg:items-end lg:justify-between;
+  }
+
+  .assessment-header-main {
+    @apply min-w-0 max-w-[72ch];
+  }
+
+  .assessment-eyebrow {
+    @apply text-[11px] font-semibold uppercase text-muted-foreground;
+    letter-spacing: 0.18em;
+  }
+
+  .assessment-header-title {
+    @apply mt-2 text-3xl font-semibold tracking-tight text-foreground lg:text-4xl;
+    font-stretch: 90%;
+    letter-spacing: -0.045em;
+  }
+
+  .assessment-header-meta {
+    @apply mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground;
+    max-width: 65ch;
+  }
+
+  .assessment-header-separator {
+    @apply text-muted-foreground/40;
+  }
+
+  .assessment-header-actions {
+    @apply flex flex-wrap items-center gap-3;
+  }
+
+  .assessment-header-status {
+    @apply inline-flex items-center rounded-full border border-border bg-muted px-3 py-1 text-xs font-semibold uppercase text-foreground;
+    letter-spacing: 0.14em;
+  }
+
+  .assessment-focus-band {
+    display: grid;
+    gap: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+  }
+
+  .assessment-focus-copy {
+    @apply min-w-0;
+  }
+
+  .assessment-focus-kicker {
+    @apply mt-3 text-xs font-semibold uppercase text-primary;
+    letter-spacing: 0.14em;
+  }
+
+  .assessment-focus-title {
+    @apply mt-2 max-w-[28ch] text-2xl font-semibold tracking-tight text-foreground lg:text-[2rem];
+    letter-spacing: -0.04em;
+  }
+
+  .assessment-focus-body {
+    @apply mt-3 max-w-[62ch] text-sm leading-6 text-muted-foreground;
+  }
+
+  .assessment-focus-note {
+    @apply mt-4 text-sm leading-6 text-muted-foreground;
+  }
+
+  .assessment-metric-grid {
+    @apply grid gap-x-6 gap-y-5 sm:grid-cols-2;
+  }
+
+  .assessment-metric {
+    @apply min-w-0;
+  }
+
+  .assessment-metric-label {
+    @apply text-[11px] font-semibold uppercase text-muted-foreground;
+    letter-spacing: 0.16em;
+  }
+
+  .assessment-metric-value {
+    @apply mt-2 block text-3xl font-semibold tracking-tight text-foreground;
+    letter-spacing: -0.04em;
+  }
+
+  .assessment-metric-note {
+    @apply mt-1 text-xs leading-5 text-muted-foreground;
+  }
+
+  .assessment-filter-shell {
+    @apply border-b border-border pb-6;
+  }
+
+  .assessment-toolbar-head {
+    @apply flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between;
+  }
+
+  .assessment-toolbar-title {
+    @apply mt-2 text-xl font-semibold tracking-tight text-foreground lg:text-2xl;
+    letter-spacing: -0.035em;
+  }
+
+  .assessment-toolbar-copy {
+    @apply mt-2 max-w-[60ch] text-sm leading-6 text-muted-foreground;
+  }
+
+  .assessment-toolbar-count {
+    @apply shrink-0 text-left lg:min-w-36 lg:text-right;
+  }
+
+  .assessment-toolbar-count strong {
+    @apply block text-3xl font-semibold tracking-tight text-foreground;
+    letter-spacing: -0.04em;
+  }
+
+  .assessment-toolbar-count span {
+    @apply mt-1 block text-xs font-medium uppercase text-muted-foreground;
+    letter-spacing: 0.14em;
+  }
+
+  .assessment-filter-primary,
+  .assessment-filter-secondary {
+    @apply mt-5 grid gap-3;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+
+  .assessment-overdue-toggle {
+    @apply flex min-h-10 items-center gap-3 rounded-xl border border-border bg-muted/40 px-3 text-sm text-foreground;
+  }
+
+  .assessment-filter-actions {
+    @apply flex flex-wrap items-center justify-start gap-2 lg:justify-end;
+  }
+
+  .assessment-filter-advanced {
+    @apply mt-4 border-t border-border pt-4;
+  }
+
+  .assessment-filter-advanced summary {
+    @apply cursor-pointer list-none text-sm font-medium text-foreground;
+  }
+
+  .assessment-filter-advanced summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .assessment-filter-advanced .assessment-filter-secondary {
+    @apply mt-4;
+  }
+
+  .assessment-filter-chip-row {
+    @apply mt-4 flex flex-wrap gap-2;
+  }
+
+  .assessment-filter-chip {
+    @apply inline-flex items-center rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-foreground;
+  }
+
+  .assessment-queue-head {
+    @apply flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between;
+  }
+
+  .assessment-queue-title {
+    @apply mt-2 text-xl font-semibold tracking-tight text-foreground lg:text-2xl;
+    letter-spacing: -0.035em;
+  }
+
+  .assessment-queue-copy {
+    @apply max-w-[52ch] text-sm leading-6 text-muted-foreground;
+  }
+
+  .assessment-bulk-inline {
+    @apply mb-4 flex items-start gap-3 text-sm leading-6 text-muted-foreground;
+  }
+
+  .assessment-bulk-inline-dot {
+    @apply mt-2 inline-block h-2 w-2 shrink-0 rounded-full;
+    background: var(--primary);
+  }
+
+  .assessment-table-wrap {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .assessment-table {
+    table-layout: auto;
+  }
+
+  .assessment-table th {
+    @apply border-b border-border bg-muted/40 px-3 py-3 text-left text-xs font-semibold uppercase text-muted-foreground;
+    letter-spacing: 0.14em;
+  }
+
+  .assessment-table td {
+    @apply border-b border-border px-3 py-4 align-top;
+  }
+
+  .assessment-table tbody tr:hover {
+    @apply bg-accent/20;
+  }
+
+  .assessment-group-row td {
+    @apply border-b border-border bg-muted/60 px-3 py-2 text-[11px] font-semibold uppercase text-muted-foreground;
+    letter-spacing: 0.16em;
+  }
+
+  .assessment-control-col {
+    min-width: 18rem;
+  }
+
+  .assessment-control-cell {
+    @apply min-w-0;
+    max-width: 70ch;
+  }
+
+  .assessment-control-code-row {
+    @apply mb-1.5 flex flex-wrap items-center gap-2 text-xs font-medium text-muted-foreground;
+  }
+
+  .assessment-control-code {
+    @apply rounded-full bg-muted px-2 py-1 font-mono text-[11px] font-semibold uppercase tracking-wide text-foreground;
+  }
+
+  .assessment-control-group {
+    @apply text-muted-foreground;
+  }
+
+  .assessment-control-link {
+    @apply block text-base font-semibold leading-6 text-foreground no-underline;
+    max-width: 58ch;
+    overflow-wrap: anywhere;
+  }
+
+  .assessment-control-link:hover {
+    color: var(--primary);
+  }
+
+  .assessment-control-summary {
+    @apply mt-1.5 text-sm leading-6 text-muted-foreground;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    max-width: 68ch;
+    overflow-wrap: anywhere;
+  }
+
+  .assessment-control-mobile-meta {
+    @apply mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground;
+  }
+
+  .assessment-workflow-cell,
+  .assessment-assignment-cell,
+  .assessment-date-cell {
+    @apply grid gap-1.5;
+  }
+
+  .assessment-cell-note {
+    @apply text-xs leading-5 text-muted-foreground;
+    max-width: 26ch;
+  }
+
+  .assessment-assignment-cell {
+    @apply text-sm text-foreground;
+  }
+
+  .assessment-assignment-cell > div {
+    @apply grid gap-0.5;
+  }
+
+  .assessment-mini-label {
+    @apply text-[11px] font-semibold uppercase text-muted-foreground;
+    letter-spacing: 0.14em;
+  }
+
+  .assessment-date-cell--overdue {
+    color: var(--color-amber-600);
+  }
+
+  .assessment-date-cell--overdue .assessment-cell-note {
+    color: var(--color-amber-600);
+  }
+
+  .assessment-mobile-queue {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .assessment-mobile-group {
+    @apply px-0 py-3 text-[11px] font-semibold uppercase text-muted-foreground;
+    letter-spacing: 0.16em;
+  }
+
+  .assessment-mobile-item {
+    @apply border-b border-border py-4 last:border-b-0;
+  }
+
+  .assessment-mobile-item-row {
+    @apply flex items-start gap-3;
+  }
+
+  .assessment-mobile-item-main {
+    @apply min-w-0 flex-1;
+  }
+
+  .assessment-mobile-checkbox {
+    @apply mt-1 shrink-0;
+  }
+
+  .assessment-mobile-empty {
+    @apply py-10 text-center text-sm text-muted-foreground;
+  }
+
+  .assessment-mobile-overdue {
+    color: var(--color-amber-600);
+  }
+
+  @media (min-width: 80rem) {
+    .assessment-focus-band {
+      grid-template-columns: minmax(0, 1.25fr) minmax(20rem, 0.75fr);
+      align-items: start;
+    }
+
+    .assessment-metric-grid {
+      border-left: 1px solid var(--border);
+      padding-left: 1.5rem;
+    }
   }
 }
 

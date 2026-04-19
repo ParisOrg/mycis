@@ -41,3 +41,18 @@ SET password_hash = $2,
     must_change_password = FALSE,
     updated_at = NOW()
 WHERE id = $1;
+
+-- name: UpdateUser :one
+UPDATE users
+SET name = $2,
+    role = $3,
+    updated_at = NOW()
+WHERE id = $1
+RETURNING *;
+
+-- name: UpdateUserPasswordReset :exec
+UPDATE users
+SET password_hash = $2,
+    must_change_password = TRUE,
+    updated_at = NOW()
+WHERE id = $1;

@@ -83,3 +83,87 @@ func TestDashboardGetPreservesFrameworkSortOrder(t *testing.T) {
 		t.Fatalf("unexpected low score item order: got %v want %v", lowScoreCodes, want)
 	}
 }
+
+func TestDashboardGetCountsOnlyOpenUnassignedItems(t *testing.T) {
+	h := newIntegrationHarness(t)
+
+	slug := fmt.Sprintf("dashboard-unassigned-%d", time.Now().UnixNano())
+	h.writeFrameworkSeed(t, slug, testOrderedFrameworkSeedYAML(slug))
+	if err := h.services.Frameworks.SeedFramework(h.ctx, slug, false); err != nil {
+		t.Fatal(err)
+	}
+
+	admin := h.createAdmin(t)
+	owner := h.createUser(t, "Owner", "owner@example.com", db.UserRoleEditor)
+	framework := h.onlyFramework(t)
+
+	assessment, err := h.services.Assessments.CreateAssessment(h.ctx, admin, CreateAssessmentInput{
+		FrameworkID: framework.ID,
+		Name:        "Dashboard Unassigned Assessment",
+		Scope:       "Production",
+		StartDate:   time.Date(2026, time.April, 1, 0, 0, 0, 0, time.UTC),
+		DueDate:     time.Date(2026, time.April, 30, 0, 0, 0, 0, time.UTC),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	items, err := h.services.Assessments.ListAssessmentItems(h.ctx, assessment.ID.String(), AssessmentItemFilters{})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assigned := findAssessmentItemByCode(t, items, "AA-one")
+	if err := h.services.Items.Update(h.ctx, admin, UpdateItemInput{
+		ID:          assigned.ID,
+		OwnerUserID: &owner.ID,
+		Status:      db.AssessmentItemStatusInProgress,
+		Priority:    assigned.Priority,
+		DueDate:     assigned.DueDate,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	openUnassigned := findAssessmentItemByCode(t, items, "ZZ-two")
+	if err := h.services.Items.Update(h.ctx, admin, UpdateItemInput{
+		ID:       openUnassigned.ID,
+		Status:   db.AssessmentItemStatusInProgress,
+		Priority: openUnassigned.Priority,
+		DueDate:  openUnassigned.DueDate,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	completedUnassigned := findAssessmentItemByCode(t, items, "MM-three")
+	score := int32(5)
+	if err := h.services.Items.Update(h.ctx, admin, UpdateItemInput{
+		ID:       completedUnassigned.ID,
+		Status:   db.AssessmentItemStatusValidated,
+		Score:    &score,
+		Priority: completedUnassigned.Priority,
+		DueDate:  completedUnassigned.DueDate,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	blockedReason := "Waiting on vendor evidence"
+	secondOpenUnassigned := findAssessmentItemByCode(t, items, "AA-nine")
+	if err := h.services.Items.Update(h.ctx, admin, UpdateItemInput{
+		ID:            secondOpenUnassigned.ID,
+		Status:        db.AssessmentItemStatusBlocked,
+		Priority:      secondOpenUnassigned.Priority,
+		DueDate:       secondOpenUnassigned.DueDate,
+		BlockedReason: &blockedReason,
+	}); err != nil {
+		t.Fatal(err)
+	}
+
+	dashboard, err := h.services.Dashboard.Get(h.ctx, assessment.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if got, want := dashboard.Overview.UnassignedItems, int32(2); got != want {
+		t.Fatalf("unexpected unassigned item count: got %d want %d", got, want)
+	}
+}

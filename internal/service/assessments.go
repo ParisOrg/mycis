@@ -34,6 +34,7 @@ type AssessmentItemFilters struct {
 	Status         *string
 	OwnerUserID    *string
 	ReviewerUserID *string
+	Unassigned     *bool
 	Overdue        *bool
 }
 
@@ -120,6 +121,7 @@ func (s *AssessmentService) ListAssessmentItems(ctx context.Context, assessmentI
 		Status:         filters.Status,
 		OwnerUserID:    filters.OwnerUserID,
 		ReviewerUserID: filters.ReviewerUserID,
+		Unassigned:     filters.Unassigned,
 		Overdue:        filters.Overdue,
 	})
 }

@@ -38,6 +38,16 @@ type DashboardPageData struct {
 	Assessments        []db.ListAssessmentsRow
 	SelectedAssessment *db.ListAssessmentsRow
 	Dashboard          *service.DashboardData
+	Focus              DashboardFocus
+	UnassignedItems    int
+}
+
+type DashboardFocus struct {
+	Kicker      string
+	Title       string
+	Body        string
+	ActionLabel string
+	ActionHref  string
 }
 
 type FrameworksPageData struct {
@@ -64,12 +74,40 @@ type GroupOption struct {
 
 type AssessmentDetailPageData struct {
 	BaseData
-	Assessment db.GetAssessmentByIDRow
-	Items      []db.ListAssessmentItemsRow
-	Users      []db.User
-	Groups     []GroupOption
-	Tags       []string
-	Filters    service.AssessmentItemFilters
+	Assessment          db.GetAssessmentByIDRow
+	Items               []db.ListAssessmentItemsRow
+	Users               []db.User
+	Groups              []GroupOption
+	Tags                []string
+	Filters             service.AssessmentItemFilters
+	QueueRows           []AssessmentQueueRow
+	WorkspaceStats      AssessmentWorkspaceStats
+	WorkspaceFocus      AssessmentWorkspaceFocus
+	FilterChips         []string
+	HasActiveFilters    bool
+	HasSecondaryFilters bool
+}
+
+type AssessmentQueueRow struct {
+	Item      db.ListAssessmentItemsRow
+	ShowGroup bool
+}
+
+type AssessmentWorkspaceStats struct {
+	TotalItems          int
+	VisibleItems        int
+	ReadyForReviewItems int
+	OverdueItems        int
+	BlockedItems        int
+	UnassignedItems     int
+	HighPriorityItems   int
+	ValidatedItems      int
+}
+
+type AssessmentWorkspaceFocus struct {
+	Kicker string
+	Title  string
+	Body   string
 }
 
 type ItemDetailPageData struct {
