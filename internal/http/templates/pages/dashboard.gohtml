@@ -1,152 +1,225 @@
 {{ define "content" }}
-<section class="space-y-10 max-w-6xl">
-  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <p class="text-sm text-muted-foreground">Assessment operating picture.</p>
-    {{ if .Assessments }}
-      <form class="flex items-center gap-2" action="/dashboard" method="get">
-        <select class="select h-8 w-auto min-w-44 text-sm" id="assessment_id" name="assessment_id">
-          {{ range .Assessments }}
-            <option value="{{ .ID }}" {{ if and $.SelectedAssessment (eq $.SelectedAssessment.ID .ID) }}selected{{ end }}>{{ .Name }}</option>
-          {{ end }}
-        </select>
-        <button class="btn btn-secondary btn-sm" type="submit">View</button>
-      </form>
-    {{ end }}
-  </div>
-
-  {{ if not .Assessments }}
-    <div class="py-20 text-center">
-      <p class="text-sm text-muted-foreground">No assessments yet. Seed a framework, then create an assessment.</p>
+{{ if not .Assessments }}
+  <section class="mx-auto max-w-lg py-24 text-center">
+    <h1 class="text-lg font-semibold tracking-tight">No assessments yet</h1>
+    <p class="mt-2 text-sm text-muted-foreground">
       {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
-        <a class="btn btn-primary mt-6" href="/assessments/new">Create assessment</a>
+        Seed a framework, then create an assessment to start tracking controls.
+      {{ else }}
+        Ask an admin to seed a framework and create an assessment.
       {{ end }}
-    </div>
-  {{ else if .Dashboard }}
-    <div class="grid grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
-      <div>
-        <p class="kpi-label">Completion</p>
-        <p class="kpi-value mt-1">{{ percentage .Dashboard.Overview.CompletedItems .Dashboard.Overview.TotalItems }}%</p>
-        <p class="kpi-detail">{{ .Dashboard.Overview.CompletedItems }} / {{ .Dashboard.Overview.TotalItems }}</p>
+    </p>
+    {{ if and .CurrentUser .CurrentUser.CanManageAssessments }}
+      <a class="btn btn-primary mt-6" href="/assessments/new">Create assessment</a>
+    {{ end }}
+  </section>
+{{ else if .Dashboard }}
+  {{ $overview := .Dashboard.Overview }}
+  {{ $completion := percentage $overview.CompletedItems $overview.TotalItems }}
+  <section class="space-y-10">
+
+    {{/* ── Title block ─────────────────────────────────────────────── */}}
+    <header class="space-y-2">
+      <details class="dashboard-switcher group relative inline-block">
+        <summary class="flex cursor-pointer list-none items-center gap-2 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <h1 class="text-2xl font-semibold tracking-tight sm:text-3xl">{{ .SelectedAssessment.Name }}</h1>
+          {{ if gt (len .Assessments) 1 }}
+            <svg class="mt-1 h-5 w-5 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          {{ end }}
+        </summary>
+        {{ if gt (len .Assessments) 1 }}
+          <div class="dashboard-switcher-menu">
+            {{ range .Assessments }}
+              <a href="/dashboard?assessment_id={{ .ID }}"
+                 class="dashboard-switcher-item {{ if eq .ID $.SelectedAssessment.ID }}is-active{{ end }}">
+                <span class="truncate">{{ .Name }}</span>
+                <span class="ml-3 shrink-0 text-xs text-muted-foreground">{{ .FrameworkLabel }}</span>
+              </a>
+            {{ end }}
+            <div class="border-t border-border my-1"></div>
+            <a href="/assessments" class="dashboard-switcher-item text-muted-foreground">All assessments →</a>
+          </div>
+        {{ end }}
+      </details>
+      <p class="text-sm text-muted-foreground">
+        {{ .SelectedAssessment.FrameworkLabel }}
+        <span class="px-1.5 text-muted-foreground/50">·</span>
+        {{ .SelectedAssessment.Scope }}
+        <span class="px-1.5 text-muted-foreground/50">·</span>
+        Due {{ formatDate .SelectedAssessment.DueDate }}
+        <span class="px-1.5 text-muted-foreground/50">·</span>
+        <span class="{{ statusClass .SelectedAssessment.Status }}">{{ assessmentStatus .SelectedAssessment.Status }}</span>
+      </p>
+    </header>
+
+    {{/* ── Hero: Completion ─────────────────────────────────────────── */}}
+    <div class="space-y-4">
+      <div class="flex items-baseline justify-between gap-6">
+        <div>
+          <p class="kpi-label">Completion</p>
+          <p class="mt-1 text-5xl font-semibold tracking-tight tabular-nums sm:text-6xl">{{ $completion }}<span class="text-2xl text-muted-foreground sm:text-3xl">%</span></p>
+        </div>
+        <p class="text-sm tabular-nums text-muted-foreground">
+          {{ $overview.CompletedItems }} <span class="text-muted-foreground/50">of</span> {{ $overview.TotalItems }} items
+        </p>
       </div>
+      <div class="bg-primary/15 relative h-2.5 w-full overflow-hidden rounded-full">
+        <div class="bg-primary h-full transition-all" style="width: {{ $completion }}%"></div>
+      </div>
+    </div>
+
+    {{/* ── Secondary KPIs ──────────────────────────────────────────── */}}
+    <div class="grid grid-cols-2 gap-x-8 gap-y-6 border-y border-border py-6 sm:grid-cols-4">
       <div>
         <p class="kpi-label">Review queue</p>
-        <p class="kpi-value mt-1">{{ .Dashboard.Overview.ReadyForReviewItems }}</p>
-        <p class="kpi-detail">Awaiting review</p>
+        <p class="kpi-value mt-1">{{ $overview.ReadyForReviewItems }}</p>
       </div>
       <div>
-        <p class="kpi-label">Overdue</p>
-        <p class="kpi-value mt-1 {{ if gt .Dashboard.Overview.OverdueItems 0 }}text-amber-600 dark:text-amber-400{{ end }}">{{ .Dashboard.Overview.OverdueItems }}</p>
-        <p class="kpi-detail">Past due date</p>
+        <p class="kpi-label flex items-center gap-1.5">
+          Overdue
+          {{ if gt $overview.OverdueItems 0 }}<span class="status-dot bg-amber-500"></span>{{ end }}
+        </p>
+        <p class="kpi-value mt-1">{{ $overview.OverdueItems }}</p>
       </div>
       <div>
-        <p class="kpi-label">Blocked</p>
-        <p class="kpi-value mt-1 {{ if gt .Dashboard.Overview.BlockedItems 0 }}text-rose-600 dark:text-rose-400{{ end }}">{{ .Dashboard.Overview.BlockedItems }}</p>
-        <p class="kpi-detail">Need intervention</p>
+        <p class="kpi-label flex items-center gap-1.5">
+          Blocked
+          {{ if gt $overview.BlockedItems 0 }}<span class="status-dot bg-rose-500"></span>{{ end }}
+        </p>
+        <p class="kpi-value mt-1">{{ $overview.BlockedItems }}</p>
       </div>
       <div>
         <p class="kpi-label">Avg score</p>
-        <p class="kpi-value mt-1">{{ printf "%.1f" (numericFloat .Dashboard.Overview.AverageScore) }}</p>
-        <p class="kpi-detail">Across scored items</p>
+        <p class="kpi-value mt-1">{{ printf "%.1f" (numericFloat $overview.AverageScore) }}<span class="text-base font-normal text-muted-foreground">/5</span></p>
       </div>
+    </div>
+
+    {{/* ── Completion by group (centerpiece) ───────────────────────── */}}
+    {{ if .Dashboard.ByGroup }}
       <div>
-        <p class="kpi-label">Scope</p>
-        <p class="text-sm font-medium mt-1 leading-snug">{{ .SelectedAssessment.Scope }}</p>
-        <p class="kpi-detail">Due {{ formatDate .SelectedAssessment.DueDate }}</p>
-      </div>
-    </div>
-
-    <div class="border-t border-border"></div>
-
-    <div class="grid gap-10 lg:grid-cols-[1.3fr_0.7fr]">
-      <div class="space-y-8">
-        <div>
+        <div class="flex items-baseline justify-between">
           <h2 class="section-heading">Completion by group</h2>
-          <div class="mt-4 space-y-4">
-            {{ range .Dashboard.ByGroup }}
-              <div>
-                <div class="flex items-baseline justify-between gap-4">
-                  <p class="text-sm font-medium">{{ .GroupCode }} · {{ .GroupTitle }}</p>
-                  <p class="text-xs tabular-nums text-muted-foreground">{{ percentage .CompletedItems .TotalItems }}%</p>
-                </div>
-                <div class="mt-1.5 flex items-center gap-3">
-                  <div class="bg-primary/20 relative h-2 w-full flex-1 overflow-hidden rounded-full">
-                    <div class="bg-primary h-full transition-all" style="width: {{ percentage .CompletedItems .TotalItems }}%"></div>
-                  </div>
-                  <span class="text-xs tabular-nums text-muted-foreground w-16 text-right">{{ .CompletedItems }}/{{ .TotalItems }}</span>
-                </div>
-              </div>
-            {{ end }}
-          </div>
+          <p class="text-xs text-muted-foreground">Sorted by completion · lowest first</p>
         </div>
+        <div class="mt-5 space-y-5">
+          {{ range .Dashboard.ByGroup }}
+            {{ $p := percentage .CompletedItems .TotalItems }}
+            <div>
+              <div class="flex items-baseline justify-between gap-4">
+                <p class="text-sm font-medium">
+                  <span class="tabular-nums text-muted-foreground">{{ .GroupCode }}</span>
+                  <span class="px-1 text-muted-foreground/40">·</span>
+                  {{ .GroupTitle }}
+                </p>
+                <p class="shrink-0 text-xs tabular-nums text-muted-foreground">
+                  <span class="font-medium text-foreground">{{ $p }}%</span>
+                  <span class="px-1 text-muted-foreground/50">·</span>
+                  {{ .CompletedItems }}/{{ .TotalItems }}
+                </p>
+              </div>
+              <div class="bg-primary/15 mt-2 h-2 w-full overflow-hidden rounded-full">
+                <div class="bg-primary h-full transition-all" style="width: {{ $p }}%"></div>
+              </div>
+            </div>
+          {{ end }}
+        </div>
+      </div>
+    {{ end }}
 
-        {{ if .Dashboard.ByOwner }}
-        <div>
-          <h2 class="section-heading">Assignment balance</h2>
-          <div class="mt-4">
-            {{ range .Dashboard.ByOwner }}
-              <div class="data-row">
-                <div>
-                  <p class="text-sm font-medium">{{ .Name }}</p>
-                  <p class="text-xs text-muted-foreground">{{ .CompletedItems }} complete · {{ .OverdueItems }} overdue</p>
-                </div>
-                <span class="text-sm tabular-nums text-muted-foreground">{{ .TotalItems }}</span>
-              </div>
+    {{/* ── Action rails ────────────────────────────────────────────── */}}
+    <div class="grid gap-10 lg:grid-cols-2">
+
+      {{/* Overdue — heaviest treatment */}}
+      <div>
+        <div class="flex items-baseline justify-between">
+          <h2 class="section-heading flex items-center gap-2">
+            Overdue
+            {{ if gt $overview.OverdueItems 0 }}
+              <span class="text-xs font-medium tabular-nums text-amber-600 dark:text-amber-400">{{ $overview.OverdueItems }}</span>
             {{ end }}
-          </div>
+          </h2>
+          {{ if gt (len .Dashboard.Overdue) 0 }}
+            <a class="text-xs text-muted-foreground hover:text-foreground" href="/assessments/{{ .SelectedAssessment.ID }}?overdue=1">View all →</a>
+          {{ end }}
         </div>
-        {{ end }}
+        <div class="mt-3">
+          {{ if .Dashboard.Overdue }}
+            {{ range .Dashboard.Overdue }}
+              <a class="data-row-link text-sm" href="/items/{{ .ID }}">
+                <span class="min-w-0 truncate">
+                  <span class="tabular-nums text-muted-foreground">{{ .ItemCode }}</span>
+                  <span class="px-1 text-muted-foreground/40">·</span>
+                  <span class="font-medium">{{ .ItemTitle }}</span>
+                </span>
+                <span class="shrink-0 text-xs font-medium tabular-nums text-amber-600 dark:text-amber-400">
+                  {{ $d := daysOverdue .DueDate }}{{ $d }} {{ if eq $d 1 }}day{{ else }}days{{ end }} late
+                </span>
+              </a>
+            {{ end }}
+          {{ else }}
+            <p class="py-2 text-sm text-muted-foreground">Nothing overdue.</p>
+          {{ end }}
+        </div>
       </div>
 
-      <div class="space-y-8">
-        <div>
-          <h2 class="section-heading">Overdue</h2>
-          <div class="mt-3">
-            {{ if .Dashboard.Overdue }}
-              {{ range .Dashboard.Overdue }}
-                <a class="data-row-link text-sm" href="/items/{{ .ID }}">
-                  <span class="font-medium">{{ .ItemCode }} · {{ .ItemTitle }}</span>
-                  <span class="text-xs text-amber-600 dark:text-amber-400 shrink-0">{{ formatDate .DueDate }}</span>
-                </a>
-              {{ end }}
-            {{ else }}
-              <p class="text-sm text-muted-foreground py-2">None.</p>
+      {{/* Ready for review — "do next" */}}
+      <div>
+        <div class="flex items-baseline justify-between">
+          <h2 class="section-heading flex items-center gap-2">
+            Ready for review
+            {{ if gt $overview.ReadyForReviewItems 0 }}
+              <span class="text-xs font-medium tabular-nums text-foreground">{{ $overview.ReadyForReviewItems }}</span>
             {{ end }}
-          </div>
+          </h2>
+          {{ if gt (len .Dashboard.ReviewQueue) 0 }}
+            <a class="text-xs text-muted-foreground hover:text-foreground" href="/assessments/{{ .SelectedAssessment.ID }}?status=ready_for_review">View all →</a>
+          {{ end }}
         </div>
-
-        <div>
-          <h2 class="section-heading">Ready for review</h2>
-          <div class="mt-3">
-            {{ if .Dashboard.ReviewQueue }}
-              {{ range .Dashboard.ReviewQueue }}
-                <a class="data-row-link text-sm" href="/items/{{ .ID }}">
-                  <span class="font-medium">{{ .ItemCode }}</span>
-                  <span class="text-xs text-muted-foreground truncate ml-2">{{ .ItemTitle }}</span>
-                </a>
-              {{ end }}
-            {{ else }}
-              <p class="text-sm text-muted-foreground py-2">None.</p>
+        <div class="mt-3">
+          {{ if .Dashboard.ReviewQueue }}
+            {{ range .Dashboard.ReviewQueue }}
+              <a class="data-row-link text-sm" href="/items/{{ .ID }}">
+                <span class="min-w-0 truncate">
+                  <span class="tabular-nums text-muted-foreground">{{ .ItemCode }}</span>
+                  <span class="px-1 text-muted-foreground/40">·</span>
+                  <span class="font-medium">{{ .ItemTitle }}</span>
+                </span>
+                <span class="shrink-0 text-xs text-muted-foreground">{{ .OwnerName }}</span>
+              </a>
             {{ end }}
-          </div>
-        </div>
-
-        <div>
-          <h2 class="section-heading">Low score</h2>
-          <div class="mt-3">
-            {{ if .Dashboard.LowScore }}
-              {{ range .Dashboard.LowScore }}
-                <a class="data-row-link text-sm" href="/items/{{ .ID }}">
-                  <span class="font-medium">{{ .ItemCode }} · {{ .ItemTitle }}</span>
-                  <span class="text-xs text-muted-foreground shrink-0">{{ .Score }}/5</span>
-                </a>
-              {{ end }}
-            {{ else }}
-              <p class="text-sm text-muted-foreground py-2">None.</p>
-            {{ end }}
-          </div>
+          {{ else }}
+            <p class="py-2 text-sm text-muted-foreground">Queue empty.</p>
+          {{ end }}
         </div>
       </div>
     </div>
-  {{ end }}
-</section>
+
+    {{/* Low score — analysis, collapsed by default */}}
+    {{ if .Dashboard.LowScore }}
+      <details class="group border-t border-border pt-4">
+        <summary class="flex cursor-pointer list-none items-center justify-between">
+          <h2 class="section-heading flex items-center gap-2">
+            Low score
+            <span class="text-xs font-medium tabular-nums text-foreground">{{ len .Dashboard.LowScore }}</span>
+          </h2>
+          <span class="text-xs text-muted-foreground group-open:hidden">Show</span>
+          <span class="hidden text-xs text-muted-foreground group-open:inline">Hide</span>
+        </summary>
+        <div class="mt-3">
+          {{ range .Dashboard.LowScore }}
+            <a class="data-row-link text-sm" href="/items/{{ .ID }}">
+              <span class="min-w-0 truncate">
+                <span class="tabular-nums text-muted-foreground">{{ .ItemCode }}</span>
+                <span class="px-1 text-muted-foreground/40">·</span>
+                <span class="font-medium">{{ .ItemTitle }}</span>
+              </span>
+              <span class="shrink-0 text-xs tabular-nums text-muted-foreground">{{ scoreValue .Score }}</span>
+            </a>
+          {{ end }}
+        </div>
+      </details>
+    {{ end }}
+
+  </section>
+{{ end }}
 {{ end }}

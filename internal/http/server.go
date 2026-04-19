@@ -159,6 +159,7 @@ func buildTemplateCache() (map[string]*template.Template, error) {
 			"assessmentStatus": assessmentStatus,
 			"itemPriority":     itemPriority,
 			"numericFloat":     numericFloat,
+			"daysOverdue":      daysOverdue,
 		}).ParseFiles(files...)
 		if err != nil {
 			return nil, fmt.Errorf("parse template %s: %w", name, err)
@@ -289,4 +290,19 @@ func itemPriority(priority db.ItemPriority) string {
 func numericFloat(n pgtype.Numeric) float64 {
 	f, _ := n.Float64Value()
 	return f.Float64
+}
+
+// daysOverdue returns how many whole days the given due date is past today.
+// Returns 0 if the date is today or in the future. Used for inline status
+// copy like "12 days late" in overdue lists.
+func daysOverdue(due time.Time) int {
+	if due.IsZero() {
+		return 0
+	}
+	today := time.Now().UTC().Truncate(24 * time.Hour)
+	dueDay := due.UTC().Truncate(24 * time.Hour)
+	if !dueDay.Before(today) {
+		return 0
+	}
+	return int(today.Sub(dueDay).Hours() / 24)
 }

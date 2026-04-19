@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ .Title }} · {{ .AppName }}</title>
+    <link rel="preload" href="/assets/fonts/MonaSans.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/assets/app.css" />
     <script>
       (() => {
@@ -41,7 +42,9 @@
             <button class="btn btn-ghost btn-sm-icon lg:hidden" data-sidebar-trigger type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
             </button>
-            <h1 class="text-sm font-medium text-foreground">{{ .Title }}</h1>
+            {{ if not .HideHeaderTitle }}
+              <h1 class="text-sm font-medium text-foreground">{{ .Title }}</h1>
+            {{ end }}
           </div>
           <div class="flex items-center gap-2">
             <button class="theme-switcher btn btn-ghost btn-sm-icon" type="button" aria-label="Toggle theme" title="Toggle theme">

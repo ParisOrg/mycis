@@ -2,6 +2,33 @@
 @import "basecoat-css";
 @import "flatpickr/dist/flatpickr.css";
 
+/* Mona Sans — self-hosted variable font (weight + width + optical size + italic). */
+@font-face {
+  font-family: "Mona Sans";
+  src: url("/assets/fonts/MonaSans.woff2") format("woff2-variations"),
+       url("/assets/fonts/MonaSans.woff2") format("woff2");
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mona Sans";
+  src: url("/assets/fonts/MonaSans.woff2") format("woff2-variations"),
+       url("/assets/fonts/MonaSans.woff2") format("woff2");
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Register Mona Sans as the default sans stack for Tailwind v4. */
+@theme {
+  --font-sans: "Mona Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
 :root {
   --background: oklch(0.985 0.002 260);
   --foreground: oklch(0.13 0.015 260);
@@ -74,6 +101,7 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+    font-weight: 500;
   }
 
   button,
@@ -151,6 +179,27 @@
 
   .data-row-link {
     @apply flex items-center justify-between gap-4 py-2.5 border-b border-border last:border-b-0 -mx-2 px-2 rounded-md transition-colors duration-150 hover:bg-accent/50;
+  }
+
+  .status-dot {
+    @apply inline-block h-1.5 w-1.5 rounded-full;
+  }
+
+  /* Assessment switcher: chevron-triggered menu anchored to the page title. */
+  .dashboard-switcher > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .dashboard-switcher-menu {
+    @apply absolute left-0 top-full z-20 mt-2 w-[22rem] max-w-[90vw] overflow-hidden rounded-lg border border-border bg-popover p-1 shadow-lg;
+  }
+
+  .dashboard-switcher-item {
+    @apply flex items-center justify-between gap-3 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground;
+  }
+
+  .dashboard-switcher-item.is-active {
+    @apply bg-accent/60 font-medium;
   }
 
   /* Assessment items table – fixed layout to prevent overflow */
