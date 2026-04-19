@@ -1,6 +1,4 @@
 {{ define "content" }}
-{{ $canManageAssessments := and .CurrentUser .CurrentUser.CanManageAssessments }}
-{{ $canEditAssignedItems := and .CurrentUser .CurrentUser.CanEditAssignedItems }}
 <section class="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] max-w-6xl">
   <div class="space-y-8">
     <div>
@@ -23,7 +21,7 @@
           <div class="grid gap-4 md:grid-cols-2">
             <div class="field">
               <label class="label" for="status">Status</label>
-              {{ if $canEditAssignedItems }}
+              {{ if .CanEditItem }}
                 <select class="select mt-1.5 w-full text-sm" id="status" name="status">
                   <option value="not_started" {{ if eq .Detail.Item.Status "not_started" }}selected{{ end }}>Not started</option>
                   <option value="in_progress" {{ if eq .Detail.Item.Status "in_progress" }}selected{{ end }}>In progress</option>
@@ -38,7 +36,7 @@
             </div>
             <div class="field">
               <label class="label" for="score">Score</label>
-              {{ if $canEditAssignedItems }}
+              {{ if .CanEditItem }}
                 <select class="select mt-1.5 w-full text-sm" id="score" name="score">
                   <option value="">Not scored</option>
                   <option value="1" {{ if intPtrEquals .Detail.Item.Score 1 }}selected{{ end }}>1</option>
@@ -53,7 +51,7 @@
             </div>
             <div class="field">
               <label class="label" for="owner_user_id">Owner</label>
-              {{ if $canManageAssessments }}
+              {{ if .CanManageAssessments }}
                 <select class="select mt-1.5 w-full text-sm" id="owner_user_id" name="owner_user_id">
                   <option value="">Unassigned</option>
                   {{ range .Users }}
@@ -68,7 +66,7 @@
             </div>
             <div class="field">
               <label class="label" for="reviewer_user_id">Reviewer</label>
-              {{ if $canManageAssessments }}
+              {{ if .CanManageAssessments }}
                 <select class="select mt-1.5 w-full text-sm" id="reviewer_user_id" name="reviewer_user_id">
                   <option value="">Unassigned</option>
                   {{ range .Users }}
@@ -83,7 +81,7 @@
             </div>
             <div class="field">
               <label class="label" for="priority">Priority</label>
-              {{ if $canManageAssessments }}
+              {{ if .CanManageAssessments }}
                 <select class="select mt-1.5 w-full text-sm" id="priority" name="priority">
                   <option value="low" {{ if eq .Detail.Item.Priority "low" }}selected{{ end }}>Low</option>
                   <option value="medium" {{ if eq .Detail.Item.Priority "medium" }}selected{{ end }}>Medium</option>
@@ -96,7 +94,7 @@
             </div>
             <div class="field">
               <label class="label" for="due_date">Due date</label>
-              {{ if $canManageAssessments }}
+              {{ if .CanManageAssessments }}
                 <input class="input mt-1.5 w-full" id="due_date" name="due_date" type="text" value="{{ formatDate .Detail.Item.DueDate }}" data-flatpickr />
               {{ else }}
                 <div class="input mt-1.5 flex w-full items-center text-sm">{{ formatDate .Detail.Item.DueDate }}</div>
@@ -104,7 +102,7 @@
             </div>
             <div class="field md:col-span-2">
               <label class="label" for="notes">Notes</label>
-              {{ if $canEditAssignedItems }}
+              {{ if .CanEditItem }}
                 <textarea class="textarea mt-1.5 min-h-28 w-full" id="notes" name="notes">{{ .Detail.Item.Notes }}</textarea>
               {{ else }}
                 <div class="mt-1.5 min-h-28 whitespace-pre-wrap rounded-md border border-border bg-muted/30 px-3 py-2.5 text-sm">{{ if .Detail.Item.Notes }}{{ .Detail.Item.Notes }}{{ else }}None{{ end }}</div>
@@ -112,7 +110,7 @@
             </div>
             <div class="field md:col-span-2">
               <label class="label" for="blocked_reason">Blocked reason</label>
-              {{ if $canEditAssignedItems }}
+              {{ if .CanEditItem }}
                 <textarea class="textarea mt-1.5 min-h-16 w-full" id="blocked_reason" name="blocked_reason">{{ trimPointerText .Detail.Item.BlockedReason }}</textarea>
               {{ else }}
                 <div class="mt-1.5 min-h-16 whitespace-pre-wrap rounded-md border border-border bg-muted/30 px-3 py-2.5 text-sm">{{ if .Detail.Item.BlockedReason }}{{ trimPointerText .Detail.Item.BlockedReason }}{{ else }}None{{ end }}</div>
@@ -122,7 +120,7 @@
         </div>
         <div class="flex items-center justify-end gap-3 border-t border-border px-5 py-3">
           <a class="btn btn-ghost btn-sm" href="/assessments/{{ .Detail.Item.AssessmentID }}">Back</a>
-          {{ if $canEditAssignedItems }}
+          {{ if .CanEditItem }}
             <button class="btn btn-primary btn-sm" type="submit">Save changes</button>
           {{ end }}
         </div>
@@ -166,7 +164,7 @@
         {{ else }}
           <p class="text-sm text-muted-foreground py-1">No evidence links yet.</p>
         {{ end }}
-        {{ if $canEditAssignedItems }}
+        {{ if .CanEditItem }}
           <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/evidence" method="post">
             {{ template "csrf_field" . }}
             <input class="input w-full" name="label" type="text" placeholder="Label" />
@@ -191,7 +189,7 @@
         {{ else }}
           <p class="text-sm text-muted-foreground py-1">No comments yet.</p>
         {{ end }}
-        {{ if $canEditAssignedItems }}
+        {{ if .CanEditItem }}
           <form class="mt-3 space-y-2" action="/items/{{ .Detail.Item.ID }}/comments" method="post">
             {{ template "csrf_field" . }}
             <textarea class="textarea min-h-16 w-full" name="body" placeholder="Add context or review notes"></textarea>

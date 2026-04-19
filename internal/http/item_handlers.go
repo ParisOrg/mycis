@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v5"
 
+	"mycis/internal/db"
 	"mycis/internal/service"
 	"mycis/internal/textutil"
 )
@@ -24,10 +25,13 @@ func (s *Server) itemDetailPage(c *echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
+	currentUser := s.currentUser(c)
 	return s.render(c, "item_show", ItemDetailPageData{
-		BaseData: s.baseData(c, detail.Item.ItemCode+" · "+detail.Item.ItemTitle, "assessments"),
-		Detail:   detail,
-		Users:    users,
+		BaseData:             s.baseData(c, detail.Item.ItemCode+" · "+detail.Item.ItemTitle, "assessments"),
+		Detail:               detail,
+		Users:                users,
+		CanEditItem:          canEditItem(currentUser, detail.Item),
+		CanManageAssessments: currentUser != nil && currentUser.CanManageAssessments(),
 	})
 }
 
@@ -86,25 +90,25 @@ func (s *Server) readItemUpdateInput(form url.Values, itemID uuid.UUID, canManag
 		return service.UpdateItemInput{}, err
 	}
 
-	priority, err := service.ParseItemPriority(form.Get("priority"))
-	if err != nil {
-		return service.UpdateItemInput{}, err
-	}
-
 	input := service.UpdateItemInput{
-		ID:             itemID,
-		Status:         status,
-		Priority:       priority,
-		OwnerUserID:    s.optionalUUID(form.Get("owner_user_id")),
-		ReviewerUserID: s.optionalUUID(form.Get("reviewer_user_id")),
-		Score:          s.optionalInt32(form.Get("score")),
-		Notes:          textutil.TrimPtr(form.Get("notes")),
-		BlockedReason:  textutil.TrimPtr(form.Get("blocked_reason")),
+		ID:            itemID,
+		Status:        status,
+		Score:         s.optionalInt32(form.Get("score")),
+		Notes:         textutil.TrimPtr(form.Get("notes")),
+		BlockedReason: textutil.TrimPtr(form.Get("blocked_reason")),
 	}
 
 	if !canManageAssessments {
 		return input, nil
 	}
+
+	priority, err := service.ParseItemPriority(form.Get("priority"))
+	if err != nil {
+		return service.UpdateItemInput{}, err
+	}
+	input.Priority = priority
+	input.OwnerUserID = s.optionalUUID(form.Get("owner_user_id"))
+	input.ReviewerUserID = s.optionalUUID(form.Get("reviewer_user_id"))
 
 	dueDate, err := textutil.ParseDateOnly(strings.TrimSpace(form.Get("due_date")))
 	if err != nil {
@@ -112,4 +116,30 @@ func (s *Server) readItemUpdateInput(form url.Values, itemID uuid.UUID, canManag
 	}
 	input.DueDate = dueDate
 	return input, nil
+}
+
+func canEditItem(user *db.User, item db.GetAssessmentItemDetailRow) bool {
+	if user == nil {
+		return false
+	}
+	if user.CanManageAssessments() {
+		return true
+	}
+	if !user.CanEditAssignedItems() {
+		return false
+	}
+	return itemUserIsAssigned(user, item)
+}
+
+func itemUserIsAssigned(user *db.User, item db.GetAssessmentItemDetailRow) bool {
+	if user == nil {
+		return false
+	}
+	if item.OwnerUserID.Valid && item.OwnerUserID.Bytes == user.ID {
+		return true
+	}
+	if item.ReviewerUserID.Valid && item.ReviewerUserID.Bytes == user.ID {
+		return true
+	}
+	return false
 }

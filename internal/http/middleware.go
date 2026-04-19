@@ -37,7 +37,7 @@ func (s *Server) requireAuth(next echo.HandlerFunc) echo.HandlerFunc {
 func (s *Server) requireAssessmentManager(c *echo.Context) bool {
 	user := s.currentUser(c)
 	if user == nil || !user.CanManageAssessments() {
-		_ = s.redirectWithFlash(c, "/dashboard", "error", "Assessment manager access is required.")
+		_ = s.redirectWithFlash(c, "/dashboard", "error", "Admin or assessment manager access is required.")
 		return false
 	}
 	return true
