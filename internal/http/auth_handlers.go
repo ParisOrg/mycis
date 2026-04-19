@@ -2,10 +2,13 @@ package httpui
 
 import (
 	"net/http"
-	"net/url"
+	"strings"
 
+	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v5"
 )
+
+const loginEmailSessionKey = "login_email"
 
 func (s *Server) handleRoot(c *echo.Context) error {
 	if s.currentUser(c) != nil {
@@ -18,9 +21,15 @@ func (s *Server) loginPage(c *echo.Context) error {
 	if s.currentUser(c) != nil {
 		return c.Redirect(http.StatusSeeOther, "/dashboard")
 	}
+	email := strings.TrimSpace(c.QueryParam("email"))
+	if email == "" {
+		email = s.popSessionString(c, loginEmailSessionKey)
+	}
+	base := s.baseData(c, "Sign In", "")
 	return s.render(c, "login", LoginPageData{
-		BaseData: s.baseData(c, "Sign In", ""),
-		Email:    c.QueryParam("email"),
+		BaseData:     base,
+		Email:        email,
+		ErrorMessage: firstFlashMessage(base.Flashes, "error"),
 	})
 }
 
@@ -34,7 +43,7 @@ func (s *Server) loginPost(c *echo.Context) error {
 	password := form.Get("password")
 	user, err := s.services.Auth.Authenticate(c.Request().Context(), email, password)
 	if err != nil {
-		return s.redirectWithFlash(c, "/login?email="+url.QueryEscape(email), "error", "Email or password is wrong.")
+		return s.redirectLoginFailure(c, email, "Email or password is wrong.")
 	}
 
 	session, err := s.session(c)
@@ -85,4 +94,71 @@ func (s *Server) changePasswordPost(c *echo.Context) error {
 		return s.redirectWithFlash(c, "/change-password", "error", err.Error())
 	}
 	return s.redirectWithFlash(c, "/dashboard", "success", "Password updated.")
+}
+
+func firstFlashMessage(flashes []Flash, kind string) string {
+	for _, flash := range flashes {
+		if flash.Kind == kind {
+			return flash.Message
+		}
+	}
+	return ""
+}
+
+func (s *Server) redirectLoginFailure(c *echo.Context, email, message string) error {
+	session, err := s.session(c)
+	if err == nil {
+		email = strings.TrimSpace(email)
+		if email == "" {
+			delete(session.Values, loginEmailSessionKey)
+		} else {
+			session.Values[loginEmailSessionKey] = email
+		}
+		session.AddFlash("error|" + message)
+		_ = session.Save(c.Request(), c.Response())
+	}
+	return c.Redirect(http.StatusSeeOther, "/login")
+}
+
+func (s *Server) popSessionString(c *echo.Context, key string) string {
+	values := s.popSessionStrings(c, key)
+	return values[key]
+}
+
+func (s *Server) popSessionStrings(c *echo.Context, keys ...string) map[string]string {
+	session, err := s.session(c)
+	if err != nil {
+		return map[string]string{}
+	}
+
+	values, changed := popSessionStringsFromSession(session, keys...)
+	if changed {
+		_ = session.Save(c.Request(), c.Response())
+	}
+
+	return values
+}
+
+func popSessionStringsFromSession(session *sessions.Session, keys ...string) (map[string]string, bool) {
+	values := make(map[string]string, len(keys))
+	changed := false
+	for _, key := range keys {
+		raw, ok := session.Values[key]
+		if !ok {
+			values[key] = ""
+			continue
+		}
+
+		delete(session.Values, key)
+		changed = true
+
+		value, ok := raw.(string)
+		if !ok {
+			values[key] = ""
+			continue
+		}
+		values[key] = strings.TrimSpace(value)
+	}
+
+	return values, changed
 }

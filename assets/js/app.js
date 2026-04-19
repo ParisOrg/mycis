@@ -43,6 +43,81 @@ function bindThemeSwitchers() {
   });
 }
 
+function bindDialogs() {
+  const dialogs = [...document.querySelectorAll("dialog[data-dialog-auto-open], dialog[id]")];
+  if (dialogs.length === 0) {
+    return;
+  }
+
+  const openDialog = (dialog) => {
+    if (!dialog || dialog.open || typeof dialog.showModal !== "function") {
+      return;
+    }
+    dialog.showModal();
+  };
+
+  const closeDialog = (dialog) => {
+    if (!dialog || !dialog.open) {
+      return;
+    }
+    dialog.close();
+  };
+
+  document.querySelectorAll("[data-dialog-open]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      openDialog(document.getElementById(trigger.dataset.dialogOpen));
+    });
+  });
+
+  document.querySelectorAll("[data-dialog-close]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const target = trigger.dataset.dialogClose
+        ? document.getElementById(trigger.dataset.dialogClose)
+        : trigger.closest("dialog");
+      closeDialog(target);
+    });
+  });
+
+  dialogs.forEach((dialog) => {
+    if (dialog.dataset.dialogAutoOpen === "true") {
+      openDialog(dialog);
+    }
+
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) {
+        closeDialog(dialog);
+      }
+    });
+  });
+}
+
+function bindEditUserTriggers() {
+  const dialog = document.getElementById("edit-user-dialog");
+  if (!dialog) {
+    return;
+  }
+
+  const fields = {
+    userID: dialog.querySelector("#edit-user-id"),
+    hiddenEmail: dialog.querySelector("#edit-user-email-hidden"),
+    name: dialog.querySelector("#edit-user-name"),
+    email: dialog.querySelector("#edit-user-email"),
+    role: dialog.querySelector("#edit-user-role"),
+    password: dialog.querySelector("#edit-user-password"),
+  };
+
+  document.querySelectorAll("[data-edit-user-trigger]").forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      if (fields.userID) fields.userID.value = trigger.dataset.userId || "";
+      if (fields.hiddenEmail) fields.hiddenEmail.value = trigger.dataset.userEmail || "";
+      if (fields.name) fields.name.value = trigger.dataset.userName || "";
+      if (fields.email) fields.email.value = trigger.dataset.userEmail || "";
+      if (fields.role) fields.role.value = trigger.dataset.userRole || "";
+      if (fields.password) fields.password.value = "";
+    });
+  });
+}
+
 function countSelected(checkboxes) {
   return checkboxes.filter((checkbox) => checkbox.checked).length;
 }
@@ -169,6 +244,8 @@ function bindDatePickers() {
 function ready() {
   bindSidebarTriggers();
   bindThemeSwitchers();
+  bindDialogs();
+  bindEditUserTriggers();
   bindBulkForms();
   bindDatePickers();
 }

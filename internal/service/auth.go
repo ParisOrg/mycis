@@ -7,12 +7,14 @@ import (
 	"strings"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 
 	"mycis/internal/auth"
 	"mycis/internal/db"
 )
 
 type AuthService struct {
+	pool    *pgxpool.Pool
 	queries *db.Queries
 }
 
@@ -141,4 +143,86 @@ func (s *AuthService) ChangePassword(ctx context.Context, userID string, passwor
 	}
 
 	return nil
+}
+
+type UpdateUserInput struct {
+	ID       string
+	Name     string
+	Role     db.UserRole
+	Password string
+}
+
+func (s *AuthService) UpdateUser(ctx context.Context, input UpdateUserInput) (db.User, error) {
+	id, err := uuidFromString(input.ID)
+	if err != nil {
+		return db.User{}, err
+	}
+
+	name := strings.TrimSpace(input.Name)
+	if name == "" {
+		return db.User{}, fmt.Errorf("%w: name is required", ErrInvalidInput)
+	}
+	if err := errIfTooLong(name, maxUserNameBytes, "name"); err != nil {
+		return db.User{}, err
+	}
+	if !input.Role.Valid() {
+		return db.User{}, fmt.Errorf("%w: valid role is required", ErrInvalidInput)
+	}
+
+	password := strings.TrimSpace(input.Password)
+	if password == "" {
+		user, err := s.queries.UpdateUser(ctx, db.UpdateUserParams{
+			ID:   id,
+			Name: name,
+			Role: input.Role,
+		})
+		if err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				return db.User{}, ErrNotFound
+			}
+			return db.User{}, fmt.Errorf("update user: %w", err)
+		}
+		return user, nil
+	}
+
+	password, err = normalizePassword(password)
+	if err != nil {
+		return db.User{}, err
+	}
+
+	hash, err := auth.HashPassword(password)
+	if err != nil {
+		return db.User{}, fmt.Errorf("hash password: %w", err)
+	}
+
+	if s.pool == nil {
+		return db.User{}, fmt.Errorf("update user: auth service transaction pool is not configured")
+	}
+
+	user, err := withTx(ctx, s.pool, func(q *db.Queries) (db.User, error) {
+		user, err := q.UpdateUser(ctx, db.UpdateUserParams{
+			ID:   id,
+			Name: name,
+			Role: input.Role,
+		})
+		if err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				return db.User{}, ErrNotFound
+			}
+			return db.User{}, fmt.Errorf("update user: %w", err)
+		}
+		if err := q.UpdateUserPasswordReset(ctx, db.UpdateUserPasswordResetParams{
+			ID:           id,
+			PasswordHash: hash,
+		}); err != nil {
+			return db.User{}, fmt.Errorf("update user password: %w", err)
+		}
+		user.MustChangePassword = true
+		return user, nil
+	})
+	if err != nil {
+		return db.User{}, err
+	}
+
+	return user, nil
 }

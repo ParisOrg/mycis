@@ -88,6 +88,11 @@
 }
 
 @layer components {
+  .dropdown-menu [role="menuitem"],
+  .dropdown-menu [role="menuitemcheckbox"],
+  .dropdown-menu [role="menuitemradio"] {
+    cursor: pointer;
+  }
 
   /* Basecoat's native select padding stays too tall once compact heights override the default control size. */
   select.select {

@@ -43,20 +43,11 @@
             </button>
             <h1 class="text-sm font-medium text-foreground">{{ .Title }}</h1>
           </div>
-          <div class="flex items-center gap-1">
-            <div class="dropdown-menu">
-              <button class="btn btn-ghost btn-sm" type="button" aria-haspopup="menu" aria-expanded="false">{{ if .CurrentUser }}{{ .CurrentUser.Name }}{{ else }}Account{{ end }}</button>
-              <div data-popover data-align="end" aria-hidden="true">
-                <div role="menu">
-                  <a role="menuitem" href="/change-password">Change password</a>
-                  <hr role="separator" />
-                  <form action="/logout" method="post">
-                    {{ template "csrf_field" . }}
-                    <button role="menuitem" class="w-full text-left" type="submit">Sign out</button>
-                  </form>
-                </div>
-              </div>
-            </div>
+          <div class="flex items-center gap-2">
+            <button class="theme-switcher btn btn-ghost btn-sm-icon" type="button" aria-label="Toggle theme" title="Toggle theme">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dark:hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            </button>
           </div>
         </div>
       </header>

@@ -57,7 +57,9 @@ type Querier interface {
 	UpdateControlRecordNotes(ctx context.Context, arg UpdateControlRecordNotesParams) error
 	UpdateControlRecordOwner(ctx context.Context, arg UpdateControlRecordOwnerParams) error
 	UpdateControlRecordReviewer(ctx context.Context, arg UpdateControlRecordReviewerParams) error
+	UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error)
 	UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error
+	UpdateUserPasswordReset(ctx context.Context, arg UpdateUserPasswordResetParams) error
 	UpsertFrameworkGroup(ctx context.Context, arg UpsertFrameworkGroupParams) (FrameworkGroup, error)
 	UpsertFrameworkItem(ctx context.Context, arg UpsertFrameworkItemParams) (FrameworkItem, error)
 }
