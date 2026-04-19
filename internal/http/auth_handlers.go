@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v5"
 )
 
@@ -120,22 +121,44 @@ func (s *Server) redirectLoginFailure(c *echo.Context, email, message string) er
 }
 
 func (s *Server) popSessionString(c *echo.Context, key string) string {
+	values := s.popSessionStrings(c, key)
+	return values[key]
+}
+
+func (s *Server) popSessionStrings(c *echo.Context, keys ...string) map[string]string {
 	session, err := s.session(c)
 	if err != nil {
-		return ""
+		return map[string]string{}
 	}
 
-	raw, ok := session.Values[key]
-	if !ok {
-		return ""
+	values, changed := popSessionStringsFromSession(session, keys...)
+	if changed {
+		_ = session.Save(c.Request(), c.Response())
 	}
 
-	delete(session.Values, key)
-	_ = session.Save(c.Request(), c.Response())
+	return values
+}
 
-	value, ok := raw.(string)
-	if !ok {
-		return ""
+func popSessionStringsFromSession(session *sessions.Session, keys ...string) (map[string]string, bool) {
+	values := make(map[string]string, len(keys))
+	changed := false
+	for _, key := range keys {
+		raw, ok := session.Values[key]
+		if !ok {
+			values[key] = ""
+			continue
+		}
+
+		delete(session.Values, key)
+		changed = true
+
+		value, ok := raw.(string)
+		if !ok {
+			values[key] = ""
+			continue
+		}
+		values[key] = strings.TrimSpace(value)
 	}
-	return strings.TrimSpace(value)
+
+	return values, changed
 }

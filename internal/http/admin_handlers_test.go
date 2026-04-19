@@ -71,3 +71,48 @@ func TestUsersTemplateHidesEditButtonForNonAdmins(t *testing.T) {
 		t.Fatal("did not expect non-admin users page to render edit button")
 	}
 }
+
+func TestPopEditUserFormStateSavesSessionOnce(t *testing.T) {
+	s := newTestServer(t)
+
+	e := echo.New()
+
+	seedReq := httptest.NewRequest(http.MethodGet, "/admin/users", nil)
+	seedRec := httptest.NewRecorder()
+	seedCtx := e.NewContext(seedReq, seedRec)
+
+	session, err := s.session(seedCtx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	session.Values[editUserOpenSessionKey] = "1"
+	session.Values[editUserIDSessionKey] = "user-123"
+	session.Values[editUserNameSessionKey] = "Edited User"
+	session.Values[editUserEmailSessionKey] = "edited@example.com"
+	session.Values[editUserRoleSessionKey] = string(db.UserRoleAssessmentManager)
+	if err := session.Save(seedReq, seedRec); err != nil {
+		t.Fatal(err)
+	}
+
+	req := httptest.NewRequest(http.MethodGet, "/admin/users", nil)
+	req.AddCookie(findSessionCookie(t, seedRec.Result().Cookies()))
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	form, open := s.popEditUserFormState(c)
+	if !open {
+		t.Fatal("expected edit dialog state to open")
+	}
+	if form != (UserEditFormData{
+		ID:    "user-123",
+		Name:  "Edited User",
+		Email: "edited@example.com",
+		Role:  string(db.UserRoleAssessmentManager),
+	}) {
+		t.Fatalf("unexpected form state: %+v", form)
+	}
+
+	if got := len(rec.Header().Values("Set-Cookie")); got != 1 {
+		t.Fatalf("expected one session save when popping edit form state, got %d", got)
+	}
+}

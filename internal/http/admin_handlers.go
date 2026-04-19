@@ -123,12 +123,19 @@ func (s *Server) redirectUserCreateFailure(c *echo.Context, form url.Values, mes
 }
 
 func (s *Server) popCreateUserFormState(c *echo.Context) (UserCreateFormData, bool) {
-	open := s.popSessionString(c, createUserOpenSessionKey) == "1"
+	values := s.popSessionStrings(
+		c,
+		createUserOpenSessionKey,
+		createUserNameSessionKey,
+		createUserEmailSessionKey,
+		createUserRoleSessionKey,
+	)
+	open := values[createUserOpenSessionKey] == "1"
 
 	return UserCreateFormData{
-		Name:  s.popSessionString(c, createUserNameSessionKey),
-		Email: s.popSessionString(c, createUserEmailSessionKey),
-		Role:  s.popSessionString(c, createUserRoleSessionKey),
+		Name:  values[createUserNameSessionKey],
+		Email: values[createUserEmailSessionKey],
+		Role:  values[createUserRoleSessionKey],
 	}, open
 }
 
@@ -152,12 +159,20 @@ func (s *Server) redirectUserUpdateFailure(c *echo.Context, form url.Values, mes
 }
 
 func (s *Server) popEditUserFormState(c *echo.Context) (UserEditFormData, bool) {
-	open := s.popSessionString(c, editUserOpenSessionKey) == "1"
+	values := s.popSessionStrings(
+		c,
+		editUserOpenSessionKey,
+		editUserIDSessionKey,
+		editUserNameSessionKey,
+		editUserEmailSessionKey,
+		editUserRoleSessionKey,
+	)
+	open := values[editUserOpenSessionKey] == "1"
 
 	return UserEditFormData{
-		ID:    s.popSessionString(c, editUserIDSessionKey),
-		Name:  s.popSessionString(c, editUserNameSessionKey),
-		Email: s.popSessionString(c, editUserEmailSessionKey),
-		Role:  s.popSessionString(c, editUserRoleSessionKey),
+		ID:    values[editUserIDSessionKey],
+		Name:  values[editUserNameSessionKey],
+		Email: values[editUserEmailSessionKey],
+		Role:  values[editUserRoleSessionKey],
 	}, open
 }

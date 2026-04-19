@@ -169,7 +169,8 @@ func (s *AuthService) UpdateUser(ctx context.Context, input UpdateUserInput) (db
 		return db.User{}, fmt.Errorf("%w: valid role is required", ErrInvalidInput)
 	}
 
-	if input.Password == "" {
+	password := strings.TrimSpace(input.Password)
+	if password == "" {
 		user, err := s.queries.UpdateUser(ctx, db.UpdateUserParams{
 			ID:   id,
 			Name: name,
@@ -184,7 +185,7 @@ func (s *AuthService) UpdateUser(ctx context.Context, input UpdateUserInput) (db
 		return user, nil
 	}
 
-	password, err := normalizePassword(input.Password)
+	password, err = normalizePassword(password)
 	if err != nil {
 		return db.User{}, err
 	}
