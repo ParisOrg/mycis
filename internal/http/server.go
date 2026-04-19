@@ -110,6 +110,7 @@ func (s *Server) Router() http.Handler {
 	protected.POST("/items/:itemID/evidence", s.itemEvidencePost)
 	protected.GET("/admin/users", s.usersPage)
 	protected.POST("/admin/users", s.userCreatePost)
+	protected.POST("/admin/users/edit", s.userUpdatePost)
 
 	return e
 }

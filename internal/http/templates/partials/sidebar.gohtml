@@ -25,22 +25,28 @@
     <div role="group">
       <ul>
         <li>
-          <div class="flex items-center gap-3 px-2 py-1.5">
-            <div class="avatar avatar-sm">
-              <span class="flex h-full w-full items-center justify-center rounded-full bg-muted text-xs font-medium">{{ if .CurrentUser }}{{ slice .CurrentUser.Name 0 1 }}{{ end }}</span>
-            </div>
-            <div class="grid flex-1 text-left text-sm leading-tight">
-              <span class="truncate font-medium text-foreground">{{ if .CurrentUser }}{{ .CurrentUser.Name }}{{ end }}</span>
-              <span class="truncate text-xs text-muted-foreground">{{ if .CurrentUser }}{{ .CurrentUser.Email }}{{ end }}</span>
+          <div class="dropdown-menu block w-full">
+            <button class="flex w-full items-center gap-3 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Open account menu">
+              <div class="avatar avatar-sm shrink-0">
+                <span class="flex h-full w-full items-center justify-center rounded-full bg-muted text-xs font-medium">{{ if .CurrentUser }}{{ slice .CurrentUser.Name 0 1 }}{{ end }}</span>
+              </div>
+              <div class="grid min-w-0 flex-1 text-left text-sm leading-tight">
+                <span class="truncate font-medium text-foreground">{{ if .CurrentUser }}{{ .CurrentUser.Name }}{{ end }}</span>
+                <span class="truncate text-xs text-muted-foreground">{{ if .CurrentUser }}{{ .CurrentUser.Email }}{{ end }}</span>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-muted-foreground"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div data-popover data-align="end" data-side="top" aria-hidden="true">
+              <div role="menu">
+                <a role="menuitem" href="/change-password">Change password</a>
+                <hr role="separator" />
+                <form action="/logout" method="post">
+                  {{ template "csrf_field" . }}
+                  <button role="menuitem" class="w-full text-left" type="submit">Sign out</button>
+                </form>
+              </div>
             </div>
           </div>
-        </li>
-        <li>
-          <button class="theme-switcher flex w-full items-center gap-2 rounded-md p-2 text-left text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0" type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dark:hidden"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden dark:block"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-            <span>Toggle theme</span>
-          </button>
         </li>
       </ul>
     </div>

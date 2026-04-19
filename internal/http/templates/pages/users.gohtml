@@ -1,54 +1,141 @@
 {{ define "content" }}
-<section class="grid gap-8 lg:grid-cols-[360px_1fr] max-w-5xl">
-  <div>
-    <h2 class="section-heading">Create user</h2>
-    <p class="mt-1 text-sm text-muted-foreground">Add a user and choose the access level they need.</p>
-    <form class="mt-5 space-y-4" action="/admin/users" method="post">
-      {{ template "csrf_field" . }}
-      <div class="field">
-        <label class="label" for="name">Name</label>
-        <input class="input mt-1.5 w-full" id="name" name="name" type="text" required />
-      </div>
-      <div class="field">
-        <label class="label" for="email">Email</label>
-        <input class="input mt-1.5 w-full" id="email" name="email" type="email" required />
-      </div>
-      <div class="field">
-        <label class="label" for="role">Role</label>
-        <select class="select mt-1.5 w-full text-sm" id="role" name="role">
-          {{ range .Roles }}
-            <option value="{{ . }}" {{ if eq . "editor" }}selected{{ end }}>{{ .Label }}</option>
-          {{ end }}
-        </select>
-      </div>
-      <button class="btn btn-primary btn-sm" type="submit">Create user</button>
-    </form>
-  </div>
-
-  <div>
-    <h2 class="section-heading">Active accounts</h2>
-    <div class="mt-3 overflow-x-auto rounded-lg border border-border">
-      <table class="table w-full text-sm">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Password</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{ range .Users }}
-            <tr>
-              <td class="font-medium">{{ .Name }}</td>
-              <td class="text-muted-foreground">{{ .Email }}</td>
-              <td><span class="{{ if .CanManageUsers }}badge-outline{{ else }}badge{{ end }} text-xs">{{ .Role.Label }}</span></td>
-              <td>{{ if .MustChangePassword }}<span class="text-amber-600 dark:text-amber-400 text-xs">Must change</span>{{ else }}<span class="text-muted-foreground text-xs">Set</span>{{ end }}</td>
-            </tr>
-          {{ end }}
-        </tbody>
-      </table>
+<section class="space-y-4">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <h2 class="section-heading">Active accounts</h2>
+      <p class="mt-1 text-sm text-muted-foreground">Manage access and review password status across the workspace.</p>
     </div>
+    <button class="btn btn-primary btn-sm w-full sm:w-auto" type="button" data-dialog-open="create-user-dialog">
+      Create user
+    </button>
+  </div>
+  <div class="overflow-x-auto rounded-lg border border-border">
+    <table class="table w-full text-sm">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Password</th>
+          {{ if and .CurrentUser .CurrentUser.CanManageUsers }}<th class="w-0"></th>{{ end }}
+        </tr>
+      </thead>
+      <tbody>
+        {{ range .Users }}
+          <tr>
+            <td class="font-medium">{{ .Name }}</td>
+            <td class="text-muted-foreground">{{ .Email }}</td>
+            <td class="text-sm text-foreground">{{ .Role.Label }}</td>
+            <td>{{ if .MustChangePassword }}<span class="text-amber-600 dark:text-amber-400 text-xs">Must change</span>{{ else }}<span class="text-muted-foreground text-xs">Set</span>{{ end }}</td>
+            {{ if and $.CurrentUser $.CurrentUser.CanManageUsers }}
+              <td class="text-right">
+                <button
+                  class="btn btn-ghost btn-sm"
+                  type="button"
+                  data-edit-user-trigger
+                  data-dialog-open="edit-user-dialog"
+                  data-user-id="{{ .ID }}"
+                  data-user-name="{{ .Name }}"
+                  data-user-email="{{ .Email }}"
+                  data-user-role="{{ .Role }}"
+                >
+                  Edit
+                </button>
+              </td>
+            {{ end }}
+          </tr>
+        {{ end }}
+      </tbody>
+    </table>
   </div>
 </section>
+
+<dialog class="dialog" id="create-user-dialog" {{ if .CreateUserDialogOpen }}data-dialog-auto-open="true"{{ end }}>
+  <div>
+    <form method="dialog">
+      <button type="submit" aria-label="Close create user dialog">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </form>
+    <header>
+      <h2>Create user</h2>
+      <p>Add a user and choose the access level they need.</p>
+    </header>
+    <section class="overflow-y-auto">
+      <form class="space-y-4" id="create-user-form" action="/admin/users" method="post">
+        {{ template "csrf_field" . }}
+        <div class="field">
+          <label class="label" for="create-user-name">Name</label>
+          <input class="input mt-1.5 w-full" id="create-user-name" name="name" type="text" value="{{ .CreateUserForm.Name }}" required />
+        </div>
+        <div class="field">
+          <label class="label" for="create-user-email">Email</label>
+          <input class="input mt-1.5 w-full" id="create-user-email" name="email" type="email" value="{{ .CreateUserForm.Email }}" required />
+        </div>
+        <div class="field">
+          <label class="label" for="create-user-role">Role</label>
+          <select class="select mt-1.5 w-full text-sm" id="create-user-role" name="role">
+            {{ range .Roles }}
+              <option value="{{ . }}" {{ if eq $.CreateUserForm.Role (printf "%s" .) }}selected{{ end }}>{{ .Label }}</option>
+            {{ end }}
+          </select>
+        </div>
+      </form>
+    </section>
+    <footer>
+      <form method="dialog">
+        <button class="btn btn-outline btn-sm border-border text-foreground opacity-100 hover:bg-accent hover:text-accent-foreground" type="submit">Cancel</button>
+      </form>
+      <button class="btn btn-primary btn-sm" type="submit" form="create-user-form">Create user</button>
+    </footer>
+  </div>
+</dialog>
+
+<dialog class="dialog" id="edit-user-dialog" {{ if .EditUserDialogOpen }}data-dialog-auto-open="true"{{ end }}>
+  <div>
+    <form method="dialog">
+      <button type="submit" aria-label="Close edit user dialog">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </form>
+    <header>
+      <h2>Edit user</h2>
+      <p>Update the assigned role, display name, or set a new password.</p>
+    </header>
+    <section class="overflow-y-auto">
+      <form class="space-y-4" id="edit-user-form" action="/admin/users/edit" method="post">
+        {{ template "csrf_field" . }}
+        <input id="edit-user-id" name="user_id" type="hidden" value="{{ .EditUserForm.ID }}" />
+        <input id="edit-user-email-hidden" name="email" type="hidden" value="{{ .EditUserForm.Email }}" />
+        <div class="field">
+          <label class="label" for="edit-user-name">Name</label>
+          <input class="input mt-1.5 w-full" id="edit-user-name" name="name" type="text" value="{{ .EditUserForm.Name }}" required />
+        </div>
+        <div class="field">
+          <label class="label" for="edit-user-email">Email</label>
+          <input class="input mt-1.5 w-full" id="edit-user-email" type="email" value="{{ .EditUserForm.Email }}" readonly />
+        </div>
+        <div class="field">
+          <label class="label" for="edit-user-role">Role</label>
+          <select class="select mt-1.5 w-full text-sm" id="edit-user-role" name="role">
+            {{ range .Roles }}
+              <option value="{{ . }}" {{ if eq $.EditUserForm.Role (printf "%s" .) }}selected{{ end }}>{{ .Label }}</option>
+            {{ end }}
+          </select>
+        </div>
+        <div class="field">
+          <label class="label" for="edit-user-password">Password</label>
+          <input class="input mt-1.5 w-full" id="edit-user-password" name="password" type="password" autocomplete="new-password" />
+          <p>Leave blank to keep the current password. Setting a new password will require the user to change it at next sign-in.</p>
+        </div>
+      </form>
+    </section>
+    <footer>
+      <form method="dialog">
+        <button class="btn btn-outline btn-sm border-border text-foreground opacity-100 hover:bg-accent hover:text-accent-foreground" type="submit">Cancel</button>
+      </form>
+      <button class="btn btn-primary btn-sm" type="submit" form="edit-user-form">Save changes</button>
+    </footer>
+  </div>
+</dialog>
 {{ end }}

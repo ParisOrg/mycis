@@ -24,7 +24,8 @@ type BaseData struct {
 
 type LoginPageData struct {
 	BaseData
-	Email string
+	Email        string
+	ErrorMessage string
 }
 
 type ChangePasswordPageData struct {
@@ -85,6 +86,23 @@ type AssessmentCyclePageData struct {
 
 type UsersPageData struct {
 	BaseData
-	Users []db.User
-	Roles []db.UserRole
+	Users                []db.User
+	Roles                []db.UserRole
+	CreateUserDialogOpen bool
+	CreateUserForm       UserCreateFormData
+	EditUserDialogOpen   bool
+	EditUserForm         UserEditFormData
+}
+
+type UserCreateFormData struct {
+	Name  string
+	Email string
+	Role  string
+}
+
+type UserEditFormData struct {
+	ID    string
+	Name  string
+	Email string
+	Role  string
 }

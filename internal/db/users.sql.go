@@ -143,6 +143,37 @@ func (q *Queries) ListUsers(ctx context.Context) ([]User, error) {
 	return items, nil
 }
 
+const updateUser = `-- name: UpdateUser :one
+UPDATE users
+SET name = $2,
+    role = $3,
+    updated_at = NOW()
+WHERE id = $1
+RETURNING id, name, email, password_hash, must_change_password, created_at, updated_at, role
+`
+
+type UpdateUserParams struct {
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+	Role UserRole  `json:"role"`
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateUser, arg.ID, arg.Name, arg.Role)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.PasswordHash,
+		&i.MustChangePassword,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Role,
+	)
+	return i, err
+}
+
 const updateUserPassword = `-- name: UpdateUserPassword :exec
 UPDATE users
 SET password_hash = $2,
@@ -158,5 +189,23 @@ type UpdateUserPasswordParams struct {
 
 func (q *Queries) UpdateUserPassword(ctx context.Context, arg UpdateUserPasswordParams) error {
 	_, err := q.db.Exec(ctx, updateUserPassword, arg.ID, arg.PasswordHash)
+	return err
+}
+
+const updateUserPasswordReset = `-- name: UpdateUserPasswordReset :exec
+UPDATE users
+SET password_hash = $2,
+    must_change_password = TRUE,
+    updated_at = NOW()
+WHERE id = $1
+`
+
+type UpdateUserPasswordResetParams struct {
+	ID           uuid.UUID `json:"id"`
+	PasswordHash string    `json:"password_hash"`
+}
+
+func (q *Queries) UpdateUserPasswordReset(ctx context.Context, arg UpdateUserPasswordResetParams) error {
+	_, err := q.db.Exec(ctx, updateUserPasswordReset, arg.ID, arg.PasswordHash)
 	return err
 }

@@ -16,7 +16,7 @@ type Services struct {
 
 func New(pool *pgxpool.Pool) *Services {
 	queries := db.New(pool)
-	authSvc := &AuthService{queries: queries}
+	authSvc := &AuthService{pool: pool, queries: queries}
 	return &Services{
 		Auth:        authSvc,
 		Frameworks:  &FrameworkService{pool: pool, queries: queries},
